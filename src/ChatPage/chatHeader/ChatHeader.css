@@ -1,0 +1,38 @@
+
+.chat-header {
+    height: 80px;
+    position: relative;
+    padding: 15px 10px;
+    border-bottom: 2px solid #f4f7f6;
+}
+
+.chat-header img {
+    float: left;
+    position: absolute;
+    left: 20px;
+    border-radius: 40px;
+    width: 50px
+}
+
+.chat-header-about{
+    position: absolute;
+    left: 80px;
+    top: 20px;
+    font-size: 24px;
+    font-weight: bold;
+    width: 450px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+
+@media only screen and (max-width: 767px) {
+
+    .chat-app .chat .chat-header {
+        border-radius: 0.55rem 0.55rem 0 0
+    }
+
+}
+
+
