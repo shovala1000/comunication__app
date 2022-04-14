@@ -1,43 +1,21 @@
 
 import React from 'react';
 
+import ContactItem from './ContactItem';
 
-import './ContactList.css';
+import './ContactItem.css';
 
-function ContactList() {
+const ContactList = (props) => {
+    const selectedConversationIndex=0;
+    const conversationsItems = props.myContacts.map((myContacts, index) => {
+        return <ContactItem key={index} isActive={index === selectedConversationIndex} myContacts={myContacts} />
+    });
     return (
+
         <div id="plist" className="people-list">
             <div className="overflow-auto">
                 <ul className="list-group chat-list mt-2 mb-0">
-                    <li className="clearfix">
-                        <img src="avatar2.png" alt="avatar"></img>
-                        <div className="about">
-                            <div className="name">Harry Kane</div>
-                            <small>last message...</small>
-
-                        </div>
-                    </li>
-                    <li className="clearfix">
-                        <img src="avatar3.png" alt="avatar"></img>
-                        <div className="about">
-                            <div className="name">Lionel Messi</div>
-                            <small>last message...</small>
-                        </div>
-                    </li>
-                    <li className="clearfix">
-                        <img src="avatar4.png" alt="avatar"></img>
-                        <div className="about">
-                            <div className="name">Christian Eriksen</div>
-                            <small>last message...</small>
-                        </div>
-                    </li>
-                    <li className="clearfix">
-                        <img src="avatar5.png" alt="avatar"></img>
-                        <div className="about">
-                            <div className="name">Cristiano Ronaldo</div>
-                            <small>last message...</small>
-                        </div>
-                    </li>
+                    {conversationsItems}
                 </ul>
             </div>
         </div>

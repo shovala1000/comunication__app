@@ -3,7 +3,7 @@ import React from "react";
 import './ChatHeader.css';
 
 
-function ChatHeader() {
+const ChatHeader = (props) => {
     return (
         <div className="chat-header clearfix">
             <div className="row">
@@ -12,7 +12,7 @@ function ChatHeader() {
                         <img src="avatar4.png" alt="avatar"></img>
                     </a>
 
-                    <div className="chat-header-about">Christian Eriksen</div>
+                    <div className="chat-header-about">{props.selectedChat.name}</div>
                 </div>
             </div>
         </div>

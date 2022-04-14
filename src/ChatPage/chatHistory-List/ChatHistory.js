@@ -1,19 +1,31 @@
 import React from "react";
 
+import Message from "./Message";
 import './ChatHistory.css';
 
-function ChatHistory() {
+const ChatHistory = (props) => {
+
+    const messageItems = props.myMessages.map((message, index) => {
+        return <Message key={index} isMyMessage={message.isMyMessage} message={message} />
+    });
+
     return (
         <div className="chat-history">
             <div className="overflow-auto">
                 <ul className="m-b-0">
-                    <li className="clearfix">
-                        <div className="message-data text-right">
-                            <span className="other-message-data-time">10:10 AM, Today</span>
-                        </div>
-                        <div className="message other-message float-right"> Hi Aiden, how are you? How is the project coming along? </div>
-                    </li>
-                    <li className="clearfix">
+                    {messageItems}                   
+                </ul>
+            </div>
+        </div>
+    );
+}
+
+export default ChatHistory;
+
+
+/*
+
+ <li className="clearfix">
                         <div className="message-data">
                             <span className="message-data-time">10:12 AM, Today</span>
                         </div>
@@ -43,10 +55,5 @@ function ChatHistory() {
                         </div>
                         <div className="message my-message">How are you?</div>
                     </li>
-                </ul>
-            </div>
-        </div>
-    );
-}
 
-export default ChatHistory;
+*/

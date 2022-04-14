@@ -1,6 +1,6 @@
 import React from "react";
 
-import './ChatMassage.css';
+import './ChatMessage.css';
 
 function ChatForm() {
     return (
