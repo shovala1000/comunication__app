@@ -1,0 +1,52 @@
+
+/******************************************************/
+input[type="text"],
+input[type="password"] {
+    height: 25px;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+}
+/******************************************************/
+
+
+/*Background of info, sign in and sign up*/
+.sign-info-background {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 20px;
+    height: 100vh;
+    width: 75vh;
+    font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif;
+    padding: 2rem;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    opacity: 0.75;
+    background: black;
+}
+
+/*Error message*/
+.error {
+    text-align: center;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    /*font-size: 12px;*/
+    box-shadow: 0 0 8px 0 rgba(255,0,0,1);
+}
+/*.list-container {*/
+/*    display: flex;*/
+/*}*/
+/*Title*/
+.title {
+    font-size: 25px;
+    margin-bottom: 20px;
+}
+/*Input container*/
+.input-container {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin: 10px;
+}
