@@ -1,0 +1,11 @@
+/*Details and info about the current page */
+.details{
+    text-align: center;
+    margin-top: 10px;
+    cursor: pointer;
+    font-size: 15px;
+    background: black;
+    border-color:white ;
+    color: white;
+    padding: 10px 20px;
+}
