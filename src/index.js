@@ -4,10 +4,11 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import ChatScreen from './ChatPage/screen/ChatScreen';
+import SignManagement from "./SignManagement/SignManagement";
 
 ReactDOM.render(
-  <React.StrictMode>
-    <ChatScreen />
+  <React.StrictMode >
+    <SignManagement />
   </React.StrictMode>,
   document.getElementById('root')
 );
