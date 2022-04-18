@@ -5,15 +5,17 @@ import './ChatHistory.css';
 
 const ChatHistory = (props) => {
 
-    const messageItems = props.myMessages.map((message, index) => {
-        return <Message key={index} isMyMessage={message.isMyMessage} message={message} />
+    const messageItems = props.messages.map((message, index) => {
+        return <Message key={index}
+        isMyMessage={message.isMyMessage}
+        message={message} />
     });
 
     return (
         <div className="chat-history">
             <div className="overflow-auto">
                 <ul className="m-b-0">
-                    {messageItems}                   
+                    {messageItems}              
                 </ul>
             </div>
         </div>

@@ -9,10 +9,9 @@ const ChatHeader = (props) => {
             <div className="row">
                 <div className="col-lg-6">
                     <a href="javascript:void(0);" data-toggle="modal" data-target="#view_info">
-                        <img src="avatar4.png" alt="avatar"></img>
+                        <img src={props.selectedChat.imageURL} alt={props.selectedChat.imageAlt}></img>
                     </a>
-
-                    <div className="chat-header-about">{props.selectedChat.name}</div>
+                    <div className="chat-header-about">{props.selectedChat.nickname}</div>
                 </div>
             </div>
         </div>

@@ -20,7 +20,7 @@
 .people-list .chat-list li {
     padding: 10px 15px;
     list-style: none;
-    border-radius: 3px
+    /* border-radius: 3px */
 }
 
 .people-list .chat-list li:hover {
@@ -38,6 +38,16 @@
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
+}
+
+.people-list .chat-list li .name .latestMessage {
+    font-size: 11px; 
+}
+
+.people-list .chat-list li .name .latestMessageTime {
+    font-size: 11px;
+    float: right;
+    padding-right: 10px;
 }
 
 .people-list .chat-list img {
@@ -60,6 +70,7 @@
     white-space: nowrap;
     text-overflow: ellipsis;
 }
+
 
 .overflow-auto{
     height: 480px;
