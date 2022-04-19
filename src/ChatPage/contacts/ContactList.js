@@ -10,7 +10,7 @@ const ContactList = (props) => {
     let i=0;
     props.map.forEach((item, index) => {
         conversationsItems[i++] = <ContactItem 
-        key={index} 
+        key={index}
         isActive={index === props.selectedConversation} 
         onContactItemSelected = {props.onContactItemSelected}
         cuttrrentContact = {props.selectedConversation}
@@ -80,8 +80,3 @@ const ContactList = (props) => {
 
 export default ContactList;
 */
-
-
-
-
-

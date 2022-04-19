@@ -9,24 +9,21 @@ import ChatHeader from '../chatHeader/ChatHeader';
 import ChatHistory from '../chatHistory-List/ChatHistory';
 import ChatMessage from '../chatMessage-Box/ChatMessage';
 import ProfileHeader from '../profileHeader/ProfileHeader';
-import { contactMap, Contact } from '../../userData/data';
+import {Contact, contactMap} from '../../userData/data';
 import NewContact from '../newContact/NewContact';
 
-
-const ChatScreen = (
-    selectedContact,
-) => {
-
+const ChatScreen=(props)=>{
+    let selectedContact;
     // This useState is saving the current state of the contactMap in contactList.
-    const [contactList, setContactList] = useState(contactMap);
+    const [contactList, setContactList] = useState(props.contactChatInfo.contactList);
 
     // This function search in the contact's search box.
     const doSearch = function (q) {
-        setContactList(Array.from(contactMap.values()).filter((item) => item.nickname.includes(q)));
+        setContactList(Array.from(props.contactChatInfo.contactList).filter((item) => item.nickname.includes(q)));
     }
 
     // This loop finds the active chat in the map the save it on selectedContact.
-    contactMap.forEach((item, index) => {
+    props.contactChatInfo.contactList.forEach((item) => {
         if (item.isActive === true) {
             selectedContact = item;
         }
@@ -35,12 +32,13 @@ const ChatScreen = (
     // This useState is saving the state for the selected contact, the contact that the current conversation is with.
     const [currentContact, setSelectedContact] = useState(selectedContact);
 
-    // this function in handle convetsation changing, pressing on contact from the contact list will invoke this function.
+    // this function in handle conversation changing, pressing on contact from the contact list will invoke this function.
     const onConversationChage = function (newContact) {
         currentContact.isActive = false;
         newContact.isActive = true;
         setSelectedContact(newContact);
-        contactMap[newContact.userName] = newContact;
+        console.log(currentContact);
+        //contactMap[newContact.userName] = newContact;
     }
 
     // This function gets the nickname from the user and starts a conversation with him.
@@ -51,15 +49,18 @@ const ChatScreen = (
     const addContact = function (username) {
         let newContact = new Contact(
             username,
-            'defalut-profile-picture.png',
+            'e5',
+            '/defalut-profile-picture.png',
             'avatar',
             username,
         )
-        console.log(newContact);
-        contactMap.set(newContact.userName, newContact);
-        setContactList(contactMap);
+
+        newContact.messages[props.contactChatInfo.mainContact.userName]=[]
+        props.contactChatInfo.mainContact.messages[newContact.userName]=[]
+        props.contactChatInfo.contactList.push(newContact);
+        contactMap.set(newContact.userName, props.contactChatInfo);
+        setContactList(props.contactChatInfo.contactList);
         onConversationChage(newContact);
-        console.log(contactMap);
     }
 
     /*
@@ -81,7 +82,7 @@ const ChatScreen = (
                 <div className="row clearfix">
                     <div className="col-lg-12">
                         <div className="card chat-app">
-                            <ProfileHeader />
+                            <ProfileHeader contact={props.contactChatInfo.mainContact} />
                             <ContactSearch doSearch={doSearch} />
                             <NewContact addContact={addContact} />
                             <ContactList map={contactList}
@@ -89,12 +90,12 @@ const ChatScreen = (
                                 onContactItemSelected={onConversationChage} />
 
                             <div className="chat">
-
-
                                 <ChatHeader selectedChat={currentContact} />
-
+                                {console.log(currentContact)}
                                 {<ChatHistory
-                                    messages={currentContact.messages} />}
+                                    // props.contactChatInfo.contactList[currentContact.username].messages
+                                    //
+                                    messages={currentContact.messages.get(props.contactChatInfo.mainContact.userName)} />}
                                 <ChatMessage />
 
                             </div>
@@ -104,6 +105,6 @@ const ChatScreen = (
             </div>
         </Container>
     );
-}
+};
 
 export default ChatScreen;

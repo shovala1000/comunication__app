@@ -21,18 +21,20 @@ function Info({signName, setShow1, setShow2, show1, show2}) {
             <div className='details'> To keep connected with us please <br/> login with your personal info</div>
     }
     return (
-        <div className="sign-info-background">
+        <div className="sign-info-background" style={{display:'flex'}}>
             <div className="title">{info.title}</div>
             {info.details}
-            <Button
-                id="button-container"
+            <div id="button-container">
+                <Button
+                    id="button-container"
                 onClick={() => {
                     setShow1(!show1);
                     setShow2(!show2);
                 }}
             >
                 {info.name}
-            </Button>
+            </Button> </div>
+
         </div>
 
     );

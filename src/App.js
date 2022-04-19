@@ -1,25 +1,45 @@
-import logo from './logo.svg';
-import './App.css';
+import {
+    Routes,
+    Route,
+} from "react-router-dom";
+import SignManagement from "./SignManagement/SignManagement";
+import ChatScreen from "./ChatPage/screen/ChatScreen";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          TTTT <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+import React, {useState} from "react";
+import initialState, {contactMap} from "./userData/data";
+
+// export const username = [];
+export default function App() {
+    initialState();
+
+    //function for every contact create path
+
+        var p =[];
+        // for(let i=0; i<contactMap.size;i++){
+        contactMap.forEach((value, key) => {
+            console.log(contactMap.get(key));
+            p.push((<Route path={"chat/" + key} element={<ChatScreen contactChatInfo={contactMap.get(key)}/>}/>));
+        })
+        console.log(p);
+
+
+
+    return (
+        <Routes>
+            <Route path="sign" element={<SignManagement/>}/>
+            {p}
+        </Routes>
+    );
 }
 
-export default App;
+// const rootElement = document.getElementById("root");
+// render(
+//     <BrowserRouter>
+//         <Routes>
+//             <Route path="/" element={<App />} />
+//             <Route path="sign" element={<SignManagement />} />
+//             <Route path="chat/a1" element={<ChatScreen contactChatInfo={contactMap['a1']}/>} />
+//         </Routes>
+//     </BrowserRouter>,
+//     rootElement
+// );

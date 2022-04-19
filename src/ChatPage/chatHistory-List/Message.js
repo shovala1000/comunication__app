@@ -4,7 +4,6 @@ import './Message.css';
 
 
 const Message = (props) => {
-
     let messageClass = 'message';
     let sendTime = 'message-time';
 

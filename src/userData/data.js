@@ -1,53 +1,69 @@
-export const Contact = function (userName, imageURL, imageAlt, nickname) {
+export const Contact = function (userName,password, imageURL, imageAlt, nickname) {
     this.userName = userName;
-    this.imageURL = imageURL
-    this.imageAlt = imageAlt;
     this.nickname = nickname;
+    this.password = password;
+    this.imageURL = imageURL;
+    this.imageAlt = imageAlt;
     this.isActive = false;
     this.latestMessage = "bla bla";
     this.latestMessageTime = "1 minute ago";
-    this.messages = [];
+    this.messages = new Map();
 }
 
 
-export const contactMap = new Map();
 
+
+export const ContactChatInfo = function (mainContact, contactList){
+    this.mainContact = mainContact;
+    this.contactList = contactList;
+}
+export const contactMap = new Map();
 
 function initialState() {
     var c1 = new Contact(
-        'Christian Eriksen',
-        'avatar4.png',
+        //'Christian Eriksen',
+        'a1',
+        'a1',
+        '/avatar1.png',
         'avatar',
         'Christian',
     );
 
 
-    contactMap.set(c1.userName, c1);
-
     var c2 = new Contact(
-        'Lionel Messi',
-        'avatar3.png',
+        // 'Lionel Messi',
+        'b2',
+        'b2',
+        '/avatar3.png',
         'avatar',
         'LM10',
     );
-    contactMap.set(c2.userName, c2);
-    c1.isActive = true;
 
     var c3 = new Contact(
-        'Hugo Loris',
-        'avatar5.png',
+        // 'Hugo Loris',
+        'c3',
+        'c3',
+        '/avatar5.png',
         'avatar',
         'Loris',
     );
-    contactMap.set(c3.userName, c3);
 
     var c4 = new Contact(
         'Son Houng min',
-        'avatar5.png',
+        'd4',
+        '/avatar5.png',
         'avatar',
         'Sonny',
     );
-    contactMap.set(c4.userName, c4);
+    c2.isActive = true;
+    contactMap.set(c4.userName,new ContactChatInfo(c4,[c1]));
+    contactMap.set(c3.userName, new ContactChatInfo(c3,[c1,c2]));
+    contactMap.set(c2.userName,new ContactChatInfo(c2,[c1,c3]));
+    contactMap.set(c1.userName, new ContactChatInfo(c1,[c2,c3,c4]));
+
+    // console.log(contactMap);
+
+
 
     // var c5 = new Contact(
     //     'Antonio Conte',
@@ -76,16 +92,61 @@ function initialState() {
 
 
 
-    c2.messages =
+    c1.messages.set(c2.userName,
         [
             {
                 time: '10:10 AM, Today',
                 data: ' Hi, how are you?',
+                isMyMessage: true,
+            },
+        ]);
+    c1.messages.set(c3.messages,
+        [
+            {
+                time: '10:10 AM, Today',
+                data: ' Hi, how are you? How is the project coming along?',
+                isMyMessage: true,
+            },
+
+            {
+                time: '10:12 AM, Today',
+                data: 'I am good, how are you?',
                 isMyMessage: false,
             },
-        ]
 
-    c1.messages =
+            {
+                time: '10:13 AM, Today',
+                data: 'Do you want to meet and work on the project toghether?',
+                isMyMessage: false,
+            },
+
+            {
+                time: '11:10 AM, Today',
+                data: 'NO!',
+                isMyMessage: true,
+            },
+
+            {
+                time: '11:10 AM, Today',
+                data: 'No way!',
+                isMyMessage: true,
+            },
+        ]);
+    c1.messages.set(c4.messages,[]);
+
+
+    c2.messages.set(c1.userName,
+        [
+            {
+                time: '10:10 AM, Today',
+                data: ' Hi, how are you?',
+                isMyMessage: true,
+            },
+        ]);
+    c2.messages.set(c3.userName,[]);
+
+
+    c3.messages.set(c1.userName,
         [
             {
                 time: '10:10 AM, Today',
@@ -116,23 +177,19 @@ function initialState() {
                 data: 'No way!',
                 isMyMessage: false,
             },
-        ]
+        ]);
+    c3.messages.set(c2.userName,[]);
 
+    c4.messages.set(c1.userName,[]);
 }
 
 
-initialState();
-
-function addMessage(userName, text) {
-    const item = contactMap.get(userName);
-    if (item != null) {
-        item.latestMessage = text;
-        item.messages.push(text);
-    }
-}
-
-
-
-
-
-
+export default initialState;
+// check!
+// function addMessage(userName, text) {
+//     const item = contactMap.get(userName);
+//     if (item != null) {
+//         item.latestMessage = text;
+//         item.messages.push(text);
+//     }
+// }

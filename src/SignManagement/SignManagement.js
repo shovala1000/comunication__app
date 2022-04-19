@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import Container from 'react-bootstrap/Container'
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
@@ -8,8 +8,9 @@ import SignIn from "./SignIn";
 import SignUp from "./SignUp";
 import Info from "./Info";
 
-
+export const username = [];
 function SignManagement() {
+
     const [show1, setShow1] = React.useState(false);
     const [show2, setShow2] = React.useState(true);
 
@@ -22,20 +23,15 @@ function SignManagement() {
         return "flex";
     }
     // Register info
-    function Register(name, nickname, pass) {
-        this.username = name;
-        this.nickname = nickname;
-        this.password = pass;
-    }
+    // function Register(name, nickname, pass) {
+    //     this.username = name;
+    //     this.nickname = nickname;
+    //     this.password = pass;
+    // }
 
 // User Login info
-    const database = [new Register("shoval", "shoval", "123")];
-
-
-
+//     const database = [new Register("shoval", "shoval", "123")];
     return (
-        <div className='main-div'>
-
             <Container className='main-container'>
 
                 <Row style={{display: display1()}}>
@@ -48,15 +44,14 @@ function SignManagement() {
                             show2={show2}/>
                     </Col>
                     <Col className='slide-animation2'>
-                        <SignIn database={database}/>
+                        <SignIn user={username}/>
                     </Col>
                 </Row>
 
                 <Row style={{display: display2()}}>
                     <Col
                         className='slide-animation'
-                    > <SignUp database={database}
-                              Register={Register}/>
+                    > <SignUp/>
 
                     </Col>
                     <Col className='slide-animation2'>
@@ -69,7 +64,6 @@ function SignManagement() {
                     </Col>
                 </Row>
             </Container>
-        </div>
     );
 }
 

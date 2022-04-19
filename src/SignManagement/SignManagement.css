@@ -11,14 +11,11 @@
 
 }
 
-/*Main background*/
-.main-div {
-    background-image: url("background.jpg");
-}
-
 /*All buttons (sign and submit)*/
 #button-container {
     display: flex;
+    text-align: center;
+    align-items: center;
     justify-content: center;
     color: white;
     padding: 10px 20px;
@@ -32,8 +29,8 @@
     align-items: center;
     justify-content: center;
     flex-direction: column;
-    height: 100vh;
-    width: 100vh;
+    height: 90vh;
+    width: 90vh;
     animation: App-logo-spin linear;
     animation-iteration-count: 1;
     animation-duration: 1s;
@@ -45,12 +42,13 @@
     align-items: center;
     justify-content: center;
     flex-direction: column;
-    height: 100vh;
-    width: 100vh;
+    height:90vh;
+    width: 90vh;
     animation: App-logo-spin2 linear;
     animation-iteration-count: 1;
     animation-duration: 1s;
     animation-fill-mode: forwards;
+
 }
 
 @keyframes App-logo-spin {
@@ -58,15 +56,15 @@
         transform: translateX(0);
     }
     to {
-        transform: translateX(99vh);
+        transform: translateX(100%);
     }
 }
 
 @keyframes App-logo-spin2 {
     from {
-        transform: translateX(0vh);
+        transform: translateX(0);
     }
     to {
-        transform: translateX(-99vh);
+        transform: translateX(-100%);
     }
 }

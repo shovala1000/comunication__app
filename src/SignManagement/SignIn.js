@@ -1,8 +1,10 @@
 import React, {useState} from "react";
 import {Button} from "react-bootstrap";
+import {contactMap, Contact} from '../userData/data';
 import './SignInOrUp.css';
 
-function SignIn({database}) {
+
+const SignIn=() =>{
     // States for registration
     const [errorMessages, setErrorMessages] = useState({});
     const [isSubmitted, setIsSubmitted] = useState(false);
@@ -27,11 +29,11 @@ function SignIn({database}) {
         event.preventDefault();
 
         // Find user login info
-        const userData = database.find((user) => user.username === username);
+        const userData = contactMap.get(username);
 
         // Compare user info
         if (userData) {
-            if (userData.password !== password) {
+            if (userData.mainContact.password !== password) {
                 // Invalid password
                 setErrorMessages({message: error});
             }
@@ -55,6 +57,7 @@ function SignIn({database}) {
     const renderForm = (
         <div className="form">
             <form onSubmit={handleSubmit}>
+                <div className="title">Sign In</div>
                 <div>  {renderErrorMessage()}</div>
                 <div className="input-container">
                     <label>Username </label>
@@ -77,8 +80,7 @@ function SignIn({database}) {
 
     return (
         <div className="sign-info-background">
-            <div className="title">Sign In</div>
-            {isSubmitted ? <div>User is successfully logged in</div> : renderForm}
+            {isSubmitted ? window.open('chat/' + username) : renderForm}
         </div>
     );
 }

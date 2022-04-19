@@ -4,11 +4,12 @@ import Message from "./Message";
 import './ChatHistory.css';
 
 const ChatHistory = (props) => {
-
-    const messageItems = props.messages.map((message, index) => {
-        return <Message key={index}
+    console.log(props);
+    var messageItems =[];
+    props.messages.forEach((message, index) => {
+        messageItems.push(( <Message key={index}
         isMyMessage={message.isMyMessage}
-        message={message} />
+        message={message} />));
     });
 
     return (

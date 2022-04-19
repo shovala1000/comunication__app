@@ -1,7 +1,7 @@
 import React, {useState} from "react";
-import console from "console";
 import {Button} from "react-bootstrap";
 import './SignInOrUp.css';
+
 function SignUp({database, Register}) {
     // States for checking the errors
     const [errorMessages, setErrorMessages] = useState({});
@@ -87,8 +87,6 @@ function SignUp({database, Register}) {
         //Prevent page reload
         event.preventDefault();
 
-        // var {uname, nname, pass, copass} = document.forms[0];
-
         // Find user login info
         const userData = database.find((user) => user.username === username);
 
@@ -114,10 +112,9 @@ function SignUp({database, Register}) {
             // Invalid confirm password
             else if (password !== confirmPassword) {
                 setErrorMessages({name: "copass", message: errors.copass});
-            }else if(!isImageValid(image)){
+            } else if (!isImageValid(image)) {
                 setErrorMessages({name: "img", message: errors.img});
-            }
-            else {
+            } else {
                 console.log(" Add new register to database");
                 // Add new register to database
                 database += new Register(username, nickname, password);
@@ -129,11 +126,13 @@ function SignUp({database, Register}) {
     };
 
 
-    // Generate JSX code for error message
+    // Generate code for error message
     const renderErrorMessage = (name) =>
         name === errorMessages.name && (<div className="error">{errorMessages.message}</div>);
+
     const renderForm = (
         <form className="form" onSubmit={handleSubmit}>
+            <div className="title">Sign Up</div>
             <div className="input-container">
                 <label>Username </label>
                 <input type="text" name="uname" onChange={handleUsername} className="input"
@@ -164,16 +163,16 @@ function SignUp({database, Register}) {
                        value={image} required/>
                 <div>  {renderErrorMessage("img")}</div>
             </div>
-            <div id='button-container'>
+            <div id = "button-container">
                 <Button id="button-container" onClick={handleSubmit} type="submit">
-                    Submit
-                </Button>
+                Submit
+            </Button>
             </div>
+
         </form>);
     return (
         <div className="sign-info-background">
-            <div className="title">Sign Up</div>
-            {isSubmitted ? <div>User is successfully sign up</div> : renderForm}
+            {isSubmitted ? window.open("chat"): renderForm}
         </div>
     );
 }
