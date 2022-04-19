@@ -2,7 +2,7 @@ import React from 'react'
 
 import './NewContact.css'
 
-function NewContact({ addContact }) {
+function NewContact({ addContact}) {
 
   window.addEventListener("keypress", checkKeyPress, false);
 
@@ -25,7 +25,7 @@ function NewContact({ addContact }) {
               <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div className="modal-body">
-              <input type="text" className="form-control" id="modal-textbox" placeholder="Enter contact nickname..." required></input>
+              <input type="text" className="form-control" id="modal-textbox" placeholder="Enter contact username..." required></input>
             </div>
             <div className="modal-footer">
               <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -42,4 +42,3 @@ function NewContact({ addContact }) {
 }
 
 export default NewContact;
-

@@ -9,10 +9,11 @@ import ChatHeader from '../chatHeader/ChatHeader';
 import ChatHistory from '../chatHistory-List/ChatHistory';
 import ChatMessage from '../chatMessage-Box/ChatMessage';
 import ProfileHeader from '../profileHeader/ProfileHeader';
-import {Contact, contactMap} from '../../userData/data';
+import {contactMap} from '../../userData/data';
 import NewContact from '../newContact/NewContact';
 
 const ChatScreen=(props)=>{
+    const [errorMessage, setErrorMessage] = useState("");
     let selectedContact;
     // This useState is saving the current state of the contactMap in contactList.
     const [contactList, setContactList] = useState(props.contactChatInfo.contactList);
@@ -46,25 +47,39 @@ const ChatScreen=(props)=>{
         After creating the users map, need to find the nickname and add it to the constructor.
     */
     const addContact = function (username) {
-        let newContact = contactMap.get(username).mainContact;
-        var isExist = false;
-        //********* need to set an error if newcontact===undefined or already in the list
-        props.contactChatInfo.contactList.forEach((value)=>{
-            if(value.userName===username){
-                isExist=true;
-            }
-        })
-        if(isExist){
-            //alreadyExist
-        }else{
-            newContact.messages.set(props.contactChatInfo.mainContact.userName,[]);
-            props.contactChatInfo.mainContact.messages.set(newContact.userName,[]);
-            props.contactChatInfo.contactList.push(newContact);
-            contactMap.set(newContact.userName, props.contactChatInfo);
-            setContactList(props.contactChatInfo.contactList);
+        // username invalid - default
+        setErrorMessage('username invalid');
+        if(username===props.contactChatInfo.mainContact.userName){
+            //texting yourself
+            setErrorMessage('can not able to add yourself');
+            return;
         }
-        onConversationChage(newContact);
+        var newContact = contactMap.get(username).mainContact;
+        if(newContact){
+            setErrorMessage('no problem');
+            var isExist = false;
+            props.contactChatInfo.contactList.forEach((value)=>{
+                if(value.userName===username){
+                    isExist=true;
+                }
+            })
+            if(isExist){
+                //alreadyExist
+                setErrorMessage('username already exist');
+            }
+            else{
+                newContact.messages.set(props.contactChatInfo.mainContact.userName,[]);
+                props.contactChatInfo.mainContact.messages.set(newContact.userName,[]);
+                props.contactChatInfo.contactList.push(newContact);
+                contactMap.set(newContact.userName, props.contactChatInfo);
+                setContactList(props.contactChatInfo.contactList);
+                onConversationChage(newContact);
+                setErrorMessage("");
+            }
+            return;
+        }
     }
+
 
     /*
       The return value for this page.
@@ -82,15 +97,20 @@ const ChatScreen=(props)=>{
             <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
 
             <div className="container">
+
                 <div className="row clearfix">
                     <div className="col-lg-12">
                         <div className="card chat-app">
+
                             <ProfileHeader contact={props.contactChatInfo.mainContact} />
                             <ContactSearch doSearch={doSearch} />
-                            <NewContact addContact={addContact} />
+                            <NewContact addContact={addContact}/>
+                            <div id="errorMessage">{errorMessage}</div>
                             <ContactList map={contactList}
                                 selectedConversation={currentContact}
                                 onContactItemSelected={onConversationChage} />
+
+
                             <div className="chat">
                                 <ChatHeader selectedChat={currentContact} />
                                 {<ChatHistory

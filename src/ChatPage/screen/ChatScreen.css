@@ -21,6 +21,14 @@ body{
     margin-left: 300px;
     border-left: 1px solid #eaeaea
 }
+#errorMessage{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    box-shadow: 0 0 8px 0 rgba(255,0,0,1);
+    padding-block: 0;
+}
 
 /* .chat .chat-header {
     padding: 15px 20px;
