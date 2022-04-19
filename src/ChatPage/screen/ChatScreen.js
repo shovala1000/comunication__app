@@ -47,16 +47,18 @@ const ChatScreen=(props)=>{
         After creating the users map, need to find the nickname and add it to the constructor.
     */
     const addContact = function (username) {
-        let newContact = new Contact(
-            username,
-            'e5',
-            '/defalut-profile-picture.png',
-            'avatar',
-            username,
-        )
+        let newContact = contactMap.get(username).mainContact;
+        var isExist = false;
+        //********* need to set an error if newcontact===undefined or already in the list
+        props.contactChatInfo.contactList.forEach((value)=>{
+            if(value.userName===username){
+                isExist=true;
+            }
+        })
 
-        newContact.messages[props.contactChatInfo.mainContact.userName]=[]
-        props.contactChatInfo.mainContact.messages[newContact.userName]=[]
+        newContact.messages.set(props.contactChatInfo.mainContact.userName,[]);
+        props.contactChatInfo.mainContact.messages.set(newContact.userName,[]);
+
         props.contactChatInfo.contactList.push(newContact);
         contactMap.set(newContact.userName, props.contactChatInfo);
         setContactList(props.contactChatInfo.contactList);
@@ -88,13 +90,9 @@ const ChatScreen=(props)=>{
                             <ContactList map={contactList}
                                 selectedConversation={currentContact}
                                 onContactItemSelected={onConversationChage} />
-
                             <div className="chat">
                                 <ChatHeader selectedChat={currentContact} />
-                                {console.log(currentContact)}
                                 {<ChatHistory
-                                    // props.contactChatInfo.contactList[currentContact.username].messages
-                                    //
                                     messages={currentContact.messages.get(props.contactChatInfo.mainContact.userName)} />}
                                 <ChatMessage />
 

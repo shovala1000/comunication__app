@@ -1,6 +1,6 @@
 import React, {useState} from "react";
 import {Button} from "react-bootstrap";
-import {contactMap, Contact} from '../userData/data';
+import {contactMap} from '../userData/data';
 import './SignInOrUp.css';
 
 
@@ -80,7 +80,7 @@ const SignIn=() =>{
 
     return (
         <div className="sign-info-background">
-            {isSubmitted ? window.open('chat/' + username) : renderForm}
+            {isSubmitted ? window.open('chat/' + username,"_self") : renderForm}
         </div>
     );
 }

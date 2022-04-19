@@ -1,8 +1,9 @@
 import React, {useState} from "react";
 import {Button} from "react-bootstrap";
+import {Contact, ContactChatInfo, contactMap} from '../userData/data';
 import './SignInOrUp.css';
 
-function SignUp({database, Register}) {
+function SignUp() {
     // States for checking the errors
     const [errorMessages, setErrorMessages] = useState({});
     const [isSubmitted, setIsSubmitted] = useState(false);
@@ -88,7 +89,7 @@ function SignUp({database, Register}) {
         event.preventDefault();
 
         // Find user login info
-        const userData = database.find((user) => user.username === username);
+        const userData = contactMap.get(username);
 
         // Username already exist
         if (userData) {
@@ -117,8 +118,11 @@ function SignUp({database, Register}) {
             } else {
                 console.log(" Add new register to database");
                 // Add new register to database
-                database += new Register(username, nickname, password);
-
+                const contact = new Contact(username,password,image,'profile',nickname);
+                const contactChatInfo= new ContactChatInfo(contact,[]);
+                contactMap.set(username,contactChatInfo);
+                // database += new Register(username, nickname, password);
+                console.log(contactMap);
                 //sign up successfully
                 setIsSubmitted(true);
             }
@@ -172,7 +176,7 @@ function SignUp({database, Register}) {
         </form>);
     return (
         <div className="sign-info-background">
-            {isSubmitted ? window.open("chat"): renderForm}
+            {isSubmitted ? window.open('chat/' + username,"_self") : renderForm}
         </div>
     );
 }

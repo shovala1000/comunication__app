@@ -1,6 +1,7 @@
 
 body{
-    /*background-color:"background.jpg";*/
+    background: url("background.jpg") no-repeat center;
+    background-size: cover;
     margin-top:30px;
 
 }

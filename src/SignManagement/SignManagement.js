@@ -8,7 +8,7 @@ import SignIn from "./SignIn";
 import SignUp from "./SignUp";
 import Info from "./Info";
 
-export const username = [];
+
 function SignManagement() {
 
     const [show1, setShow1] = React.useState(false);
@@ -22,15 +22,7 @@ function SignManagement() {
         if (show2) return "none";
         return "flex";
     }
-    // Register info
-    // function Register(name, nickname, pass) {
-    //     this.username = name;
-    //     this.nickname = nickname;
-    //     this.password = pass;
-    // }
 
-// User Login info
-//     const database = [new Register("shoval", "shoval", "123")];
     return (
             <Container className='main-container'>
 
@@ -44,7 +36,7 @@ function SignManagement() {
                             show2={show2}/>
                     </Col>
                     <Col className='slide-animation2'>
-                        <SignIn user={username}/>
+                        <SignIn/>
                     </Col>
                 </Row>
 

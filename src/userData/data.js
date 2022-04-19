@@ -49,13 +49,14 @@ function initialState() {
     );
 
     var c4 = new Contact(
-        'Son Houng min',
+        // 'Son Houng min',
+        'd4',
         'd4',
         '/avatar5.png',
         'avatar',
         'Sonny',
     );
-    c2.isActive = true;
+    c1.isActive = true;
     contactMap.set(c4.userName,new ContactChatInfo(c4,[c1]));
     contactMap.set(c3.userName, new ContactChatInfo(c3,[c1,c2]));
     contactMap.set(c2.userName,new ContactChatInfo(c2,[c1,c3]));
@@ -100,7 +101,7 @@ function initialState() {
                 isMyMessage: true,
             },
         ]);
-    c1.messages.set(c3.messages,
+    c1.messages.set(c3.userName,
         [
             {
                 time: '10:10 AM, Today',
@@ -132,7 +133,7 @@ function initialState() {
                 isMyMessage: true,
             },
         ]);
-    c1.messages.set(c4.messages,[]);
+    c1.messages.set(c4.userName,[]);
 
 
     c2.messages.set(c1.userName,

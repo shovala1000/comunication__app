@@ -25,21 +25,9 @@ export default function App() {
 
 
     return (
-        <Routes>
-            <Route path="sign" element={<SignManagement/>}/>
+        <Routes >
+            <Route path="/" element={<SignManagement/>}/>
             {p}
         </Routes>
     );
 }
-
-// const rootElement = document.getElementById("root");
-// render(
-//     <BrowserRouter>
-//         <Routes>
-//             <Route path="/" element={<App />} />
-//             <Route path="sign" element={<SignManagement />} />
-//             <Route path="chat/a1" element={<ChatScreen contactChatInfo={contactMap['a1']}/>} />
-//         </Routes>
-//     </BrowserRouter>,
-//     rootElement
-// );
