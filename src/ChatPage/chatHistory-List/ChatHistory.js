@@ -4,14 +4,14 @@ import Message from "./Message";
 import './ChatHistory.css';
 
 const ChatHistory = (props) => {
-    console.log(props);
     var messageItems =[];
-    props.messages.forEach((message, index) => {
-        messageItems.push(( <Message key={index}
-        isMyMessage={message.isMyMessage}
-        message={message} />));
-    });
-
+    if(props.messages){
+        props.messages.forEach((message, index) => {
+            messageItems.push(( <Message key={index}
+                                         isMyMessage={message.isMyMessage}
+                                         message={message} />));
+        });
+    }
     return (
         <div className="chat-history">
             <div className="overflow-auto">

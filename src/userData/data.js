@@ -56,7 +56,7 @@ function initialState() {
         'avatar',
         'Sonny',
     );
-    c1.isActive = true;
+    c2.isActive = true;
     contactMap.set(c4.userName,new ContactChatInfo(c4,[c1]));
     contactMap.set(c3.userName, new ContactChatInfo(c3,[c1,c2]));
     contactMap.set(c2.userName,new ContactChatInfo(c2,[c1,c3]));

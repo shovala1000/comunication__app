@@ -37,7 +37,6 @@ const ChatScreen=(props)=>{
         currentContact.isActive = false;
         newContact.isActive = true;
         setSelectedContact(newContact);
-        console.log(currentContact);
         //contactMap[newContact.userName] = newContact;
     }
 
@@ -55,13 +54,15 @@ const ChatScreen=(props)=>{
                 isExist=true;
             }
         })
-
-        newContact.messages.set(props.contactChatInfo.mainContact.userName,[]);
-        props.contactChatInfo.mainContact.messages.set(newContact.userName,[]);
-
-        props.contactChatInfo.contactList.push(newContact);
-        contactMap.set(newContact.userName, props.contactChatInfo);
-        setContactList(props.contactChatInfo.contactList);
+        if(isExist){
+            //alreadyExist
+        }else{
+            newContact.messages.set(props.contactChatInfo.mainContact.userName,[]);
+            props.contactChatInfo.mainContact.messages.set(newContact.userName,[]);
+            props.contactChatInfo.contactList.push(newContact);
+            contactMap.set(newContact.userName, props.contactChatInfo);
+            setContactList(props.contactChatInfo.contactList);
+        }
         onConversationChage(newContact);
     }
 

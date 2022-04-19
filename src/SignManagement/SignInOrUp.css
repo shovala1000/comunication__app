@@ -50,3 +50,33 @@ input[type="password"] {
     gap: 8px;
     margin: 10px;
 }
+#details{
+    display: none;
+}
+
+/*only in Large devices*/
+@media all and (max-width: 992px) {
+    #info {
+        display: none;
+    }
+
+    /*Animation*/
+    .slide-animation {
+        animation: none;
+    }
+
+    .slide-animation2 {
+        animation: none;
+    }
+    #details{
+        text-align: center;
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+    }
+    .sign-info-background{
+        width: 80%;
+    }
+}

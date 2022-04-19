@@ -2,9 +2,11 @@ import React, {useState} from "react";
 import {Button} from "react-bootstrap";
 import {contactMap} from '../userData/data';
 import './SignInOrUp.css';
+import SignUp from "./SignUp";
+import {Link} from "react-router-dom";
 
 
-const SignIn=() =>{
+function SignIn({setShow1, setShow2, show1, show2}){
     // States for registration
     const [errorMessages, setErrorMessages] = useState({});
     const [isSubmitted, setIsSubmitted] = useState(false);
@@ -73,6 +75,16 @@ const SignIn=() =>{
                     <Button id="button-container" onClick={handleSubmit} type="submit">
                         Submit
                     </Button>
+                </div>
+                <div id='details'>
+                    not register yet?
+                    <Link to={'/'}
+                          onClick={() => {
+                              setShow1(!show1);
+                              setShow2(!show2);
+                          }}>
+                    Sign Up
+                    </Link>
                 </div>
             </form>
         </div>

@@ -2,8 +2,9 @@ import React, {useState} from "react";
 import {Button} from "react-bootstrap";
 import {Contact, ContactChatInfo, contactMap} from '../userData/data';
 import './SignInOrUp.css';
+import {Link} from "react-router-dom";
 
-function SignUp() {
+function SignUp({setShow1, setShow2, show1, show2}) {
     // States for checking the errors
     const [errorMessages, setErrorMessages] = useState({});
     const [isSubmitted, setIsSubmitted] = useState(false);
@@ -172,7 +173,16 @@ function SignUp() {
                 Submit
             </Button>
             </div>
-
+            <div id='details'>
+                already a register?
+                <Link to={'/'}
+                      onClick={() => {
+                          setShow1(!show1);
+                          setShow2(!show2);
+                      }}>
+                    Sign In
+                </Link>
+            </div>
         </form>);
     return (
         <div className="sign-info-background">

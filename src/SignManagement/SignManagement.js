@@ -25,9 +25,8 @@ function SignManagement() {
 
     return (
             <Container className='main-container'>
-
                 <Row style={{display: display1()}}>
-                    <Col className='slide-animation'>
+                    <Col id= 'info' className='slide-animation '>
                         <Info
                             signName={"Sign Up"}
                             setShow1={setShow1}
@@ -36,17 +35,22 @@ function SignManagement() {
                             show2={show2}/>
                     </Col>
                     <Col className='slide-animation2'>
-                        <SignIn/>
+                        <SignIn  setShow1={setShow1}
+                                 setShow2={setShow2}
+                                 show1={show1}
+                                 show2={show2}/>
                     </Col>
                 </Row>
-
                 <Row style={{display: display2()}}>
                     <Col
                         className='slide-animation'
-                    > <SignUp/>
+                    > <SignUp setShow1={setShow1}
+                              setShow2={setShow2}
+                              show1={show1}
+                              show2={show2}/>
 
                     </Col>
-                    <Col className='slide-animation2'>
+                    <Col id= 'info' className='slide-animation2'>
                         <Info
                             signName={"Sign In"}
                             setShow1={setShow1}
