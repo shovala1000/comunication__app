@@ -3,6 +3,20 @@ import React from "react";
 import './Message.css';
 
 
+export const MESSAGES_TYPE = {
+    TEXT : 'text',
+    IMAGE: 'image',
+    MICROPHONE: 'microphone',
+    VIDEO: 'video',
+}
+
+export const NewMessage = function(currentTime,type,data, myMessage) {
+    this.type = type;
+    this.data = data;
+    this.isMyMessage = myMessage;
+    this.time = currentTime;
+}
+
 const Message = (props) => {
     let messageClass = 'message';
     let sendTime = 'message-time';
@@ -12,7 +26,6 @@ const Message = (props) => {
     } else {
         messageClass += ' other-message float-right';
         sendTime = 'other-' + sendTime;
-
     }
 
 

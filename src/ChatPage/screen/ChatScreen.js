@@ -7,10 +7,11 @@ import ContactList from '../contacts/ContactList';
 import ContactSearch from '../contacts/ContactSearch';
 import ChatHeader from '../chatHeader/ChatHeader';
 import ChatHistory from '../chatHistory-List/ChatHistory';
-import ChatMessage from '../chatMessage-Box/ChatMessage';
 import ProfileHeader from '../profileHeader/ProfileHeader';
 import {contactMap} from '../../userData/data';
 import NewContact from '../newContact/NewContact';
+import { MESSAGES_TYPE, NewMessage } from '../chatHistory-List/Message';
+import ChatMessage from '../chatMessage-Box/ChatMessage';
 
 const ChatScreen=(props)=>{
     const [errorMessage, setErrorMessage] = useState("");
@@ -39,6 +40,7 @@ const ChatScreen=(props)=>{
         newContact.isActive = true;
         setSelectedContact(newContact);
         //contactMap[newContact.userName] = newContact;
+        
     }
 
     // This function gets the nickname from the user and starts a conversation with him.
@@ -81,6 +83,57 @@ const ChatScreen=(props)=>{
     }
 
 
+    function getCurrentTime() {
+        var today = new Date();
+        var date = today.getDate() + '-' + (today.getMonth() + 1) + '-' + today.getFullYear();
+        var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+        var dateTime = time + ' ' + date;
+        return String(dateTime)
+    }
+
+
+    function createNewMessage(info, type) {
+        var currentTime = getCurrentTime();
+        // console.log("current time is: " + currentTime);
+        switch (type) {
+            case MESSAGES_TYPE.TEXT:
+                // console.log("in createNewMessage");
+                // console.log(info);
+                // console.log(type);
+                // currentContact.latestMessageTime = currentTime;
+                // currentContact.messages.push(NewMessage(currentTime,MESSAGES_TYPE.TEXT, info, true));
+                // props.contactChatInfo.mainContact.messages.set(selectedContact.userName,[... NewMessage(currentTime,MESSAGES_TYPE.TEXT, info, true)]);
+                // currentContact.latestMessage = info;
+                // currentContact.latestMessageTime = currentTime;
+                // selectedContact.messages.push(NewMessage(currentTime,MESSAGES_TYPE.TEXT, info, false));
+                // selectedContact.latestMessage = info;
+                // selectedContact.latestMessageTime = currentTime;
+                // console.log(contactMap);
+                console.log("clicked on send text");
+                break;
+
+            case MESSAGES_TYPE.IMAGE:
+                console.log("clicked on image");
+                break;
+
+            case MESSAGES_TYPE.MICROPHONE:
+                console.log("clicked on microphone");
+                break;
+
+            case MESSAGES_TYPE.VIDEO:
+                console.log("clicked on video");
+                break;
+                
+            default:
+                return null;
+        }
+
+    }
+
+
+ 
+
+
     /*
       The return value for this page.
          In ProfileHeader - The name of the user, and his Image.
@@ -110,8 +163,7 @@ const ChatScreen=(props)=>{
                                 <ChatHeader selectedChat={currentContact} />
                                 {<ChatHistory
                                     messages={currentContact.messages.get(props.contactChatInfo.mainContact.userName)} />}
-                                <ChatMessage />
-
+                                <ChatMessage createMessage={createNewMessage}/>
                             </div>
                         </div>
                     </div>

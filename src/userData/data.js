@@ -1,15 +1,17 @@
+import { MESSAGES_TYPE } from "../ChatPage/chatHistory-List/Message";
+
 export const Contact = function (userName,password, imageURL, imageAlt, nickname) {
     this.userName = userName;
     this.nickname = nickname;
     this.password = password;
     this.imageURL = imageURL;
     this.imageAlt = imageAlt;
+    this.type = null;
     this.isActive = false;
     this.latestMessage = "bla bla";
     this.latestMessageTime = "1 minute ago";
     this.messages = new Map();
 }
-
 
 
 
@@ -99,6 +101,7 @@ function initialState() {
                 time: '10:10 AM, Today',
                 data: ' Hi, how are you?',
                 isMyMessage: true,
+                type: MESSAGES_TYPE.TEXT
             },
         ]);
     c1.messages.set(c3.userName,
@@ -107,30 +110,35 @@ function initialState() {
                 time: '10:10 AM, Today',
                 data: ' Hi, how are you? How is the project coming along?',
                 isMyMessage: true,
+                type: MESSAGES_TYPE.TEXT
             },
 
             {
                 time: '10:12 AM, Today',
                 data: 'I am good, how are you?',
                 isMyMessage: false,
+                type: MESSAGES_TYPE.TEXT
             },
 
             {
                 time: '10:13 AM, Today',
                 data: 'Do you want to meet and work on the project toghether?',
                 isMyMessage: false,
+                type: MESSAGES_TYPE.TEXT
             },
 
             {
                 time: '11:10 AM, Today',
                 data: 'NO!',
                 isMyMessage: true,
+                type: MESSAGES_TYPE.TEXT
             },
 
             {
                 time: '11:10 AM, Today',
                 data: 'No way!',
                 isMyMessage: true,
+                type: MESSAGES_TYPE.TEXT
             },
         ]);
     c1.messages.set(c4.userName,[]);
@@ -142,6 +150,7 @@ function initialState() {
                 time: '10:10 AM, Today',
                 data: ' Hi, how are you?',
                 isMyMessage: true,
+                type: MESSAGES_TYPE.TEXT
             },
         ]);
     c2.messages.set(c3.userName,[]);
@@ -153,30 +162,35 @@ function initialState() {
                 time: '10:10 AM, Today',
                 data: ' Hi, how are you? How is the project coming along?',
                 isMyMessage: false,
+                type: MESSAGES_TYPE.TEXT
             },
 
             {
                 time: '10:12 AM, Today',
                 data: 'I am good, how are you?',
                 isMyMessage: true,
+                type: MESSAGES_TYPE.TEXT
             },
 
             {
                 time: '10:13 AM, Today',
                 data: 'Do you want to meet and work on the project toghether?',
                 isMyMessage: true,
+                type: MESSAGES_TYPE.TEXT
             },
 
             {
                 time: '11:10 AM, Today',
                 data: 'NO!',
                 isMyMessage: false,
+                type: MESSAGES_TYPE.TEXT
             },
 
             {
                 time: '11:10 AM, Today',
                 data: 'No way!',
                 isMyMessage: false,
+                type: MESSAGES_TYPE.TEXT
             },
         ]);
     c3.messages.set(c2.userName,[]);
@@ -186,6 +200,7 @@ function initialState() {
 
 
 export default initialState;
+
 // check!
 // function addMessage(userName, text) {
 //     const item = contactMap.get(userName);

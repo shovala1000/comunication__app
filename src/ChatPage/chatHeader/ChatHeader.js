@@ -13,7 +13,7 @@ const ChatHeader = (props) => {
                         <img src={props.selectedChat.imageURL} alt={props.selectedChat.imageAlt}></img>
                     </a>
                     <div className="chat-header-about">{props.selectedChat.nickname}</div>
-                    <Button className="sign-out-button" onClick={() => {window.open("/","_self")}}>Sign Out </Button>
+                    <button type="button" className="btn btn-outline-primary sign-out-button" onClick={() => {window.open("/","_self")}}>Sign Out</button>
                 </div>
             </div>
         </div>
@@ -21,3 +21,6 @@ const ChatHeader = (props) => {
 }
 
 export default ChatHeader;
+
+
+{/* <Button className="sign-out-button" onClick={() => {window.open("/","_self")}}>Sign Out </Button>*/}

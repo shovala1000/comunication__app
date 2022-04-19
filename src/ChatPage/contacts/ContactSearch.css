@@ -17,11 +17,15 @@
     z-index: 7;
 }
 
-.form-control {
+/* .form-control {
     position:absolute;
-}
+} */
 
 #basic-addon2 {
     position:relative;
+}
+
+#contact-search-box{
+    height: auto;
 }
 
