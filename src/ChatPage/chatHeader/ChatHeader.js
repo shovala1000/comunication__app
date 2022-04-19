@@ -1,6 +1,7 @@
 import React from "react";
 
 import './ChatHeader.css';
+import {Button} from "react-bootstrap";
 
 
 const ChatHeader = (props) => {
@@ -12,6 +13,7 @@ const ChatHeader = (props) => {
                         <img src={props.selectedChat.imageURL} alt={props.selectedChat.imageAlt}></img>
                     </a>
                     <div className="chat-header-about">{props.selectedChat.nickname}</div>
+                    <Button className="sign-out-button" onClick={() => {window.open("/","_self")}}>Sign Out </Button>
                 </div>
             </div>
         </div>

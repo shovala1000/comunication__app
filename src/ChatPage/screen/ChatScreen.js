@@ -95,13 +95,10 @@ const ChatScreen=(props)=>{
         <Container>
 
             <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
-
             <div className="container">
-
                 <div className="row clearfix">
                     <div className="col-lg-12">
                         <div className="card chat-app">
-
                             <ProfileHeader contact={props.contactChatInfo.mainContact} />
                             <ContactSearch doSearch={doSearch} />
                             <NewContact addContact={addContact}/>
@@ -109,8 +106,6 @@ const ChatScreen=(props)=>{
                             <ContactList map={contactList}
                                 selectedConversation={currentContact}
                                 onContactItemSelected={onConversationChage} />
-
-
                             <div className="chat">
                                 <ChatHeader selectedChat={currentContact} />
                                 {<ChatHistory

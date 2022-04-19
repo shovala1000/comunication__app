@@ -25,7 +25,12 @@
     white-space: nowrap;
     text-overflow: ellipsis;
 }
+.sign-out-button{
+    position: absolute;
+    float: right;
+    right: 20px;
 
+}
 
 @media only screen and (max-width: 767px) {
 
@@ -34,5 +39,3 @@
     }
 
 }
-
-

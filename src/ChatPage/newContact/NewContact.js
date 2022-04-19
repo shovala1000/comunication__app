@@ -4,13 +4,13 @@ import './NewContact.css'
 
 function NewContact({ addContact}) {
 
-  window.addEventListener("keypress", checkKeyPress, false);
-
-  function checkKeyPress(key) {
-    if(key.keyCode === 13) {
-      addContact(document.getElementById("modal-textbox").value);
-    }
-  }
+  // window.addEventListener("keypress", checkKeyPress, false);
+  //
+  // function checkKeyPress(key) {
+  //   if(key.keyCode === 13) {
+  //     addContact(document.getElementById("modal-textbox").value);
+  //   }
+  // }
 
   return (
     <div>
@@ -22,10 +22,10 @@ function NewContact({ addContact}) {
           <div className="modal-content">
             <div className="modal-header">
               <h5 className="modal-title" id="add-new-contact">Add new contact</h5>
-              <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"/>
             </div>
             <div className="modal-body">
-              <input type="text" className="form-control" id="modal-textbox" placeholder="Enter contact username..." required></input>
+              <input type="text" className="form-control" id="modal-textbox" placeholder="Enter contact username..." required/>
             </div>
             <div className="modal-footer">
               <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
