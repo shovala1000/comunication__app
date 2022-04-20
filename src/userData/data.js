@@ -125,7 +125,7 @@ function initialState() {
             {
                 time: '10:10 AM, Today',
                 data: ' Hi, how are you?',
-                isMyMessage: true,
+                isMyMessage: false,
                 type: MESSAGES_TYPE.TEXT
             },
         ]);

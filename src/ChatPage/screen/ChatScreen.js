@@ -1,5 +1,4 @@
-
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 import './ChatScreen.css';
 
 import Container from 'react-bootstrap/Container';
@@ -8,15 +7,15 @@ import ContactSearch from '../contacts/ContactSearch';
 import ChatHeader from '../chatHeader/ChatHeader';
 import ChatHistory from '../chatHistory-List/ChatHistory';
 import ProfileHeader from '../profileHeader/ProfileHeader';
-import { contactMap } from '../../userData/data';
+import {contactMap} from '../../userData/data';
 import NewContact from '../newContact/NewContact';
-import { MESSAGES_TYPE, NewMessage } from '../chatHistory-List/Message';
+import {MESSAGES_TYPE} from '../chatHistory-List/Message';
 import ChatMessage from '../chatMessage-Box/ChatMessage';
 
 const ChatScreen = (props) => {
+    const [addMessage, setAddMessage] = useState(false);
     const [errorMessage, setErrorMessage] = useState("");
-    let selectedContact = null;
-
+    let selectedContact;
     // This useState is saving the current state of the contactMap in contactList.
     const [contactList, setContactList] = useState(props.contactChatInfo.contactList);
 
@@ -37,9 +36,7 @@ const ChatScreen = (props) => {
 
     // this function in handle conversation changing, pressing on contact from the contact list will invoke this function.
     const onConversationChage = function (newContact) {
-        if (currentContact != null) {
-            currentContact.isActive = false;
-        }
+        currentContact.isActive = false;
         newContact.isActive = true;
         setSelectedContact(newContact);
         //contactMap[newContact.userName] = newContact;
@@ -71,8 +68,7 @@ const ChatScreen = (props) => {
             if (isExist) {
                 //alreadyExist
                 setErrorMessage('username already exist');
-            }
-            else {
+            } else {
                 newContact.messages.set(props.contactChatInfo.mainContact.userName, []);
                 props.contactChatInfo.mainContact.messages.set(newContact.userName, []);
                 props.contactChatInfo.contactList.push(newContact);
@@ -81,7 +77,6 @@ const ChatScreen = (props) => {
                 onConversationChage(newContact);
                 setErrorMessage("");
             }
-            return;
         }
     }
 
@@ -91,29 +86,34 @@ const ChatScreen = (props) => {
         var date = today.getDate() + '-' + (today.getMonth() + 1) + '-' + today.getFullYear();
         var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
         var dateTime = time + ' ' + date;
-        return String(dateTime);
+        return String(dateTime)
     }
-
 
     function createNewMessage(info, type) {
         var currentTime = getCurrentTime();
         // console.log("current time is: " + currentTime);
         switch (type) {
             case MESSAGES_TYPE.TEXT:
-                // console.log("in createNewMessage");
-                // console.log(info);
-                // console.log(type);
-
-                // currentContact.latestMessageTime = currentTime;
-                // currentContact.messages.push(NewMessage(currentTime,MESSAGES_TYPE.TEXT, info, true));
-                // props.contactChatInfo.mainContact.messages.set(selectedContact.userName,[... NewMessage(currentTime,MESSAGES_TYPE.TEXT, info, true)]);
-                // currentContact.latestMessage = info;
-                // currentContact.latestMessageTime = currentTime;
-                // selectedContact.messages.push(NewMessage(currentTime,MESSAGES_TYPE.TEXT, info, false));
-                // selectedContact.latestMessage = info;
-                // selectedContact.latestMessageTime = currentTime;
-                // console.log(contactMap);
                 console.log("clicked on send text");
+
+                props.contactChatInfo.mainContact.messages.get(currentContact.userName).push({
+                     time: currentTime,
+                     data: info,
+                     isMyMessage: true,
+                     type: MESSAGES_TYPE.TEXT
+                 });
+                 setAddMessage(true);
+                currentContact.messages.get(props.contactChatInfo.mainContact.userName).push({
+                    time: currentTime,
+                    data: info,
+                    isMyMessage: false,
+                    type: MESSAGES_TYPE.TEXT
+                });
+
+                // console.log(contactMap.get(props.contactChatInfo.mainContact.userName).mainContact.messages.get(currentContact.userName))
+                //console.log(props.contactChatInfo.contactList.filter((contact) => contact.userName === currentContact.userName)[0].messages.get(props.contactChatInfo.mainContact.userName));
+
+
                 break;
 
             case MESSAGES_TYPE.IMAGE:
@@ -131,19 +131,7 @@ const ChatScreen = (props) => {
             default:
                 return null;
         }
-
     }
-
-    function checkMessagesStatus(){
-        if (currentContact !== null) {
-            return currentContact.messages.get(props.contactChatInfo.mainContact.userName);
-        } else {
-            return currentContact;
-        }
-    }
-
-    let messageStatus = checkMessagesStatus();
-
 
     /*
       The return value for this page.
@@ -155,32 +143,34 @@ const ChatScreen = (props) => {
          In ChatHistory - This component contains the chat history with that specific user.
          In ChatMessage - This component contains the send message box and the other application for sending messages.
      */
-        return (
-            <Container>
-                <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
-                <div className="container">
-                    <div className="row clearfix">
-                        <div className="col-lg-12">
-                            <div className="card chat-app">
-                                <ProfileHeader contact={props.contactChatInfo.mainContact} />
-                                <ContactSearch doSearch={doSearch} />
-                                <NewContact addContact={addContact} />
-                                <div id="errorMessage">{errorMessage}</div>
-                                <ContactList map={contactList}
-                                    selectedConversation={currentContact}
-                                    onContactItemSelected={onConversationChage} />
-                                <div className="chat">
-                                    <ChatHeader selectedChat={currentContact} />
-                                    {<ChatHistory
-                                        messages={messageStatus} />}
-                                    <ChatMessage createMessage={createNewMessage} />
-                                </div>
+    const mass = () => {
+        return currentContact.messages.get(props.contactChatInfo.mainContact.userName);
+    }
+    return (
+        <Container>
+            <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"/>
+            <div className="container">
+                <div className="row clearfix">
+                    <div className="col-lg-12">
+                        <div className="card chat-app">
+                            <ProfileHeader contact={props.contactChatInfo.mainContact}/>
+                            <ContactSearch doSearch={doSearch}/>
+                            <NewContact addContact={addContact}/>
+                            <div id="errorMessage">{errorMessage}</div>
+                            <ContactList map={contactList}
+                                         selectedConversation={currentContact}
+                                         onContactItemSelected={onConversationChage}/>
+                            <div className="chat">
+                                <ChatHeader selectedChat={currentContact}/>
+                                {addMessage ? setAddMessage(false) : <ChatHistory messages={mass()}/>}
+                                <ChatMessage createMessage={createNewMessage}/>
                             </div>
                         </div>
                     </div>
                 </div>
-            </Container>
-        );
+            </div>
+        </Container>
+    );
 };
 
 export default ChatScreen;

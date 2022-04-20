@@ -17,10 +17,8 @@ export default function App() {
         var p =[];
         // for(let i=0; i<contactMap.size;i++){
         contactMap.forEach((value, key) => {
-            console.log(contactMap.get(key));
             p.push((<Route path={"chat/" + key} element={<ChatScreen contactChatInfo={contactMap.get(key)}/>}/>));
         })
-        console.log(p);
 
 
 

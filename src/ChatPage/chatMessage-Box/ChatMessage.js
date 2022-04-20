@@ -5,7 +5,7 @@ import './ChatMessage.css';
 
 function ChatMessage({createMessage}) {
 
-    function handleClikc(){
+    function handleClick(){
         createMessage(document.getElementById('send-message-box').value, MESSAGES_TYPE.TEXT);
     }
 
@@ -13,14 +13,14 @@ function ChatMessage({createMessage}) {
         <div className="chat-message clearfix">
             <div className="input-group mb-3">
                 <div className="input-group-prepend">
-                    <button type="button" className="btn btn-outline-info" onClick={handleClikc}>
-                    <i className="fa fa-send" aria-hidden="true"></i></button>
+                    <button type="button" className="btn btn-outline-info" onClick={handleClick}>
+                    <i className="fa fa-send" aria-hidden="true"/></button>
                 </div>
-                <input type="text" className="form-control" id="send-message-box" placeholder="Enter text here..."></input>
+                <input type="text" className="form-control" id="send-message-box" placeholder="Enter text here..."/>
                 <div className="btn-group" role="group" aria-label="Basic mixed styles example">
-                <button type="button" className="btn btn-outline-success" onClick={handleClikc}><i className="fa fa-camera" aria-hidden="true"></i></button>
-                <button type="button" className="btn btn-outline-danger" onClick={handleClikc}><i className="fa fa-microphone" aria-hidden="true"></i></button>
-                <button type="button" className="btn btn-outline-primary" onClick={handleClikc}><i className="fa fa-video-camera" aria-hidden="true"></i></button>
+                <button type="button" className="btn btn-outline-success" onClick={handleClick}><i className="fa fa-camera" aria-hidden="true"/></button>
+                <button type="button" className="btn btn-outline-danger" onClick={handleClick}><i className="fa fa-microphone" aria-hidden="true"/></button>
+                <button type="button" className="btn btn-outline-primary" onClick={handleClick}><i className="fa fa-video-camera" aria-hidden="true"/></button>
                 </div>
             </div>
         </div>
@@ -28,8 +28,3 @@ function ChatMessage({createMessage}) {
 }
 
 export default ChatMessage;
-
-
-
-
-
