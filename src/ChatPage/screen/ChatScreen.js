@@ -92,27 +92,28 @@ const ChatScreen = (props) => {
     }
 
     function createNewMessage(info, type) {
+
         var currentTime = getCurrentTime();
         // console.log("current time is: " + currentTime);
         switch (type) {
             case MESSAGES_TYPE.TEXT:
                 console.log("clicked on send text");
-
-                contactMap.get(props.contactChatInfo.mainContact.userName).mainContact.messages.get(currentContact.userName).push({
-                     time: currentTime,
-                     data: info,
-                     isMyMessage: true,
-                     type: MESSAGES_TYPE.TEXT
-                 });
-                 setAddMessage(true);
-                contactMap.get(currentContact.userName).mainContact.messages.get(props.contactChatInfo.mainContact.userName).push({
-                    time: currentTime,
-                    data: info,
-                    isMyMessage: false,
-                    type: MESSAGES_TYPE.TEXT
-                });
-               console.log(contactMap);
-
+                if (info.toString().length !== 0) {
+                    contactMap.get(props.contactChatInfo.mainContact.userName).mainContact.messages.get(currentContact.userName).push({
+                        time: currentTime,
+                        data: info,
+                        isMyMessage: true,
+                        type: MESSAGES_TYPE.TEXT
+                    });
+                    setAddMessage(true);
+                    contactMap.get(currentContact.userName).mainContact.messages.get(props.contactChatInfo.mainContact.userName).push({
+                        time: currentTime,
+                        data: info,
+                        isMyMessage: false,
+                        type: MESSAGES_TYPE.TEXT
+                    });
+                    console.log(contactMap);
+                }
                 break;
 
             case MESSAGES_TYPE.IMAGE:
