@@ -13,6 +13,8 @@ import {MESSAGES_TYPE} from '../chatHistory-List/Message';
 import ChatMessage from '../chatMessage-Box/ChatMessage';
 
 const ChatScreen = (props) => {
+
+
     const [addMessage, setAddMessage] = useState(false);
     const [errorMessage, setErrorMessage] = useState("");
     let selectedContact;
@@ -96,23 +98,20 @@ const ChatScreen = (props) => {
             case MESSAGES_TYPE.TEXT:
                 console.log("clicked on send text");
 
-                props.contactChatInfo.mainContact.messages.get(currentContact.userName).push({
+                contactMap.get(props.contactChatInfo.mainContact.userName).mainContact.messages.get(currentContact.userName).push({
                      time: currentTime,
                      data: info,
                      isMyMessage: true,
                      type: MESSAGES_TYPE.TEXT
                  });
                  setAddMessage(true);
-                currentContact.messages.get(props.contactChatInfo.mainContact.userName).push({
+                contactMap.get(currentContact.userName).mainContact.messages.get(props.contactChatInfo.mainContact.userName).push({
                     time: currentTime,
                     data: info,
                     isMyMessage: false,
                     type: MESSAGES_TYPE.TEXT
                 });
-
-                // console.log(contactMap.get(props.contactChatInfo.mainContact.userName).mainContact.messages.get(currentContact.userName))
-                //console.log(props.contactChatInfo.contactList.filter((contact) => contact.userName === currentContact.userName)[0].messages.get(props.contactChatInfo.mainContact.userName));
-
+               console.log(contactMap);
 
                 break;
 
@@ -144,7 +143,7 @@ const ChatScreen = (props) => {
          In ChatMessage - This component contains the send message box and the other application for sending messages.
      */
     const mass = () => {
-        return currentContact.messages.get(props.contactChatInfo.mainContact.userName);
+        return contactMap.get(currentContact.userName).mainContact.messages.get(props.contactChatInfo.mainContact.userName);
     }
     return (
         <Container>
