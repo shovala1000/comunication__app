@@ -16,6 +16,11 @@ import ChatMessage from '../chatMessage-Box/ChatMessage';
 import { Row, Col, Container } from 'react-bootstrap';
 
 
+import {
+    useParams,
+    useNavigate,
+    useLocation,
+} from "react-router-dom";
 const ChatScreen = (props) => {
 
 
@@ -58,6 +63,7 @@ const ChatScreen = (props) => {
         After creating the users map, need to find the nickname and add it to the constructor.
     */
     const addContact = function (username) {
+        document.getElementById("modal-textbox").value = '';
         // username invalid - default
         setErrorMessage('username invalid');
         if (username === props.contactChatInfo.mainContact.userName) {
@@ -102,24 +108,12 @@ const ChatScreen = (props) => {
 
 
     function createNewMessage(info, type) {
-
+        console.log(info)
         var currentTime = getCurrentTime();
         // console.log("current time is: " + currentTime);
         switch (type) {
             case MESSAGES_TYPE.TEXT:
-                // console.log("in createNewMessage");
-                // console.log(info);
-                // console.log(type);
-
-                // currentContact.latestMessageTime = currentTime;
-                // currentContact.messages.push(NewMessage(currentTime,MESSAGES_TYPE.TEXT, info, true));
-                // props.contactChatInfo.mainContact.messages.set(selectedContact.userName,[... NewMessage(currentTime,MESSAGES_TYPE.TEXT, info, true)]);
-                // currentContact.latestMessage = info;
-                // currentContact.latestMessageTime = currentTime;
-                // selectedContact.messages.push(NewMessage(currentTime,MESSAGES_TYPE.TEXT, info, false));
-                // selectedContact.latestMessage = info;
-                // selectedContact.latestMessageTime = currentTime;
-                // console.log(contactMap);
+                setTypeMessage(MESSAGES_TYPE.TEXT);
                 console.log("clicked on send text");
                 if (info.toString().length !== 0) {
                     contactMap.get(props.contactChatInfo.mainContact.userName).mainContact.messages.get(currentContact.userName).push({
@@ -141,6 +135,24 @@ const ChatScreen = (props) => {
 
             case MESSAGES_TYPE.IMAGE:
                 console.log("clicked on image");
+                if (info.toString().length !== 1) {
+                    setTypeMessage(MESSAGES_TYPE.IMAGE);
+
+                    contactMap.get(props.contactChatInfo.mainContact.userName).mainContact.messages.get(currentContact.userName).push({
+                        time: currentTime,
+                        data: info,
+                        isMyMessage: true,
+                        type: MESSAGES_TYPE.IMAGE
+                    });
+                    setAddMessage(true);
+                    contactMap.get(currentContact.userName).mainContact.messages.get(props.contactChatInfo.mainContact.userName).push({
+                        time: currentTime,
+                        data: info,
+                        isMyMessage: false,
+                        type: MESSAGES_TYPE.IMAGE
+                    });
+                    console.log(contactMap);
+                }
                 break;
 
             case MESSAGES_TYPE.MICROPHONE:
@@ -149,6 +161,24 @@ const ChatScreen = (props) => {
 
             case MESSAGES_TYPE.VIDEO:
                 console.log("clicked on video");
+                if (info.toString().length !== 0) {
+                    setTypeMessage(MESSAGES_TYPE.VIDEO);
+
+                    contactMap.get(props.contactChatInfo.mainContact.userName).mainContact.messages.get(currentContact.userName).push({
+                        time: currentTime,
+                        data: info,
+                        isMyMessage: true,
+                        type: MESSAGES_TYPE.VIDEO
+                    });
+                    setAddMessage(true);
+                    contactMap.get(currentContact.userName).mainContact.messages.get(props.contactChatInfo.mainContact.userName).push({
+                        time: currentTime,
+                        data: info,
+                        isMyMessage: false,
+                        type: MESSAGES_TYPE.VIDEO
+                    });
+                    console.log(contactMap);
+                }
                 break;
 
             default:

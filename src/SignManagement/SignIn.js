@@ -2,7 +2,6 @@ import React, {useState} from "react";
 import {Button} from "react-bootstrap";
 import {contactMap} from '../userData/data';
 import './SignInOrUp.css';
-import SignUp from "./SignUp";
 import {Link} from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 

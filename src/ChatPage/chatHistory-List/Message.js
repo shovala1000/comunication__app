@@ -28,6 +28,18 @@ const Message = (props) => {
         sendTime = 'other-' + sendTime;
     }
 
+    function data(){
+        if(props.type===MESSAGES_TYPE.TEXT){
+            return (<div className="message-Text">{props.message.data}</div>);
+        }
+        if(props.type===MESSAGES_TYPE.IMAGE){
+            return (<div className="message-Img"><img className="message-Img" src={props.message.data}/></div>)
+        }
+        if(props.type===MESSAGES_TYPE.VIDEO){
+            console.log('this is a video');
+            return (<div className="message-Video"><video className="message-Video" src={props.message.data}/></div>)
+        }
+    }
 
     return (
         <li className="clearfix">
@@ -36,7 +48,7 @@ const Message = (props) => {
                 <div className= {sendTime}> {props.message.time}</div>
             </div>
             <div className={messageClass}>
-                <div className="message-Text">{props.message.data}</div>
+                {data()}
             </div>
         </li>
     );
