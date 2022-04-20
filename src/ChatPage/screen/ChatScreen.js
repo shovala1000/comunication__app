@@ -14,6 +14,9 @@ import { MESSAGES_TYPE, NewMessage } from '../chatHistory-List/Message';
 import ChatMessage from '../chatMessage-Box/ChatMessage';
 
 const ChatScreen = (props) => {
+
+
+    const [addMessage, setAddMessage] = useState(false);
     const [errorMessage, setErrorMessage] = useState("");
     let selectedContact = null;
 
@@ -96,6 +99,7 @@ const ChatScreen = (props) => {
 
 
     function createNewMessage(info, type) {
+
         var currentTime = getCurrentTime();
         // console.log("current time is: " + currentTime);
         switch (type) {
@@ -114,6 +118,22 @@ const ChatScreen = (props) => {
                 // selectedContact.latestMessageTime = currentTime;
                 // console.log(contactMap);
                 console.log("clicked on send text");
+                if (info.toString().length !== 0) {
+                    contactMap.get(props.contactChatInfo.mainContact.userName).mainContact.messages.get(currentContact.userName).push({
+                        time: currentTime,
+                        data: info,
+                        isMyMessage: true,
+                        type: MESSAGES_TYPE.TEXT
+                    });
+                    setAddMessage(true);
+                    contactMap.get(currentContact.userName).mainContact.messages.get(props.contactChatInfo.mainContact.userName).push({
+                        time: currentTime,
+                        data: info,
+                        isMyMessage: false,
+                        type: MESSAGES_TYPE.TEXT
+                    });
+                    console.log(contactMap);
+                }
                 break;
 
             case MESSAGES_TYPE.IMAGE:
@@ -155,26 +175,27 @@ const ChatScreen = (props) => {
          In ChatHistory - This component contains the chat history with that specific user.
          In ChatMessage - This component contains the send message box and the other application for sending messages.
      */
-        return (
-            <Container>
-                <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
-                <div className="container">
-                    <div className="row clearfix">
-                        <div className="col-lg-12">
-                            <div className="card chat-app">
-                                <ProfileHeader contact={props.contactChatInfo.mainContact} />
-                                <ContactSearch doSearch={doSearch} />
-                                <NewContact addContact={addContact} />
-                                <div id="errorMessage">{errorMessage}</div>
-                                <ContactList map={contactList}
-                                    selectedConversation={currentContact}
-                                    onContactItemSelected={onConversationChage} />
-                                <div className="chat">
-                                    <ChatHeader selectedChat={currentContact} />
-                                    {<ChatHistory
-                                        messages={messageStatus} />}
-                                    <ChatMessage createMessage={createNewMessage} />
-                                </div>
+    const mass = () => {
+        return contactMap.get(currentContact.userName).mainContact.messages.get(props.contactChatInfo.mainContact.userName);
+    }
+    return (
+        <Container>
+            <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"/>
+            <div className="container">
+                <div className="row clearfix">
+                    <div className="col-lg-12">
+                        <div className="card chat-app">
+                            <ProfileHeader contact={props.contactChatInfo.mainContact}/>
+                            <ContactSearch doSearch={doSearch}/>
+                            <NewContact addContact={addContact}/>
+                            <div id="errorMessage">{errorMessage}</div>
+                            <ContactList map={contactList}
+                                         selectedConversation={currentContact}
+                                         onContactItemSelected={onConversationChage}/>
+                            <div className="chat">
+                                <ChatHeader selectedChat={currentContact}/>
+                                {addMessage ? setAddMessage(false) : <ChatHistory messages={mass()}/>}
+                                <ChatMessage createMessage={createNewMessage}/>
                             </div>
                         </div>
                     </div>
