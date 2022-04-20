@@ -26,8 +26,8 @@ function ChatMessage({createMessage}) {
     function handleClick(id,type) {
         switch (type){
             case MESSAGES_TYPE.TEXT:
-            createMessage(document.getElementById(id).value,type);
-            break;
+                createMessage(document.getElementById(id).value,type);
+                break;
             case MESSAGES_TYPE.IMAGE:
                 // createMessage('/'+fileName,type);
 
@@ -62,13 +62,14 @@ function ChatMessage({createMessage}) {
                     <input type="file" onChange={createMessageImg} onInput={fileSelectedHandler} id="input_file" accept=".jpg,.jpeg,.png" style={{ display: 'none' }} />
 
 
+
                     {/*<button type="button" className="btn btn-outline-danger" onClick={()=>handleClick(MESSAGES_TYPE.MICROPHONE)}><i*/}
                     {/*    className="fa fa-microphone" aria-hidden="true"/></button>*/}
 
 
                     <button id="get_video" variant="outlined" type="button" className="btn btn-outline-primary" onClick={()=>{OpenVideo();handleClick("input_video",MESSAGES_TYPE.VIDEO)}}>
                         <i
-                        className="fa fa-video-camera" aria-hidden="true"/></button>
+                            className="fa fa-video-camera" aria-hidden="true"/></button>
                     <input type="file" onChange={createMessageVideo} onInput={fileSelectedHandler} id="input_video" accept=".video,.mp4,.video,.x-m4v,.video" style={{ display: 'none' }} />
                 </div>
             </div>

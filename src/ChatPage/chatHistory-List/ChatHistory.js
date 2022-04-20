@@ -17,7 +17,7 @@ const ChatHistory = (props) => {
         <div className="chat-history">
             <div className="overflow-auto">
                 <ul className="m-b-0">
-                    {messageItems}              
+                    {messageItems}
                 </ul>
             </div>
         </div>
