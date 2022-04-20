@@ -1,8 +1,5 @@
 import React from "react";
-
 import './ChatHeader.css';
-import { Button } from "react-bootstrap";
-
 
 const ChatHeader = (props) => {
     if (props.selectedChat !== null) {

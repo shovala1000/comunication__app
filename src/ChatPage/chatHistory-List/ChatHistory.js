@@ -9,7 +9,8 @@ const ChatHistory = (props) => {
         props.messages.forEach((message, index) => {
             messageItems.push(( <Message key={index}
                                          isMyMessage={message.isMyMessage}
-                                         message={message} />));
+                                         message={message}
+                                         type={message.type}/>));
         });
     }
     return (

@@ -12,6 +12,11 @@ import NewContact from '../newContact/NewContact';
 import {MESSAGES_TYPE} from '../chatHistory-List/Message';
 import ChatMessage from '../chatMessage-Box/ChatMessage';
 
+import {
+    useParams,
+    useNavigate,
+    useLocation,
+} from "react-router-dom";
 const ChatScreen = (props) => {
 
 
@@ -51,6 +56,7 @@ const ChatScreen = (props) => {
         After creating the users map, need to find the nickname and add it to the constructor.
     */
     const addContact = function (username) {
+        document.getElementById("modal-textbox").value = '';
         // username invalid - default
         setErrorMessage('username invalid');
         if (username === props.contactChatInfo.mainContact.userName) {
@@ -92,11 +98,12 @@ const ChatScreen = (props) => {
     }
 
     function createNewMessage(info, type) {
-
+        console.log(info)
         var currentTime = getCurrentTime();
         // console.log("current time is: " + currentTime);
         switch (type) {
             case MESSAGES_TYPE.TEXT:
+                setTypeMessage(MESSAGES_TYPE.TEXT);
                 console.log("clicked on send text");
                 if (info.toString().length !== 0) {
                     contactMap.get(props.contactChatInfo.mainContact.userName).mainContact.messages.get(currentContact.userName).push({
@@ -118,6 +125,24 @@ const ChatScreen = (props) => {
 
             case MESSAGES_TYPE.IMAGE:
                 console.log("clicked on image");
+                if (info.toString().length !== 1) {
+                    setTypeMessage(MESSAGES_TYPE.IMAGE);
+
+                    contactMap.get(props.contactChatInfo.mainContact.userName).mainContact.messages.get(currentContact.userName).push({
+                        time: currentTime,
+                        data: info,
+                        isMyMessage: true,
+                        type: MESSAGES_TYPE.IMAGE
+                    });
+                    setAddMessage(true);
+                    contactMap.get(currentContact.userName).mainContact.messages.get(props.contactChatInfo.mainContact.userName).push({
+                        time: currentTime,
+                        data: info,
+                        isMyMessage: false,
+                        type: MESSAGES_TYPE.IMAGE
+                    });
+                    console.log(contactMap);
+                }
                 break;
 
             case MESSAGES_TYPE.MICROPHONE:
@@ -126,6 +151,24 @@ const ChatScreen = (props) => {
 
             case MESSAGES_TYPE.VIDEO:
                 console.log("clicked on video");
+                if (info.toString().length !== 0) {
+                    setTypeMessage(MESSAGES_TYPE.VIDEO);
+
+                    contactMap.get(props.contactChatInfo.mainContact.userName).mainContact.messages.get(currentContact.userName).push({
+                        time: currentTime,
+                        data: info,
+                        isMyMessage: true,
+                        type: MESSAGES_TYPE.VIDEO
+                    });
+                    setAddMessage(true);
+                    contactMap.get(currentContact.userName).mainContact.messages.get(props.contactChatInfo.mainContact.userName).push({
+                        time: currentTime,
+                        data: info,
+                        isMyMessage: false,
+                        type: MESSAGES_TYPE.VIDEO
+                    });
+                    console.log(contactMap);
+                }
                 break;
 
             default:
@@ -146,6 +189,7 @@ const ChatScreen = (props) => {
     const mass = () => {
         return contactMap.get(currentContact.userName).mainContact.messages.get(props.contactChatInfo.mainContact.userName);
     }
+    const [typeMessage, setTypeMessage] = useState(MESSAGES_TYPE.TEXT);
     return (
         <Container>
             <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"/>
@@ -157,9 +201,9 @@ const ChatScreen = (props) => {
                             <ContactSearch doSearch={doSearch}/>
                             <NewContact addContact={addContact}/>
                             <div id="errorMessage">{errorMessage}</div>
-                            <ContactList map={contactList}
+                            {addMessage? null:<ContactList map={contactList}
                                          selectedConversation={currentContact}
-                                         onContactItemSelected={onConversationChage}/>
+                                         onContactItemSelected={onConversationChage}/>}
                             <div className="chat">
                                 <ChatHeader selectedChat={currentContact}/>
                                 {addMessage ? setAddMessage(false) : <ChatHistory messages={mass()}/>}
@@ -170,6 +214,7 @@ const ChatScreen = (props) => {
                 </div>
             </div>
         </Container>
+
     );
 };
 
