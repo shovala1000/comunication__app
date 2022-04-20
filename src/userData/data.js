@@ -7,18 +7,25 @@ export const Contact = function (userName,password, imageURL, imageAlt, nickname
     this.imageURL = imageURL;
     this.imageAlt = imageAlt;
     this.type = null;
-    this.isActive = false;
     this.latestMessage = "bla bla";
     this.latestMessageTime = "1 minute ago";
     this.messages = new Map();
+    this.isActive = false;
 }
-
 
 
 export const ContactChatInfo = function (mainContact, contactList){
     this.mainContact = mainContact;
     this.contactList = contactList;
+    if (contactList.length !== 0) {
+        contactList[0].isActive = true;
+    } else {
+       
+    }
 }
+
+
+
 export const contactMap = new Map();
 
 function initialState() {
@@ -58,44 +65,13 @@ function initialState() {
         'avatar',
         'Sonny',
     );
-    c2.isActive = true;
-    contactMap.set(c4.userName,new ContactChatInfo(c4,[c1]));
+    // c2.isActive = true;
+    contactMap.set(c4.userName,new ContactChatInfo(c4,[]));
     contactMap.set(c3.userName, new ContactChatInfo(c3,[c1,c2]));
     contactMap.set(c2.userName,new ContactChatInfo(c2,[c1,c3]));
     contactMap.set(c1.userName, new ContactChatInfo(c1,[c2,c3,c4]));
 
-    // console.log(contactMap);
-
-
-
-    // var c5 = new Contact(
-    //     'Antonio Conte',
-    //     'avatar5.png',
-    //     'avatar',
-    //     'Antonio',
-    // );
-    // contactMap.set(c5.userName, c5);
-
-    // var c6 = new Contact(
-    //     'Cristiano Ronaldo',
-    //     'avatar5.png',
-    //     'avatar',
-    //     'CR7',
-    // );
-    // contactMap.set(c6.userName, c6);
-
-    // var c7 = new Contact(
-    //     'Harry Kane',
-    //     'avatar5.png',
-    //     'avatar',
-    //     'HK10',
-    // );
-    // contactMap.set(c7.userName, c7);
-
-
-
-
-    c1.messages.set(c2.userName,
+     c1.messages.set(c2.userName,
         [
             {
                 time: '10:10 AM, Today',
@@ -209,3 +185,34 @@ export default initialState;
 //         item.messages.push(text);
 //     }
 // }
+
+
+   /*contactMap.get(c4.userName).contactList.map()*/
+
+    // console.log(contactMap);
+
+
+
+    // var c5 = new Contact(
+    //     'Antonio Conte',
+    //     'avatar5.png',
+    //     'avatar',
+    //     'Antonio',
+    // );
+    // contactMap.set(c5.userName, c5);
+
+    // var c6 = new Contact(
+    //     'Cristiano Ronaldo',
+    //     'avatar5.png',
+    //     'avatar',
+    //     'CR7',
+    // );
+    // contactMap.set(c6.userName, c6);
+
+    // var c7 = new Contact(
+    //     'Harry Kane',
+    //     'avatar5.png',
+    //     'avatar',
+    //     'HK10',
+    // );
+    // contactMap.set(c7.userName, c7);
