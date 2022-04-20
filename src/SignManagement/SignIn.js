@@ -4,9 +4,11 @@ import {contactMap} from '../userData/data';
 import './SignInOrUp.css';
 import SignUp from "./SignUp";
 import {Link} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 
 function SignIn({setShow1, setShow2, show1, show2}){
+    let navigate = useNavigate();
     // States for registration
     const [errorMessages, setErrorMessages] = useState({});
     const [isSubmitted, setIsSubmitted] = useState(false);
@@ -15,7 +17,7 @@ function SignIn({setShow1, setShow2, show1, show2}){
     const [password, setPassword] = useState('');
     //Error message
     const error = "invalid username or/and password";
-// Handling the username change
+    // Handling the username change
     const handleUsername = (e) => {
         setUsername(e.target.value);
         setIsSubmitted(false);
@@ -92,7 +94,8 @@ function SignIn({setShow1, setShow2, show1, show2}){
 
     return (
         <div className="sign-info-background">
-            {isSubmitted ? window.open('chat/' + username,"_self") : renderForm}
+            {isSubmitted ? navigate('chat/' + username, {replace: true}) : renderForm}
+            
         </div>
     );
 }

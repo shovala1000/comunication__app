@@ -2,9 +2,11 @@ import React, {useState} from "react";
 import {Button} from "react-bootstrap";
 import {Contact, ContactChatInfo, contactMap} from '../userData/data';
 import './SignInOrUp.css';
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
+
 
 function SignUp({setShow1, setShow2, show1, show2}) {
+    let navigate = useNavigate();
     // States for checking the errors
     const [errorMessages, setErrorMessages] = useState({});
     const [isSubmitted, setIsSubmitted] = useState(false);
@@ -186,7 +188,7 @@ function SignUp({setShow1, setShow2, show1, show2}) {
         </form>);
     return (
         <div className="sign-info-background">
-            {isSubmitted ? window.open('chat/' + username,"_self") : renderForm}
+            {isSubmitted ? navigate('chat/' + username, {replace: true}) : renderForm}
         </div>
     );
 }

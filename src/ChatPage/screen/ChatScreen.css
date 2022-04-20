@@ -2,17 +2,118 @@
 html {
     height: 100%;
 }
-html{
-    height: 100%;
-}
+
 body{
     background: url("background.jpg") no-repeat center;
     background-size: cover;
-    margin-top:30px;
-
+    margin :30px;
+    padding: 30px;
+    
 }
 
-.card {
+.container-fluid {
+    background: #fff;
+    display: table;
+    width: 100%;
+    height: border-box;
+    height: 90vh;
+    border: 3px solid navy; 
+}
+
+.chat-page{ 
+    height: 90vh;
+    width: 100%;
+    
+}
+
+.left-menu {
+    height: auto;
+    width: 20%;
+}
+
+.search-tn{
+    height: auto;
+    align-items: center;
+    align-content: center;
+    align-self: center;
+}
+
+/* .contact-search {
+} */
+
+/* .new-contact-btn {
+    
+    
+} */
+
+.profile-header-class{
+    height: 10%;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+
+.contact-list {
+    height: 80%;
+}
+
+.chat-menu { 
+    height: auto;
+    width: 80%;
+    border-left: 3px solid navy;
+}
+
+.chat-header-class { 
+    height: 10%;
+}
+
+.chat-history-class {
+    height: 80%;
+}
+
+.chat-message-box {
+    
+    height: 10%;
+}
+
+#errorMessage{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    box-shadow: 0 0 8px 0 rgba(255,0,0,1);
+    padding-block: 0;
+} 
+
+
+/* Style for or all the scrollbar in ChatPage */
+
+/* width */
+::-webkit-scrollbar {
+    width: 7px;
+  }
+  
+  /* Track */
+  ::-webkit-scrollbar-track {
+    background: #f1f1f1;
+  }
+  
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    background: #6c84ff;
+    border-radius: 7px;
+  }
+  
+  /* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+    background: #3b5bfe;
+  }
+
+
+
+/* .card {
     background: #fff;
     transition: .5s;
     border: 0;
@@ -21,20 +122,15 @@ body{
     position: relative;
     width: 100%;
     box-shadow: 0 1px 2px 0 rgb(0 0 0 / 10%);
+    display: block;
 }
 
 .chat-app .chat {
     margin-left: 300px;
-    border-left: 1px solid #eaeaea
+    border-left: 1px solid #eaeaea;
 }
-#errorMessage{
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-    box-shadow: 0 0 8px 0 rgba(255,0,0,1);
-    padding-block: 0;
-}
+
+
 
 /* .chat .chat-header {
     padding: 15px 20px;
@@ -145,7 +241,7 @@ body{
     padding: 20px
 } */
 
-.me {
+/* .me {
     margin-right: 2px;
     font-size: 8px;
     vertical-align: middle
@@ -208,28 +304,6 @@ body{
         height: calc(100vh - 350px);
         overflow-x: auto
     }
-}
+} */
 
 
-/* Style for or all the scrollbar in ChatPage */
-
-/* width */
-::-webkit-scrollbar {
-    width: 7px;
-  }
-  
-  /* Track */
-  ::-webkit-scrollbar-track {
-    background: #f1f1f1;
-  }
-  
-  /* Handle */
-  ::-webkit-scrollbar-thumb {
-    background: #6c84ff;
-    border-radius: 10px;
-  }
-  
-  /* Handle on hover */
-  ::-webkit-scrollbar-thumb:hover {
-    background: #3b5bfe;
-  }

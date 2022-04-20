@@ -2,7 +2,7 @@ import React from 'react'
 
 import './NewContact.css'
 
-function NewContact({addContact}) {
+function NewContact({addContact, errorMessage}) {
 
   // window.addEventListener("keypress", checkKeyPress, false);
   //

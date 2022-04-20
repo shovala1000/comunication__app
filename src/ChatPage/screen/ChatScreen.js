@@ -1,8 +1,9 @@
 
 import React, { useState } from 'react';
+
 import './ChatScreen.css';
 
-import Container from 'react-bootstrap/Container';
+
 import ContactList from '../contacts/ContactList';
 import ContactSearch from '../contacts/ContactSearch';
 import ChatHeader from '../chatHeader/ChatHeader';
@@ -12,6 +13,8 @@ import { contactMap } from '../../userData/data';
 import NewContact from '../newContact/NewContact';
 import { MESSAGES_TYPE, NewMessage } from '../chatHistory-List/Message';
 import ChatMessage from '../chatMessage-Box/ChatMessage';
+import { Row, Col, Container } from 'react-bootstrap';
+
 
 const ChatScreen = (props) => {
 
@@ -62,8 +65,8 @@ const ChatScreen = (props) => {
             setErrorMessage('can not able to add yourself');
             return;
         }
-        var newContact = contactMap.get(username).mainContact;
-        if (newContact) {
+        if (contactMap.get(username)) {
+            var newContact = contactMap.get(username).mainContact;
             setErrorMessage('no problem');
             var isExist = false;
             props.contactChatInfo.contactList.forEach((value) => {
@@ -154,7 +157,7 @@ const ChatScreen = (props) => {
 
     }
 
-    function checkMessagesStatus(){
+    function checkMessagesStatus() {
         if (currentContact !== null) {
             return currentContact.messages.get(props.contactChatInfo.mainContact.userName);
         } else {
@@ -176,32 +179,65 @@ const ChatScreen = (props) => {
          In ChatMessage - This component contains the send message box and the other application for sending messages.
      */
     const mass = () => {
-        return contactMap.get(currentContact.userName).mainContact.messages.get(props.contactChatInfo.mainContact.userName);
+        if (currentContact != null) {
+            return contactMap.get(currentContact.userName).mainContact.messages.get(props.contactChatInfo.mainContact.userName);
+        }
+        return null;
     }
+    // return (
+    //     <Container>
+    //         <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
+    //         <div className="container">
+    //             <div className="row clearfix">
+    //                 <div className="col-lg-12">
+    //                     <div className="card">
+    //                         <div className="container chat-app">
+    //                             <ProfileHeader contact={props.contactChatInfo.mainContact} />
+    //                             <ContactSearch doSearch={doSearch} />
+    //                             <NewContact addContact={addContact} />
+    //                             <div id="errorMessage">{errorMessage}</div>
+    //                             <ContactList map={contactList}
+    //                                 selectedConversation={currentContact}
+    //                                 onContactItemSelected={onConversationChage} />
+    //                             <div className="chat">
+    //                                 <ChatHeader selectedChat={currentContact} />
+    //                                 {addMessage ? setAddMessage(false) : <ChatHistory messages={mass()} />}
+    //                                 <ChatMessage createMessage={createNewMessage} />
+    //                             </div>
+    //                         </div>
+    //                     </div>
+    //                 </div>
+    //             </div>
+    //         </div>
+    //     </Container >
+    // );
+
     return (
-        <Container>
-            <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"/>
-            <div className="container">
-                <div className="row clearfix">
-                    <div className="col-lg-12">
-                        <div className="card chat-app">
-                            <ProfileHeader contact={props.contactChatInfo.mainContact}/>
-                            <ContactSearch doSearch={doSearch}/>
-                            <NewContact addContact={addContact}/>
-                            <div id="errorMessage">{errorMessage}</div>
-                            <ContactList map={contactList}
-                                         selectedConversation={currentContact}
-                                         onContactItemSelected={onConversationChage}/>
-                            <div className="chat">
-                                <ChatHeader selectedChat={currentContact}/>
-                                {addMessage ? setAddMessage(false) : <ChatHistory messages={mass()}/>}
-                                <ChatMessage createMessage={createNewMessage}/>
-                            </div>
-                        </div>
+        <div className='container-fluid'>
+            <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
+            <div className="row chat-page">
+                <div className='col-4 left-menu'>
+                    <div className='row profile-header-class'>
+                        <ProfileHeader contact={props.contactChatInfo.mainContact} />
                     </div>
+                    <div className='row search-tn'>
+                        <div className='col-9 contact-search'><ContactSearch doSearch={doSearch} /></div>
+                        <div className='col-3 new-contact-btn'><NewContact addContact={addContact} /></div>
+                        <div id="errorMessage">{errorMessage}</div>
+                    </div>
+                    <div className='row contact-list'><ContactList map={contactList}
+                        selectedConversation={currentContact}
+                        onContactItemSelected={onConversationChage} /></div>
                 </div>
-            </Container>
-        );
+                <div className='col-8 chat-menu'>
+                    <div className='row chat-header-class'><ChatHeader selectedChat={currentContact} /></div>
+                    <div className='row chat-history-class'>{addMessage ? setAddMessage(false) : <ChatHistory messages={mass()} />}</div>
+                    <div className='row chat-message-box'> <ChatMessage createMessage={createNewMessage} /></div>
+                </div>
+            </div>
+        </div>
+    );
 };
 
 export default ChatScreen;
+

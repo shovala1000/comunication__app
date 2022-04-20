@@ -1,9 +1,9 @@
 
 .chat-header {
-    height: 80px;
+    /* height: 80px; */
     position: relative;
     padding: 15px 10px;
-    border-bottom: 2px solid #f4f7f6;
+    border-bottom: 3px solid navy;
 }
 
 .chat-header img {
@@ -29,13 +29,12 @@
     position: absolute;
     float: right;
     right: 20px;
-
 }
 
-@media only screen and (max-width: 767px) {
+/* @media only screen and (max-width: 767px) {
 
     .chat-app .chat .chat-header {
         border-radius: 0.55rem 0.55rem 0 0
     }
 
-}
+} */
