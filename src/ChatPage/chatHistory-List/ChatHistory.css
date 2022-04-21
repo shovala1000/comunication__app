@@ -12,10 +12,11 @@
     width: 100%;
     flex-direction: column;
     padding: 1%;
+    /*color: black;*/
 }
 
 .chat-history li .message {
-    background: cornflowerblue;
+    background: darkblue;
     border-radius: 7px;
     display: inline-table;
     position: relative;
@@ -32,7 +33,7 @@
 }
 
 .chat-history li .other-message {
-    background: grey;
+    background: dimgrey;
     border-radius: 7px;
     display: inline-table;
     position: relative;
