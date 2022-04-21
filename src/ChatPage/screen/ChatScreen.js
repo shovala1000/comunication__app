@@ -21,6 +21,9 @@ import {
     useNavigate,
     useLocation,
 } from "react-router-dom";
+import Col from "react-bootstrap/Col";
+import Row from "react-bootstrap/Row";
+
 const ChatScreen = (props) => {
 
 
@@ -144,14 +147,13 @@ const ChatScreen = (props) => {
                         isMyMessage: true,
                         type: MESSAGES_TYPE.IMAGE
                     });
-                    setAddMessage(true);
                     contactMap.get(currentContact.userName).mainContact.messages.get(props.contactChatInfo.mainContact.userName).push({
                         time: currentTime,
                         data: info,
                         isMyMessage: false,
                         type: MESSAGES_TYPE.IMAGE
                     });
-                    console.log(contactMap);
+                    setAddMessage(true);
                 }
                 break;
 
@@ -170,7 +172,6 @@ const ChatScreen = (props) => {
                         isMyMessage: true,
                         type: MESSAGES_TYPE.VIDEO
                     });
-                    setAddMessage(true);
                     contactMap.get(currentContact.userName).mainContact.messages.get(props.contactChatInfo.mainContact.userName).push({
                         time: currentTime,
                         data: info,
@@ -178,12 +179,23 @@ const ChatScreen = (props) => {
                         type: MESSAGES_TYPE.VIDEO
                     });
                     console.log(contactMap);
+                    setAddMessage(true);
                 }
                 break;
-
-            default:
-                return null;
         }
+<<<<<<< HEAD
+=======
+        contactMap.get(props.contactChatInfo.mainContact.userName).contactList.filter((contact) => contact.userName === currentContact.userName)[0]
+            .latestMessageTime = currentTime;
+        contactMap.get(currentContact.userName).contactList.filter((contact) => contact.userName === props.contactChatInfo.mainContact.userName)[0]
+            .latestMessageTime = currentTime;
+        contactMap.get(props.contactChatInfo.mainContact.userName).contactList.filter((contact) => contact.userName === currentContact.userName)[0]
+            .latestMessage = info;
+        contactMap.get(currentContact.userName).contactList.filter((contact) => contact.userName === props.contactChatInfo.mainContact.userName)[0]
+            .latestMessage = info;
+        setContactList(contactMap.get(props.contactChatInfo.mainContact.userName).contactList);
+
+>>>>>>> 63fa0da392f0d0e4f2d2a88453d06eff1cebd7b1
 
     }
 
@@ -243,6 +255,7 @@ const ChatScreen = (props) => {
     // );
 
     return (
+<<<<<<< HEAD
         <div className='container-fluid'>
             <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
             <div className="row chat-page">
@@ -266,6 +279,61 @@ const ChatScreen = (props) => {
                 </div>
             </div>
         </div>
+=======
+        <Container className='chat-screen'>
+            <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"/>
+            <Row className=" chat-page">
+
+                <Col xs={4} sm={4} md={4} lg={4} xl={4} xxl={4} className='left-menu'>
+                    <Container className='left-menu-container'>
+                        <Row className='profile-header-class'>
+                            <Col className='profile-header'>
+                                <ProfileHeader contact={props.contactChatInfo.mainContact}/>
+                            </Col>
+                        </Row>
+                        <Row className='search-tn'>
+                            <Col xs={10} sm={10} md={10} lg={10} xl={10} xxl={10} className='contact-search'>
+                                <ContactSearch doSearch={doSearch}/>
+                            </Col>
+                            <Col className='new-contact-btn'>
+                                <NewContact addContact={addContact}/>
+                            </Col>
+                            {/*<div id="errorMessage">{errorMessage}</div>*/}
+                        </Row>
+                        <Row className='contact-list'>
+                            <Col className="people-list">
+                                <ContactList map={contactList}
+                                             selectedConversation={currentContact}
+                                             onContactItemSelected={onConversationChage}/>
+                            </Col>
+                        </Row>
+                    </Container>
+                </Col>
+
+
+                <Col className='chat-menu'>
+                    <Container  className='chat-menu-container'>
+                        <Row className='chat-header-class'>
+                            <Col className='chat-header'>
+                                <ChatHeader selectedChat={currentContact}/>
+                            </Col>
+                        </Row>
+                        <Row className='chat-history-class'>
+                            <Col className='chat-history'>
+                                {addMessage ? setAddMessage(false) : <ChatHistory messages={mass()}/>}
+                            </Col>
+                        </Row>
+                        <Row className='chat-message-box'>
+                            <Col className='chat-message'>
+                                <ChatMessage createMessage={createNewMessage}/>
+                            </Col>
+                        </Row>
+                    </Container>
+                </Col>
+            </Row>
+        </Container>
+
+>>>>>>> 63fa0da392f0d0e4f2d2a88453d06eff1cebd7b1
     );
 };
 

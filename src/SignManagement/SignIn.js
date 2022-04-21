@@ -2,8 +2,12 @@ import React, {useState} from "react";
 import {Button} from "react-bootstrap";
 import {contactMap} from '../userData/data';
 import './SignInOrUp.css';
+import SignUp from "./SignUp";
 import {Link} from "react-router-dom";
+<<<<<<< HEAD
 import { useNavigate } from "react-router-dom";
+=======
+>>>>>>> 63fa0da392f0d0e4f2d2a88453d06eff1cebd7b1
 
 
 function SignIn({setShow1, setShow2, show1, show2}){
@@ -93,8 +97,12 @@ function SignIn({setShow1, setShow2, show1, show2}){
 
     return (
         <div className="sign-info-background">
+<<<<<<< HEAD
             {isSubmitted ? navigate('chat/' + username, {replace: true}) : renderForm}
             
+=======
+            {isSubmitted ? window.open('chat/' + username,"_self") : renderForm}
+>>>>>>> 63fa0da392f0d0e4f2d2a88453d06eff1cebd7b1
         </div>
     );
 }

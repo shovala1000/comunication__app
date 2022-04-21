@@ -1,3 +1,4 @@
+<<<<<<< HEAD
  /* .chat-message {
     padding: 20px
 } */
@@ -6,3 +7,11 @@
     height: auto;
 }
 
+=======
+.input-group-prepend,.btn-group,.fa-send,.fa{
+    height: 100%;
+}
+#get_file ,#get-audio ,#get_video,#send-message-box,#send-button{
+    height: 100%;
+}
+>>>>>>> 63fa0da392f0d0e4f2d2a88453d06eff1cebd7b1
