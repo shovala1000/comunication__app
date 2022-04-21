@@ -1,8 +1,6 @@
-.chat .chat-message {
-    padding: 20px
+.input-group-prepend,.btn-group,.fa-send,.fa{
+    height: 100%;
 }
-
-#send-message-box {
-    height: auto;
+#get_file ,#get-audio ,#get_video,#send-message-box,#send-button{
+    height: 100%;
 }
-

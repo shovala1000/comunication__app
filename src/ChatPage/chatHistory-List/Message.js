@@ -4,13 +4,13 @@ import './Message.css';
 
 
 export const MESSAGES_TYPE = {
-    TEXT : 'text',
+    TEXT: 'text',
     IMAGE: 'image',
     MICROPHONE: 'microphone',
     VIDEO: 'video',
 }
 
-export const NewMessage = function(currentTime,type,data, myMessage) {
+export const NewMessage = function (currentTime, type, data, myMessage) {
     this.type = type;
     this.data = data;
     this.isMyMessage = myMessage;
@@ -19,37 +19,34 @@ export const NewMessage = function(currentTime,type,data, myMessage) {
 
 const Message = (props) => {
     let messageClass = 'message';
-    let sendTime = 'message-time';
+    let sendTime = 'time';
 
     if (props.isMyMessage) {
-        messageClass += ' my-message';
+
     } else {
-        messageClass += ' other-message float-right';
+        messageClass = ' other-'+messageClass;
         sendTime = 'other-' + sendTime;
     }
 
-    function data(){
-        if(props.type===MESSAGES_TYPE.TEXT){
+    function data() {
+        if (props.type === MESSAGES_TYPE.TEXT) {
             return (<div className="message-Text">{props.message.data}</div>);
         }
-        if(props.type===MESSAGES_TYPE.IMAGE){
+        if (props.type === MESSAGES_TYPE.IMAGE) {
             return (<div className="message-Img"><img className="message-Img" src={props.message.data}/></div>)
         }
-        if(props.type===MESSAGES_TYPE.VIDEO){
+        if (props.type === MESSAGES_TYPE.VIDEO) {
             console.log('this is a video');
-            return (<div className="message-Video"><video className="message-Video" src={props.message.data}/></div>)
+            return (<div className="message-Video">
+                <video className="message-Video" src={props.message.data}/>
+            </div>)
         }
     }
 
     return (
         <li className="clearfix">
-
-            <div className="message-data">
-                <div className= {sendTime}> {props.message.time}</div>
-            </div>
-            <div className={messageClass}>
-                {data()}
-            </div>
+            <div className={sendTime}> {props.message.time}</div>
+            <div className={messageClass}>{data()}</div>
         </li>
     );
 }

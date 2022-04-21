@@ -17,6 +17,9 @@ import {
     useNavigate,
     useLocation,
 } from "react-router-dom";
+import Col from "react-bootstrap/Col";
+import Row from "react-bootstrap/Row";
+
 const ChatScreen = (props) => {
 
 
@@ -170,13 +173,13 @@ const ChatScreen = (props) => {
                 }
                 break;
         }
-        contactMap.get(props.contactChatInfo.mainContact.userName).contactList.filter((contact)=>contact.userName===currentContact.userName)[0]
+        contactMap.get(props.contactChatInfo.mainContact.userName).contactList.filter((contact) => contact.userName === currentContact.userName)[0]
             .latestMessageTime = currentTime;
-        contactMap.get(currentContact.userName).contactList.filter((contact)=>contact.userName===props.contactChatInfo.mainContact.userName)[0]
+        contactMap.get(currentContact.userName).contactList.filter((contact) => contact.userName === props.contactChatInfo.mainContact.userName)[0]
             .latestMessageTime = currentTime;
-        contactMap.get(props.contactChatInfo.mainContact.userName).contactList.filter((contact)=>contact.userName===currentContact.userName)[0]
+        contactMap.get(props.contactChatInfo.mainContact.userName).contactList.filter((contact) => contact.userName === currentContact.userName)[0]
             .latestMessage = info;
-        contactMap.get(currentContact.userName).contactList.filter((contact)=>contact.userName===props.contactChatInfo.mainContact.userName)[0]
+        contactMap.get(currentContact.userName).contactList.filter((contact) => contact.userName === props.contactChatInfo.mainContact.userName)[0]
             .latestMessage = info;
         setContactList(contactMap.get(props.contactChatInfo.mainContact.userName).contactList);
 
@@ -198,29 +201,58 @@ const ChatScreen = (props) => {
     }
     const [typeMessage, setTypeMessage] = useState(MESSAGES_TYPE.TEXT);
     return (
-        <div className='container-fluid'>
-            <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
-            <div className="row chat-page">
-                <div className='col-4 left-menu'>
-                    <div className='row profile-header-class'>
-                        <ProfileHeader contact={props.contactChatInfo.mainContact} />
-                    </div>
-                    <div className='row search-tn'>
-                        <div className='col-9 contact-search'><ContactSearch doSearch={doSearch} /></div>
-                        <div className='col-3 new-contact-btn'><NewContact addContact={addContact} /></div>
-                        <div id="errorMessage">{errorMessage}</div>
-                    </div>
-                    <div className='row contact-list'><ContactList map={contactList}
-                                                                   selectedConversation={currentContact}
-                                                                   onContactItemSelected={onConversationChage} /></div>
-                </div>
-                <div className='col-8 chat-menu'>
-                    <div className='row chat-header-class'><ChatHeader selectedChat={currentContact} /></div>
-                    <div className='row chat-history-class'>{addMessage ? setAddMessage(false) : <ChatHistory messages={mass()} />}</div>
-                    <div className='row chat-message-box'> <ChatMessage createMessage={createNewMessage} /></div>
-                </div>
-            </div>
-        </div>
+        <Container className='chat-screen'>
+            <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"/>
+            <Row className=" chat-page">
+
+                <Col xs={4} sm={4} md={4} lg={4} xl={4} xxl={4} className='left-menu'>
+                    <Container className='left-menu-container'>
+                        <Row className='profile-header-class'>
+                            <Col className='profile-header'>
+                                <ProfileHeader contact={props.contactChatInfo.mainContact}/>
+                            </Col>
+                        </Row>
+                        <Row className='search-tn'>
+                            <Col xs={10} sm={10} md={10} lg={10} xl={10} xxl={10} className='contact-search'>
+                                <ContactSearch doSearch={doSearch}/>
+                            </Col>
+                            <Col className='new-contact-btn'>
+                                <NewContact addContact={addContact}/>
+                            </Col>
+                            {/*<div id="errorMessage">{errorMessage}</div>*/}
+                        </Row>
+                        <Row className='contact-list'>
+                            <Col className="people-list">
+                                <ContactList map={contactList}
+                                             selectedConversation={currentContact}
+                                             onContactItemSelected={onConversationChage}/>
+                            </Col>
+                        </Row>
+                    </Container>
+                </Col>
+
+
+                <Col className='chat-menu'>
+                    <Container  className='chat-menu-container'>
+                        <Row className='chat-header-class'>
+                            <Col className='chat-header'>
+                                <ChatHeader selectedChat={currentContact}/>
+                            </Col>
+                        </Row>
+                        <Row className='chat-history-class'>
+                            <Col className='chat-history'>
+                                {addMessage ? setAddMessage(false) : <ChatHistory messages={mass()}/>}
+                            </Col>
+                        </Row>
+                        <Row className='chat-message-box'>
+                            <Col className='chat-message'>
+                                <ChatMessage createMessage={createNewMessage}/>
+                            </Col>
+                        </Row>
+                    </Container>
+                </Col>
+            </Row>
+        </Container>
 
     );
 };

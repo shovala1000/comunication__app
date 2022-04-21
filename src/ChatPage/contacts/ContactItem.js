@@ -10,21 +10,19 @@ const ContactItem = (props) => {
     }
 
     return (
-        <li className= {className} onClick={() => props.onContactItemSelected(props.item)}>
+        <li className={className} onClick={() => props.onContactItemSelected(props.item)}>
             <img src={props.item.imageURL} alt={props.item.imageAlt}></img>
-            <div className="about">
-                <div className="name">{props.item.nickname}
-                    <span className="latestMessageTime">{props.item.latestMessageTime}</span>
-                </div>
-                <small className="latestMessage">{props.item.latestMessage}</small>
-                
+            <div className="name-latestMessage">
+                {props.item.nickname} <br/>{props.item.latestMessage}
             </div>
+
+            <div className="latestMessage-time">{props.item.latestMessageTime}</div>
+
         </li>
     );
 }
 
 export default ContactItem;
-
 
 
 // import React from "react";

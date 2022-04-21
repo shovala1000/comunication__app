@@ -13,7 +13,7 @@ function NewContact({addContact}) {
   // }
 
   return (
-    <div>
+    <div className='new-contact-btn'>
       <div className="new-contact">
         <button type="button" className="btn btn-light" id="new-contact-button" data-bs-toggle="modal" data-bs-target="#add-new-contact-button">+</button>
       </div>
@@ -38,7 +38,7 @@ function NewContact({addContact}) {
         </div>
       </div>
     </div>
-  )
+  );
 }
 
 export default NewContact;

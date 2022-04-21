@@ -1,19 +1,16 @@
-
-.chat-app .new-contact {
-    margin-top: 85px;
-    margin-left: 230px;
-    position: absolute;
-    left: 0;
-    top: 0;
-    padding: 20px;
-    z-index: 7;
-
+.new-contact {
+    position: relative;
+    height: 100%;
+    width: 100%;
 }
 
 #new-contact-button {
-    position:relative;
+    padding: 0;
+    font-size: medium;
     font-weight: bold;
-      
+    height: 100%;
+    width: 100%;
+
 }
 
 #new-contact-button:hover {
@@ -26,7 +23,3 @@
 #modal-textbox {
     position: relative;
 }
-
-
-
-

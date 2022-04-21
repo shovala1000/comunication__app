@@ -1,77 +1,40 @@
-
-.chat-app .people-list {
-    margin-top: 130px;
-    width: 280px;
-    position: absolute;
-    left: 0;
-    top: 0;
-    padding: 20px;
-    z-index: 7;
+.chat-list {
+    padding: 1px;
+    height: 100%;
 }
 
-.people-list {
-    -moz-transition: .5s;
-    -o-transition: .5s;
-    -webkit-transition: .5s;
-    transition: .5s
+.chat-list img{
+    float: left;
+    border-radius: 40px;
+    height:100% ;
+    width: fit-content;
+    overflow: hidden;
 }
-
-
-.people-list .chat-list li {
-    padding: 10px 15px;
-    list-style: none;
-    /* border-radius: 3px */
+.chat-list li{
+    height: 20%;
+    padding: 1%;
 }
-
-.people-list .chat-list li:hover {
-    background: #efefef;
-    cursor: pointer
-}
-
-.people-list .chat-list li.active {
-    background: #efefef
-}
-
-.people-list .chat-list li .name {
-    font-size: 15px;
-    width: 150px;
+.chat-list li .name-latestMessage{
+    margin-left: 10%;
+    float: left;
+    font-size: medium;
+    display: flex;
+    width: 25%;
     overflow: hidden;
     white-space: nowrap;
-    text-overflow: ellipsis;
-}
-
-.people-list .chat-list li .name .latestMessage {
-    font-size: 11px; 
-}
-
-.people-list .chat-list li .name .latestMessageTime {
-    font-size: 11px;
+ }
+.chat-list li .latestMessage-time{
+    margin-right: 5%;
     float: right;
-    padding-right: 10px;
-}
-
-.people-list .chat-list img {
-    width: 45px;
-    border-radius: 50%
-}
-
-.people-list img {
-    float: left;
-    border-radius: 50%
-}
-
-.people-list .about {
-    position: relative;
-    float: left;
-    padding-left: 8px;
-    font-size: 15px;
-    width: 150px;
+    font-size: medium;
+    display: flex;
     overflow: hidden;
     white-space: nowrap;
-    text-overflow: ellipsis;
+
+
 }
 
-
-.overflow-auto{
-    height: 480px;
+.chat-list li:hover {
+    background: cornflowerblue;
+    cursor: pointer
 }

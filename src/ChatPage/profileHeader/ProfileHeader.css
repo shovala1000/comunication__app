@@ -1,30 +1,19 @@
-.profile-header {
-    width: 300px;
-    height: 80px;
-    position: absolute;
-    padding: 15px 10px;
-    border-bottom: 2px solid #f4f7f6;
-}
-
 .profile-header img {
-    float: left;
     position: relative;
-    margin-left: 20px;
-    margin-right: 20px;
+    float: left;
     border-radius: 40px;
-    width: 50px
+    height:100% ;
+    width: fit-content;
+    overflow: hidden;
+
 }
 
 .profile-header-about {
-    /* padding-left: 50px;
-    padding-top: 20px; */
-    position: relative;
-    /*left: 80px;*/
-    /*bottom: 50px;*/
-    font-size: 16px;
+    margin-left: 10%;
+    float: left;
+    font-size: large;
     font-weight: bold;
-    /*width: 200px;*/
+    display: flex;
+    flex-direction: column;
     overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
 }
