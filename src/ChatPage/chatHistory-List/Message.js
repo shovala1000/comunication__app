@@ -10,36 +10,57 @@ export const MESSAGES_TYPE = {
     VIDEO: 'video',
 }
 
-export const NewMessage = function (currentTime, type, data, myMessage) {
-    this.type = type;
-    this.data = data;
-    this.isMyMessage = myMessage;
-    this.time = currentTime;
-}
+// export const NewMessage = function (currentTime, type, data, myMessage) {
+//     this.type = type;
+//     this.data = data;
+//     this.isMyMessage = myMessage;
+//     this.time = currentTime;
+// }
 
 const Message = (props) => {
-    let messageClass = 'message';
-    let sendTime = 'time';
+    var messageClass = 'message';
+    var sendTime = 'time';
 
-    if (props.isMyMessage) {
-
+    if (props.isMyMessage === true) {
+        messageClass = 'message';
+        sendTime = 'time';
     } else {
-        messageClass = ' other-'+messageClass;
-        sendTime = 'other-' + sendTime;
+        messageClass = ' other-message';
+        sendTime = 'other-time';
     }
 
+    console.log(messageClass);
+
     function data() {
-        if (props.type === MESSAGES_TYPE.TEXT) {
-            return (<div className="message-Text">{props.message.data}</div>);
-        }
-        if (props.type === MESSAGES_TYPE.IMAGE) {
-            return (<div className="message-Img"><img className="message-Img" src={props.message.data}/></div>)
-        }
-        if (props.type === MESSAGES_TYPE.VIDEO) {
-            console.log('this is a video');
-            return (<div className="message-Video">
-                <video className="message-Video" src={props.message.data}/>
-            </div>)
+        // if (props.type === MESSAGES_TYPE.TEXT) {
+        //     return (<div className="message-Text">{props.message.data}</div>);
+        // }
+        // if (props.type === MESSAGES_TYPE.IMAGE) {
+        //     return (<div className="message-Img"><img className="message-Img" src={props.message.data} /></div>)
+        // }
+        // if (props.type === MESSAGES_TYPE.VIDEO) {
+        //     console.log('this is a video');
+        //     return (<div className="message-Video">
+        //         <video className="message-Video" src={props.message.data} />
+        //     </div>)
+        // }
+
+
+        switch (props.type) {
+            case MESSAGES_TYPE.TEXT:
+                return (<div className="message-Text">{props.message.data}</div>);
+            case MESSAGES_TYPE.IMAGE:
+                return (<div className="message-Img">
+                <img className="message-Img" src={props.message.data} /></div>)
+            case MESSAGES_TYPE.VIDEO:
+                return (<div className="message-Video">
+                    <video controls className="message-Video" src={props.message.data} />
+                </div>)
+            case MESSAGES_TYPE.MICROPHONE:
+                console.log(props.message.data);
+                return (<div className="message-Microphone">
+                <audio controls className="message-Microphone audio-recording" src={props.message.data}></audio></div>)
+
         }
     }
 

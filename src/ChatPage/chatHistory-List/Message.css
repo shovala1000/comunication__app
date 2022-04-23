@@ -1,3 +1,14 @@
-.message-Img,.message-Video,.message-Text{
+.message-Img, .message-Text{
     max-height: 10vw;
+    max-width: 40vw;
+}
+
+.message-Microphone{
+    width: 200px;
+    height: 40px;
+}
+
+.message-Video{
+    width: 250px;
+    height: 250px;
 }

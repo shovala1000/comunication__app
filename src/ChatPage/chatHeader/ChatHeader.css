@@ -1,15 +1,32 @@
-<<<<<<< HEAD
 
-.chat-header {
-    /* height: 80px; */
+.chat-header img {
     position: relative;
-    padding: 15px 10px;
-    border-bottom: 3px solid navy;
+    float: left;
+    border-radius: 40px;
+    height: 75%;
+    width: fit-content;
+    overflow: hidden;
+    margin-top: 2.5% ;
+    display: flex;
 }
 
-=======
->>>>>>> 63fa0da392f0d0e4f2d2a88453d06eff1cebd7b1
-.chat-header img {
+.chat-header-about {
+    margin-left: 3%;
+    margin-top: 5%;
+    float: left;
+    font-size: x-large;
+    font-weight: bold;
+    flex-direction: column;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.sign-out-button {
+    float: right;
+}
+
+
+/* .chat-header img {
     position: relative;
     float: left;
     border-radius: 40px;
@@ -29,20 +46,11 @@
 }
 .sign-out-button{
     float: right;
-<<<<<<< HEAD
-    right: 20px;
-}
-
-/* @media only screen and (max-width: 767px) {
-=======
-}
-
->>>>>>> 63fa0da392f0d0e4f2d2a88453d06eff1cebd7b1
-
-
-<<<<<<< HEAD
 } */
-=======
+
+
+
+
 /*.chat-header {*/
 /*    height: 80px;*/
 /*    position: relative;*/
@@ -83,4 +91,3 @@
 /*    }*/
 
 /*}*/
->>>>>>> 63fa0da392f0d0e4f2d2a88453d06eff1cebd7b1

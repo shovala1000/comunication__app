@@ -1,9 +1,7 @@
-
 import React, { useState } from 'react';
-
 import './ChatScreen.css';
 
-
+import Container from 'react-bootstrap/Container';
 import ContactList from '../contacts/ContactList';
 import ContactSearch from '../contacts/ContactSearch';
 import ChatHeader from '../chatHeader/ChatHeader';
@@ -11,26 +9,23 @@ import ChatHistory from '../chatHistory-List/ChatHistory';
 import ProfileHeader from '../profileHeader/ProfileHeader';
 import { contactMap } from '../../userData/data';
 import NewContact from '../newContact/NewContact';
-import { MESSAGES_TYPE, NewMessage } from '../chatHistory-List/Message';
+import { MESSAGES_TYPE } from '../chatHistory-List/Message';
 import ChatMessage from '../chatMessage-Box/ChatMessage';
-import { Row, Col, Container } from 'react-bootstrap';
+import { ContactChatInfo } from '../../userData/data';
 
-
-import {
-    useParams,
-    useNavigate,
-    useLocation,
-} from "react-router-dom";
+// import {
+//     useParams,
+//     useNavigate,
+//     useLocation,
+// } from "react-router-dom";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 
 const ChatScreen = (props) => {
 
-
     const [addMessage, setAddMessage] = useState(false);
-    const [errorMessage, setErrorMessage] = useState("");
-    let selectedContact = null;
 
+    let selectedContact = null;
     // This useState is saving the current state of the contactMap in contactList.
     const [contactList, setContactList] = useState(props.contactChatInfo.contactList);
 
@@ -51,7 +46,7 @@ const ChatScreen = (props) => {
 
     // this function in handle conversation changing, pressing on contact from the contact list will invoke this function.
     const onConversationChage = function (newContact) {
-        if (currentContact != null) {
+        if (currentContact !== null) {
             currentContact.isActive = false;
         }
         newContact.isActive = true;
@@ -59,6 +54,12 @@ const ChatScreen = (props) => {
         //contactMap[newContact.userName] = newContact;
 
     }
+
+
+    const [currentError, setErrorMessage] = useState('');
+
+    const [isAlertActive, setAlertActive] = useState(false);
+
 
     // This function gets the nickname from the user and starts a conversation with him.
     /*
@@ -69,14 +70,15 @@ const ChatScreen = (props) => {
         document.getElementById("modal-textbox").value = '';
         // username invalid - default
         setErrorMessage('username invalid');
+        setAlertActive(true);
         if (username === props.contactChatInfo.mainContact.userName) {
             //texting yourself
             setErrorMessage('can not able to add yourself');
+            setAlertActive(true);
             return;
         }
-        if (contactMap.get(username)) {
-            var newContact = contactMap.get(username).mainContact;
-            setErrorMessage('no problem');
+        var newContact = contactMap.get(username).mainContact;
+        if (newContact) {
             var isExist = false;
             props.contactChatInfo.contactList.forEach((value) => {
                 if (value.userName === username) {
@@ -86,29 +88,36 @@ const ChatScreen = (props) => {
             if (isExist) {
                 //alreadyExist
                 setErrorMessage('username already exist');
-            }
-            else {
+                setAlertActive(true);
+            } else {               
                 newContact.messages.set(props.contactChatInfo.mainContact.userName, []);
+                currentContact.messages.set(newContact.userName, []);
                 props.contactChatInfo.mainContact.messages.set(newContact.userName, []);
                 props.contactChatInfo.contactList.push(newContact);
                 contactMap.set(newContact.userName, props.contactChatInfo);
                 setContactList(props.contactChatInfo.contactList);
                 onConversationChage(newContact);
                 setErrorMessage("");
+                setAlertActive(false);
             }
-            return;
         }
+        console.log(contactMap);
     }
 
 
     function getCurrentTime() {
         var today = new Date();
-        var date = today.getDate() + '-' + (today.getMonth() + 1) + '-' + today.getFullYear();
-        var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
-        var dateTime = time + ' ' + date;
-        return String(dateTime);
+        let date = today.getDate() + '/' + (today.getMonth() + 1) + '/' + today.getFullYear();
+        let minutes = today.getMinutes();
+        let time;
+        if (minutes > 10) {
+            time = today.getHours() + ":" + today.getMinutes();
+        } else {
+            time = today.getHours() + ":0" + today.getMinutes();
+        }
+        let dateTime = time + ', ' + date;
+        return String(dateTime)
     }
-
 
     function createNewMessage(info, type) {
         console.log(info)
@@ -133,6 +142,10 @@ const ChatScreen = (props) => {
                         type: MESSAGES_TYPE.TEXT
                     });
                     console.log(contactMap);
+                    contactMap.get(props.contactChatInfo.mainContact.userName).contactList.filter((contact) => contact.userName === currentContact.userName)[0]
+                        .latestMessage = info;
+                    contactMap.get(currentContact.userName).contactList.filter((contact) => contact.userName === props.contactChatInfo.mainContact.userName)[0]
+                        .latestMessage = info;
                 }
                 break;
 
@@ -154,11 +167,32 @@ const ChatScreen = (props) => {
                         type: MESSAGES_TYPE.IMAGE
                     });
                     setAddMessage(true);
+                    contactMap.get(props.contactChatInfo.mainContact.userName).contactList.filter((contact) => contact.userName === currentContact.userName)[0]
+                        .latestMessage = 'Img';
+                    contactMap.get(currentContact.userName).contactList.filter((contact) => contact.userName === props.contactChatInfo.mainContact.userName)[0]
+                        .latestMessage = 'Img';
                 }
                 break;
 
             case MESSAGES_TYPE.MICROPHONE:
-                console.log("clicked on microphone");
+                contactMap.get(props.contactChatInfo.mainContact.userName).mainContact.messages.get(currentContact.userName).push({
+                    time: currentTime,
+                    data: info,
+                    isMyMessage: true,
+                    type: MESSAGES_TYPE.MICROPHONE
+                });
+                contactMap.get(currentContact.userName).mainContact.messages.get(props.contactChatInfo.mainContact.userName).push({
+                    time: currentTime,
+                    data: info,
+                    isMyMessage: false,
+                    type: MESSAGES_TYPE.MICROPHONE
+                });
+                console.log(contactMap);
+                setAddMessage(true);
+                contactMap.get(props.contactChatInfo.mainContact.userName).contactList.filter((contact) => contact.userName === currentContact.userName)[0]
+                    .latestMessage = 'Audio';
+                contactMap.get(currentContact.userName).contactList.filter((contact) => contact.userName === props.contactChatInfo.mainContact.userName)[0]
+                    .latestMessage = 'Audio';
                 break;
 
             case MESSAGES_TYPE.VIDEO:
@@ -180,35 +214,23 @@ const ChatScreen = (props) => {
                     });
                     console.log(contactMap);
                     setAddMessage(true);
+                    contactMap.get(props.contactChatInfo.mainContact.userName).contactList.filter((contact) => contact.userName === currentContact.userName)[0]
+                        .latestMessage = 'Video';
+                    contactMap.get(currentContact.userName).contactList.filter((contact) => contact.userName === props.contactChatInfo.mainContact.userName)[0]
+                        .latestMessage = 'Video';
                 }
                 break;
         }
-<<<<<<< HEAD
-=======
         contactMap.get(props.contactChatInfo.mainContact.userName).contactList.filter((contact) => contact.userName === currentContact.userName)[0]
             .latestMessageTime = currentTime;
         contactMap.get(currentContact.userName).contactList.filter((contact) => contact.userName === props.contactChatInfo.mainContact.userName)[0]
             .latestMessageTime = currentTime;
-        contactMap.get(props.contactChatInfo.mainContact.userName).contactList.filter((contact) => contact.userName === currentContact.userName)[0]
-            .latestMessage = info;
-        contactMap.get(currentContact.userName).contactList.filter((contact) => contact.userName === props.contactChatInfo.mainContact.userName)[0]
-            .latestMessage = info;
+        // contactMap.get(props.contactChatInfo.mainContact.userName).contactList.filter((contact) => contact.userName === currentContact.userName)[0]
+        //     .latestMessage = info;
+        // contactMap.get(currentContact.userName).contactList.filter((contact) => contact.userName === props.contactChatInfo.mainContact.userName)[0]
+        //     .latestMessage = info;
         setContactList(contactMap.get(props.contactChatInfo.mainContact.userName).contactList);
-
->>>>>>> 63fa0da392f0d0e4f2d2a88453d06eff1cebd7b1
-
     }
-
-    function checkMessagesStatus() {
-        if (currentContact !== null) {
-            return currentContact.messages.get(props.contactChatInfo.mainContact.userName);
-        } else {
-            return currentContact;
-        }
-    }
-
-    let messageStatus = checkMessagesStatus();
-
 
     /*
       The return value for this page.
@@ -221,90 +243,38 @@ const ChatScreen = (props) => {
          In ChatMessage - This component contains the send message box and the other application for sending messages.
      */
     const mass = () => {
-        if (currentContact != null) {
-            return contactMap.get(currentContact.userName).mainContact.messages.get(props.contactChatInfo.mainContact.userName);
+        if (currentContact !== null) {
+            // return contactMap.get(currentContact.userName).mainContact.messages.get(props.contactChatInfo.mainContact.userName);
+            return contactMap.get(props.connectedUser).mainContact.messages.get(currentContact.userName);
         }
-        return null;
     }
-    // return (
-    //     <Container>
-    //         <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
-    //         <div className="container">
-    //             <div className="row clearfix">
-    //                 <div className="col-lg-12">
-    //                     <div className="card">
-    //                         <div className="container chat-app">
-    //                             <ProfileHeader contact={props.contactChatInfo.mainContact} />
-    //                             <ContactSearch doSearch={doSearch} />
-    //                             <NewContact addContact={addContact} />
-    //                             <div id="errorMessage">{errorMessage}</div>
-    //                             <ContactList map={contactList}
-    //                                 selectedConversation={currentContact}
-    //                                 onContactItemSelected={onConversationChage} />
-    //                             <div className="chat">
-    //                                 <ChatHeader selectedChat={currentContact} />
-    //                                 {addMessage ? setAddMessage(false) : <ChatHistory messages={mass()} />}
-    //                                 <ChatMessage createMessage={createNewMessage} />
-    //                             </div>
-    //                         </div>
-    //                     </div>
-    //                 </div>
-    //             </div>
-    //         </div>
-    //     </Container >
-    // );
-
+    const [typeMessage, setTypeMessage] = useState(MESSAGES_TYPE.TEXT);
     return (
-<<<<<<< HEAD
-        <div className='container-fluid'>
-            <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
-            <div className="row chat-page">
-                <div className='col-4 left-menu'>
-                    <div className='row profile-header-class'>
-                        <ProfileHeader contact={props.contactChatInfo.mainContact} />
-                    </div>
-                    <div className='row search-tn'>
-                        <div className='col-9 contact-search'><ContactSearch doSearch={doSearch} /></div>
-                        <div className='col-3 new-contact-btn'><NewContact addContact={addContact} /></div>
-                        <div id="errorMessage">{errorMessage}</div>
-                    </div>
-                    <div className='row contact-list'><ContactList map={contactList}
-                        selectedConversation={currentContact}
-                        onContactItemSelected={onConversationChage} /></div>
-                </div>
-                <div className='col-8 chat-menu'>
-                    <div className='row chat-header-class'><ChatHeader selectedChat={currentContact} /></div>
-                    <div className='row chat-history-class'>{addMessage ? setAddMessage(false) : <ChatHistory messages={mass()} />}</div>
-                    <div className='row chat-message-box'> <ChatMessage createMessage={createNewMessage} /></div>
-                </div>
-            </div>
-        </div>
-=======
         <Container className='chat-screen'>
-            <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"/>
+            <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
             <Row className=" chat-page">
 
                 <Col xs={4} sm={4} md={4} lg={4} xl={4} xxl={4} className='left-menu'>
                     <Container className='left-menu-container'>
                         <Row className='profile-header-class'>
                             <Col className='profile-header'>
-                                <ProfileHeader contact={props.contactChatInfo.mainContact}/>
+                                <ProfileHeader contact={props.contactChatInfo.mainContact} />
                             </Col>
                         </Row>
                         <Row className='search-tn'>
                             <Col xs={10} sm={10} md={10} lg={10} xl={10} xxl={10} className='contact-search'>
-                                <ContactSearch doSearch={doSearch}/>
+                                <ContactSearch doSearch={doSearch} />
                             </Col>
                             <Col className='new-contact-btn'>
-                                <NewContact addContact={addContact}/>
+                                <NewContact addContact={addContact} currentError={currentError} setErrorMessage={setErrorMessage} isAlertActive={isAlertActive} setAlertActive={setAlertActive} />
                             </Col>
-                            {/*<div id="errorMessage">{errorMessage}</div>*/}
+                            {/*<div id="errorMessage">{current}</div>*/}
                         </Row>
                         <Row className='contact-list'>
                             <Col className="people-list">
                                 <ContactList map={contactList}
-                                             selectedConversation={currentContact}
-                                             onContactItemSelected={onConversationChage}/>
+                                    selectedConversation={currentContact}
+                                    onContactItemSelected={onConversationChage} />
                             </Col>
                         </Row>
                     </Container>
@@ -312,30 +282,27 @@ const ChatScreen = (props) => {
 
 
                 <Col className='chat-menu'>
-                    <Container  className='chat-menu-container'>
+                    <Container className='chat-menu-container'>
                         <Row className='chat-header-class'>
                             <Col className='chat-header'>
-                                <ChatHeader selectedChat={currentContact}/>
+                                <ChatHeader selectedChat={currentContact} />
                             </Col>
                         </Row>
                         <Row className='chat-history-class'>
                             <Col className='chat-history'>
-                                {addMessage ? setAddMessage(false) : <ChatHistory messages={mass()}/>}
+                                {addMessage ? setAddMessage(false) : <ChatHistory messages={mass()} />}
                             </Col>
                         </Row>
                         <Row className='chat-message-box'>
                             <Col className='chat-message'>
-                                <ChatMessage createMessage={createNewMessage}/>
+                                <ChatMessage createMessage={createNewMessage} />
                             </Col>
                         </Row>
                     </Container>
                 </Col>
             </Row>
         </Container>
-
->>>>>>> 63fa0da392f0d0e4f2d2a88453d06eff1cebd7b1
     );
 };
 
 export default ChatScreen;
-
