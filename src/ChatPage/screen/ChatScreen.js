@@ -16,10 +16,7 @@ import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 
 const ChatScreen = (props) => {
-    const [listState,setListState]=useState(contactMap.get(props.mainUserName).contactList)
-
-
-
+    const [stam, setStam] = useState(false);
     const [addMessage, setAddMessage] = useState(false);
     const [currentError, setErrorMessage] = useState('');
     const [isAlertActive, setAlertActive] = useState(false);
@@ -40,7 +37,6 @@ const ChatScreen = (props) => {
 
     // This function search in the contact's search box.
     const doSearch = function (q) {
-        setListState(contactMap.get(props.userName).contactList.filter((MessageData)=>MessageData.contact.nickname.includes(q)));
         contactMap.get(props.mainUserName).contactList.filter((MessageData) => MessageData.contact.nickname.includes(q));
     }
 
@@ -52,7 +48,7 @@ const ChatScreen = (props) => {
         }
         newContact.isActive = true;
         setCurrentContact(newContact);
-        setListState(contactMap.get(props.mainUserName).contactList);
+        //contactMap[newContact.userName] = newContact;
 
     }
 
@@ -110,6 +106,7 @@ const ChatScreen = (props) => {
             onConversationChange(newContact);
             setErrorMessage("");
             setAlertActive(false);
+            setStam(false);
         }
 
     }
@@ -209,10 +206,10 @@ const ChatScreen = (props) => {
         contactMap.get(props.mainUserName).contactList.filter((MessageData) => MessageData.contact.userName === currentContact.userName)[0]
             .latestMessageTime = currentTime;
         //mainUserName added currentContact but currentContact didn't add mainUserName.
-        if (contactMap.get(currentContact.userName).contactList.find((MessageData) => MessageData.contact.userName === props.mainUserName)) {
+        // if (contactMap.get(currentContact.userName).contactList.find((MessageData) => MessageData.contact.userName === props.mainUserName)) {
             contactMap.get(currentContact.userName).contactList.find((MessageData) => MessageData.contact.userName === props.mainUserName)
                 .latestMessageTime = currentTime;
-        }
+        // }
 
         // setContactList(contactMap.get(contactMap.get(props.mainUserName).mainContact.userName).contactList);
     }
@@ -249,6 +246,8 @@ const ChatScreen = (props) => {
                                 <ProfileHeader contact={contactMap.get(props.mainUserName).mainContact}/>
                             </Col>
                         </Row>
+
+
                         <Row className='search-tn' style={isAlertActive ? {display: 'none'} : null}>
                             <Col xs={10} sm={10} md={10} lg={10} xl={10} xxl={10} className='contact-search'>
                                 <ContactSearch doSearch={doSearch}/>
@@ -259,6 +258,7 @@ const ChatScreen = (props) => {
                                             setAlertActive={setAlertActive}/>
                             </Col>
                         </Row>
+
                         <Row style={isAlertActive ? null : {display: 'none'}} className='error-message'>
                             <Col className={classAlert} role="alert">{currentError}>
                                 <button type="button" className="btn-close" aria-label="Close"
@@ -268,8 +268,8 @@ const ChatScreen = (props) => {
 
                         <Row className='contact-list'>
                             <Col className="people-list">
-                                <ContactList userName={props.mainUserName} listState={listState}
-                                                      onContactItemSelected={onConversationChange}/>
+                                {stam ? (<ContactList userName={props.mainUserName}
+                                                      onContactItemSelected={onConversationChange}/>) : setStam(true)}
                             </Col>
                         </Row>
                     </Container>
