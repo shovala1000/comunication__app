@@ -13,7 +13,6 @@ function NewContact({addContact, currentError, setErrorMessage, isAlertActive, s
             keyboard: false
         })
         bsModal.show()
-        console.log('showModal');
     }
 
     const hideModal = () => {

@@ -3,17 +3,18 @@ import React from 'react';
 import ContactItem from './ContactItem';
 
 import './ContactItem.css';
-import {contactMap} from "../../userData/data";
+// import {contactMap} from "../../userData/data";
 
 const ContactList = (props) => {
     const conversationsItems = [];
     // let i = 0;
-    contactMap.get(props.userName).contactList.forEach((item ,index) => {
+    props.listState.forEach((item ,index) => {
         // console.log("item: "+item);// object
         // console.log("index: "+index); //0,1,2...
         conversationsItems.push(
             (<ContactItem index={index}
                           userName={props.userName}
+                          item={item}
                           onContactItemSelected={props.onContactItemSelected}/>));
 
     });

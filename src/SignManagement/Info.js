@@ -13,12 +13,12 @@ function Info({signName, setShow1, setShow2, show1, show2}) {
     if (signName === "Sign Up") {
         info.name = "Sign Up";
         info.title = "Hello, Friend!";
-        info.details = <div className='details'> Enter your personal details <br/> and start journey with us</div>
+        info.details = <div className='details'> Enter your personal details <br/> and start your journey with us</div>
     } else if (signName === "Sign In") {
         info.name = "Sign In";
         info.title = "Welcome Back!";
         info.details =
-            <div className='details'> To keep connected with us please <br/> login with your personal info</div>
+            <div className='details'> To stay connected please <br/> login with your personal info</div>
     }
     return (
         <div className="sign-info-background" style={{display:'flex'}}>

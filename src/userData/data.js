@@ -129,7 +129,6 @@ function initialState() {
 }
 
 export default initialState;
-console.log("initialState");
 initialState();
 // check!
 // function addMessage(userName, text) {
