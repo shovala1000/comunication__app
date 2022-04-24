@@ -14,12 +14,14 @@ function ChatMessage({ createMessage }) {
     }
     const createMessageImg = (event) => {
         if (event.target.files[0].name) {
+            console.log(event.target.url);
             createMessage('/' + fileName, MESSAGES_TYPE.IMAGE);
             console.log(fileName);
         }
     }
     const createMessageVideo = (event) => {
         if (event.target.files[0].name) {
+
             createMessage('/' + fileName, MESSAGES_TYPE.VIDEO);
             console.log(fileName);
         }

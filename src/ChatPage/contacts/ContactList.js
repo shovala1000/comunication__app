@@ -3,18 +3,19 @@ import React from 'react';
 import ContactItem from './ContactItem';
 
 import './ContactItem.css';
+import {contactMap} from "../../userData/data";
 
 const ContactList = (props) => {
     const conversationsItems = [];
-    let i = 0;
-    props.map.forEach((item, index) => {
-        conversationsItems[i++] =
-            <ContactItem
-                key={index}
-                isActive={index === props.selectedConversation}
-                onContactItemSelected={props.onContactItemSelected}
-                cuttrrentContact={props.selectedConversation}
-                item={item}/>
+    // let i = 0;
+    contactMap.get(props.userName).contactList.forEach((item ,index) => {
+        // console.log("item: "+item);// object
+        // console.log("index: "+index); //0,1,2...
+        conversationsItems.push(
+            (<ContactItem index={index}
+                          userName={props.userName}
+                          onContactItemSelected={props.onContactItemSelected}/>));
+
     });
     return (
         <ul className="list-group chat-list">

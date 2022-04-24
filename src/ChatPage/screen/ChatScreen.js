@@ -7,7 +7,7 @@ import ContactSearch from '../contacts/ContactSearch';
 import ChatHeader from '../chatHeader/ChatHeader';
 import ChatHistory from '../chatHistory-List/ChatHistory';
 import ProfileHeader from '../profileHeader/ProfileHeader';
-import {contactMap} from '../../userData/data';
+import {contactMap, Message} from '../../userData/data';
 import NewContact from '../newContact/NewContact';
 import {MESSAGES_TYPE} from '../chatHistory-List/Message';
 import ChatMessage from '../chatMessage-Box/ChatMessage';
@@ -16,43 +16,42 @@ import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 
 const ChatScreen = (props) => {
-    let selectedContact = null;
+    const [stam, setStam] = useState(false);
     const [addMessage, setAddMessage] = useState(false);
     const [currentError, setErrorMessage] = useState('');
     const [isAlertActive, setAlertActive] = useState(false);
-    // This useState is saving the current state of the contactMap in contactList.
-    const [contactList, setContactList] = useState(props.mainContact.messages.keys());
+    let selectedContact = null;
+    // // This useState is saving the current state of the contactMap in contactList.
+    // const [contactList, setContactList] = useState(contactMap.get(props.mainUserName).contactList);
 
+
+    // This loop finds the active chat in the map the save it on selectedContact.
+    contactMap.get(props.mainUserName).contactList.forEach((item) => {
+        if (item.isActive === true) {
+            selectedContact = item;
+        }
+    });
     // This useState is saving the state for the selected contact, the contact that the current conversation is with.
-    const [currentContact, setSelectedContact] = useState(selectedContact);
-    const [typeMessage, setTypeMessage] = useState(MESSAGES_TYPE.TEXT);
+    const [currentContact, setCurrentContact] = useState(selectedContact);
 
 
     // This function search in the contact's search box.
     const doSearch = function (q) {
-        setContactList(Array.from(contactList).filter((item) => item.nickname.includes(q)));
+        contactMap.get(props.mainUserName).contactList.filter((item) => item.nickname.includes(q));
     }
 
-    // This loop finds the active chat in the map the save it on selectedContact.
-    for (let i=0; i<contactList.length; i++){
-        console.log(props.mainContact)
-        let contactName = contactList.next();
-        console.log(contactName);
-        if (contactName.isActive === true) {
-            setSelectedContact(contactName);
-        }
-    }
 
     // this function in handle conversation changing, pressing on contact from the contact list will invoke this function.
-    const onConversationChage = function (newContact) {
+    const onConversationChange = function (newContact) {
         if (currentContact !== null) {
             currentContact.isActive = false;
         }
         newContact.isActive = true;
-        setSelectedContact(newContact);
+        setCurrentContact(newContact);
         //contactMap[newContact.userName] = newContact;
 
     }
+
 
     // This function gets the nickname from the user and starts a conversation with him.
     /*
@@ -64,38 +63,50 @@ const ChatScreen = (props) => {
         // username invalid - default
         setErrorMessage('username invalid');
         setAlertActive(true);
-        if (username === props.contactChatInfo.mainContact.userName) {
+        if (username === contactMap.get(props.mainUserName).mainContact.userName) {
             //texting yourself
             setErrorMessage('can not able to add yourself');
             setAlertActive(true);
             return;
         }
-        var newContact = contactMap.get(username).mainContact;
+        const newContact = contactMap.get(username).mainContact;
+        //newContact is a register
         if (newContact) {
-            var isExist = false;
-            contactList.forEach((value) => {
+            let isExist = false;
+            contactMap.get(props.mainUserName).contactList.forEach((value) => {
                 if (value.userName === username) {
                     isExist = true;
                 }
             })
+            //already exist in the contactList
             if (isExist) {
-                //alreadyExist
                 setErrorMessage('username already exist');
                 setAlertActive(true);
-            } else {
-                //add contact successfully
-                newContact.messages.set(props.contactChatInfo.mainContact.userName, []);
-                currentContact.messages.set(newContact.userName, []);
-                props.contactChatInfo.mainContact.messages.set(newContact.userName, []);
-                contactList.push(newContact);
-                contactMap.set(newContact.userName, props.contactChatInfo);
-                setContactList(contactList);
-                onConversationChage(newContact);
-                setErrorMessage("");
-                setAlertActive(false);
+                return;
             }
+            // // userName exist in the messages and not in the contactList (added before by the other contact)
+            // let isInMessage = contactMap.get(props.mainUserName).mainContact.messages.get(username)
+            // if (isInMessage) {
+            //     contactMap.get(props.mainUserName).contactList.push(newContact);
+            //
+            //     setErrorMessage("");
+            //     setAlertActive(false);
+            //     setStam(false);
+            //     return;
+            // }
+            //add contact successfully
+            contactMap.get(newContact.userName).mainContact.messages.set(contactMap.get(props.mainUserName).mainContact.userName, []);
+            contactMap.get(newContact.userName).contactList.push(contactMap.get(props.mainUserName).mainContact);
+            contactMap.get(props.mainUserName).mainContact.messages.set(newContact.userName, []);
+            contactMap.get(props.mainUserName).contactList.push(newContact);
+
+            // setContactList( contactMap.get(contactMap.get(props.mainUserName).mainContact.userName).contactList);
+            onConversationChange(newContact);
+            setErrorMessage("");
+            setAlertActive(false);
+            setStam(false);
         }
-        console.log(contactMap);
+
     }
 
 
@@ -113,117 +124,92 @@ const ChatScreen = (props) => {
         return String(dateTime)
     }
 
+
     function createNewMessage(info, type) {
-        console.log(info)
-        var currentTime = getCurrentTime();
-        // console.log("current time is: " + currentTime);
+        const currentTime = getCurrentTime();
         switch (type) {
             case MESSAGES_TYPE.TEXT:
-                setTypeMessage(MESSAGES_TYPE.TEXT);
-                console.log("clicked on send text");
+                // setTypeMessage(MESSAGES_TYPE.TEXT);
                 if (info.toString().length !== 0) {
-                    contactMap.get(props.contactChatInfo.mainContact.userName).mainContact.messages.get(currentContact.userName).push({
-                        time: currentTime,
-                        data: info,
-                        isMyMessage: true,
-                        type: MESSAGES_TYPE.TEXT
-                    });
+                    contactMap.get(props.mainUserName).mainContact.messages.get(currentContact.userName).push(
+                        new Message(currentTime, info, true, MESSAGES_TYPE.TEXT));
                     setAddMessage(true);
-                    contactMap.get(currentContact.userName).mainContact.messages.get(props.contactChatInfo.mainContact.userName).push({
-                        time: currentTime,
-                        data: info,
-                        isMyMessage: false,
-                        type: MESSAGES_TYPE.TEXT
-                    });
-                    console.log(contactMap);
-                    contactMap.get(props.contactChatInfo.mainContact.userName).contactList.filter((contact) => contact.userName === currentContact.userName)[0]
+                    contactMap.get(currentContact.userName).mainContact.messages.get(contactMap.get(props.mainUserName).mainContact.userName).push(
+                        new Message(currentTime, info, false, MESSAGES_TYPE.TEXT));
+
+
+                    contactMap.get(props.mainUserName).contactList.filter((contact) => contact.userName === currentContact.userName)[0]
                         .latestMessage = info;
-                    contactMap.get(currentContact.userName).contactList.filter((contact) => contact.userName === props.contactChatInfo.mainContact.userName)[0]
-                        .latestMessage = info;
+                    //mainUserName added currentContact but currentContact didn't add mainUserName.
+                    if (contactMap.get(currentContact.userName).contactList.find((contact) => contact.userName === props.mainUserName)) {
+                        contactMap.get(currentContact.userName).contactList.find((contact) => contact.userName === props.mainUserName).latestMessage = info;
+                    }
                 }
                 break;
 
             case MESSAGES_TYPE.IMAGE:
-                console.log("clicked on image");
                 if (info.toString().length !== 1) {
-                    setTypeMessage(MESSAGES_TYPE.IMAGE);
-
-                    contactMap.get(props.contactChatInfo.mainContact.userName).mainContact.messages.get(currentContact.userName).push({
-                        time: currentTime,
-                        data: info,
-                        isMyMessage: true,
-                        type: MESSAGES_TYPE.IMAGE
-                    });
-                    contactMap.get(currentContact.userName).mainContact.messages.get(props.contactChatInfo.mainContact.userName).push({
-                        time: currentTime,
-                        data: info,
-                        isMyMessage: false,
-                        type: MESSAGES_TYPE.IMAGE
-                    });
+                    contactMap.get(props.mainUserName).mainContact.messages.get(currentContact.userName).push(
+                        new Message(currentTime, info, true, MESSAGES_TYPE.IMAGE));
+                    contactMap.get(currentContact.userName).mainContact.messages.get(contactMap.get(props.mainUserName).mainContact.userName).push(
+                        new Message(currentTime, info, false, MESSAGES_TYPE.IMAGE));
                     setAddMessage(true);
-                    contactMap.get(props.contactChatInfo.mainContact.userName).contactList.filter((contact) => contact.userName === currentContact.userName)[0]
+
+
+                    contactMap.get(props.mainUserName).contactList.filter((contact) => contact.userName === currentContact.userName)[0]
                         .latestMessage = 'Img';
-                    contactMap.get(currentContact.userName).contactList.filter((contact) => contact.userName === props.contactChatInfo.mainContact.userName)[0]
-                        .latestMessage = 'Img';
+                    //mainUserName added currentContact but currentContact didn't add mainUserName.
+                    if (contactMap.get(currentContact.userName).contactList.find((contact) => contact.userName === props.mainUserName)) {
+                        contactMap.get(currentContact.userName).contactList.find((contact) => contact.userName === props.mainUserName).latestMessage = 'Img';
+                    }
                 }
                 break;
 
             case MESSAGES_TYPE.MICROPHONE:
-                contactMap.get(props.contactChatInfo.mainContact.userName).mainContact.messages.get(currentContact.userName).push({
-                    time: currentTime,
-                    data: info,
-                    isMyMessage: true,
-                    type: MESSAGES_TYPE.MICROPHONE
-                });
-                contactMap.get(currentContact.userName).mainContact.messages.get(props.contactChatInfo.mainContact.userName).push({
-                    time: currentTime,
-                    data: info,
-                    isMyMessage: false,
-                    type: MESSAGES_TYPE.MICROPHONE
-                });
-                console.log(contactMap);
+                contactMap.get(props.mainUserName).mainContact.messages.get(currentContact.userName).push(
+                    new Message(currentTime, info, true, MESSAGES_TYPE.MICROPHONE));
+                contactMap.get(currentContact.userName).mainContact.messages.get(contactMap.get(props.mainUserName).mainContact.userName).push(
+                    new Message(currentTime, info, false, MESSAGES_TYPE.MICROPHONE));
                 setAddMessage(true);
-                contactMap.get(props.contactChatInfo.mainContact.userName).contactList.filter((contact) => contact.userName === currentContact.userName)[0]
+
+
+                contactMap.get(props.mainUserName).contactList.filter((contact) => contact.userName === currentContact.userName)[0]
                     .latestMessage = 'Audio';
-                contactMap.get(currentContact.userName).contactList.filter((contact) => contact.userName === props.contactChatInfo.mainContact.userName)[0]
-                    .latestMessage = 'Audio';
+                //mainUserName added currentContact but currentContact didn't add mainUserName.
+                if (contactMap.get(currentContact.userName).contactList.find((contact) => contact.userName === props.mainUserName)) {
+                    contactMap.get(currentContact.userName).contactList.find((contact) => contact.userName === props.mainUserName).latestMessage = 'Audio';
+                }
                 break;
 
             case MESSAGES_TYPE.VIDEO:
-                console.log("clicked on video");
                 if (info.toString().length !== 0) {
-                    setTypeMessage(MESSAGES_TYPE.VIDEO);
+                    // setTypeMessage(MESSAGES_TYPE.VIDEO);
 
-                    contactMap.get(props.contactChatInfo.mainContact.userName).mainContact.messages.get(currentContact.userName).push({
-                        time: currentTime,
-                        data: info,
-                        isMyMessage: true,
-                        type: MESSAGES_TYPE.VIDEO
-                    });
-                    contactMap.get(currentContact.userName).mainContact.messages.get(props.contactChatInfo.mainContact.userName).push({
-                        time: currentTime,
-                        data: info,
-                        isMyMessage: false,
-                        type: MESSAGES_TYPE.VIDEO
-                    });
-                    console.log(contactMap);
+                    contactMap.get(props.mainUserName).mainContact.messages.get(currentContact.userName).push(
+                        new Message(currentTime, info, true, MESSAGES_TYPE.VIDEO));
+                    contactMap.get(currentContact.userName).mainContact.messages.get(contactMap.get(props.mainUserName).mainContact.userName).push(
+                        new Message(currentTime, info, false, MESSAGES_TYPE.VIDEO));
                     setAddMessage(true);
-                    contactMap.get(props.contactChatInfo.mainContact.userName).contactList.filter((contact) => contact.userName === currentContact.userName)[0]
+
+
+                    contactMap.get(props.mainUserName).contactList.filter((contact) => contact.userName === currentContact.userName)[0]
                         .latestMessage = 'Video';
-                    contactMap.get(currentContact.userName).contactList.filter((contact) => contact.userName === props.contactChatInfo.mainContact.userName)[0]
-                        .latestMessage = 'Video';
+                    //mainUserName added currentContact but currentContact didn't add mainUserName.
+                    if (contactMap.get(currentContact.userName).contactList.find((contact) => contact.userName === props.mainUserName)) {
+                        contactMap.get(currentContact.userName).contactList.find((contact) => contact.userName === props.mainUserName).latestMessage = 'Video';
+                    }
                 }
                 break;
         }
-        contactMap.get(props.contactChatInfo.mainContact.userName).contactList.filter((contact) => contact.userName === currentContact.userName)[0]
+        contactMap.get(props.mainUserName).contactList.filter((contact) => contact.userName === currentContact.userName)[0]
             .latestMessageTime = currentTime;
-        contactMap.get(currentContact.userName).contactList.filter((contact) => contact.userName === props.contactChatInfo.mainContact.userName)[0]
-            .latestMessageTime = currentTime;
-        // contactMap.get(props.contactChatInfo.mainContact.userName).contactList.filter((contact) => contact.userName === currentContact.userName)[0]
-        //     .latestMessage = info;
-        // contactMap.get(currentContact.userName).contactList.filter((contact) => contact.userName === props.contactChatInfo.mainContact.userName)[0]
-        //     .latestMessage = info;
-        setContactList(contactMap.get(props.contactChatInfo.mainContact.userName).contactList);
+        //mainUserName added currentContact but currentContact didn't add mainUserName.
+        if (contactMap.get(currentContact.userName).contactList.find((contact) => contact.userName === props.mainUserName)) {
+            contactMap.get(currentContact.userName).contactList.find((contact) => contact.userName === props.mainUserName)
+                .latestMessageTime = currentTime;
+        }
+
+        // setContactList(contactMap.get(contactMap.get(props.mainUserName).mainContact.userName).contactList);
     }
 
     /*
@@ -238,15 +224,12 @@ const ChatScreen = (props) => {
      */
     const mass = () => {
         if (currentContact !== null) {
-            // return contactMap.get(currentContact.userName).mainContact.messages.get(props.contactChatInfo.mainContact.userName);
-            return contactMap.get(props.connectedUser).mainContact.messages.get(currentContact.userName);
+            return contactMap.get(props.mainUserName).mainContact.messages.get(currentContact.userName);
         }
     }
 
+
     let classAlert = "alert alert-primary";
-    // if (isAlertActive === false) {
-    //     classAlert = 'alert alert-primary'// + '-hide'
-    // }
 
 
     return (
@@ -258,12 +241,12 @@ const ChatScreen = (props) => {
                     <Container className='left-menu-container'>
                         <Row className='profile-header-class'>
                             <Col className='profile-header'>
-                                <ProfileHeader contact={props.contactChatInfo.mainContact}/>
+                                <ProfileHeader contact={contactMap.get(props.mainUserName).mainContact}/>
                             </Col>
                         </Row>
 
 
-                        <Row className='search-tn' style={isAlertActive?{display:'none'}:null}>
+                        <Row className='search-tn' style={isAlertActive ? {display: 'none'} : null}>
                             <Col xs={10} sm={10} md={10} lg={10} xl={10} xxl={10} className='contact-search'>
                                 <ContactSearch doSearch={doSearch}/>
                             </Col>
@@ -273,17 +256,18 @@ const ChatScreen = (props) => {
                                             setAlertActive={setAlertActive}/>
                             </Col>
                         </Row>
-                        <Row style={isAlertActive?null:{display:'none'}} className='error-message'>
+
+                        <Row style={isAlertActive ? null : {display: 'none'}} className='error-message'>
                             <Col className={classAlert} role="alert">{currentError}>
                                 <button type="button" className="btn-close" aria-label="Close"
                                         onClick={() => setAlertActive(false)}></button>
                             </Col>
                         </Row>
+
                         <Row className='contact-list'>
                             <Col className="people-list">
-                                <ContactList map={contactList}
-                                             selectedConversation={currentContact}
-                                             onContactItemSelected={onConversationChage}/>
+                                {stam ? (<ContactList userName={props.mainUserName}
+                                                      onContactItemSelected={onConversationChange}/>) : setStam(true)}
                             </Col>
                         </Row>
                     </Container>
@@ -310,9 +294,9 @@ const ChatScreen = (props) => {
                     </Container>
                 </Col>
             </Row>
+            {console.log(contactMap)}
         </Container>
     );
-
 };
 
 export default ChatScreen;

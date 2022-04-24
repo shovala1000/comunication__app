@@ -1,11 +1,14 @@
 import {MESSAGES_TYPE} from "../ChatPage/chatHistory-List/Message";
 
-export const Contact = function (userName, password, imageURL, imageAlt, nickname) {
+export const Contact = function (userName, password, imageURL, nickname) {
     this.userName = userName;
     this.nickname = nickname;
     this.password = password;
-    this.imageURL = imageURL;
-    this.imageAlt = imageAlt;
+    if(imageURL){
+        this.imageURL = imageURL;
+    }
+    else {this.imageURL = '/defalut-profile-picture.png';}
+    this.imageAlt = 'avatar';
     this.type = null;
     this.latestMessage = "";
     this.latestMessageTime = "";
@@ -13,14 +16,14 @@ export const Contact = function (userName, password, imageURL, imageAlt, nicknam
     this.isActive = false;
 }
 
-//
-// export const ContactChatInfo = function (mainContact, contactList) {
-//     this.mainContact = mainContact;
-//     this.contactList = contactList;
-//     if (contactList.length !== 0) {
-//         contactList[0].isActive = true;
-//     }
-// }
+
+export const ContactChatInfo = function (mainContact, contactList) {
+    this.mainContact = mainContact;
+    this.contactList = contactList;
+    if (contactList.length !== 0) {
+        contactList[0].isActive = true;
+    }
+}
 export const Message = function (time, data, isMyMessage, type) {
     this.time = time;
     this.data = data;
@@ -32,62 +35,53 @@ export const Message = function (time, data, isMyMessage, type) {
 export const contactMap = new Map();
 
 function initialState() {
-    const c1 = new Contact(
+    var c1 = new Contact(
         //'Christian Eriksen',
         'a1',
         'a1',
-        '/avatar1.png',
-        'avatar',
+        null,
+        // '/avatar1.png',
         'Christiansxxxxxxxxxxxxxxxxxxx',
     );
 
 
-    const c2 = new Contact(
+    var c2 = new Contact(
         // 'Lionel Messi',
         'b2',
         'b2',
         '/avatar3.png',
-        'avatar',
         'LM10',
     );
 
-    const c3 = new Contact(
+    var c3 = new Contact(
         // 'Hugo Loris',
         'c3',
         'c3',
         '/avatar5.png',
-        'avatar',
         'Loris',
     );
 
-    const c4 = new Contact(
+    var c4 = new Contact(
         // 'Son Houng min',
         'd4',
         'd4',
         '/avatar5.png',
-        'avatar',
         'Sonny',
     );
 
-    const c5 = new Contact(
+    var c5 = new Contact(
         // 'Antonio Conte',
         'e5',
         'e5',
         '/avatar6.png',
-        'avatar',
         'Antonio',
     );
-    // contactMap.set(c1.userName, new ContactChatInfo(c1, [c2, c3, c4]));
-    // contactMap.set(c2.userName, new ContactChatInfo(c2, [c1, c3]));
-    // contactMap.set(c3.userName, new ContactChatInfo(c3, [c1, c2]));
-    // contactMap.set(c4.userName, new ContactChatInfo(c4, [c1]));
-    // contactMap.set(c5.userName, new ContactChatInfo(c5, []));
+    contactMap.set(c1.userName, new ContactChatInfo(c1, [c2, c3, c4]));
+    contactMap.set(c2.userName, new ContactChatInfo(c2, [c1, c3]));
+    contactMap.set(c3.userName, new ContactChatInfo(c3, [c1, c2]));
+    contactMap.set(c4.userName, new ContactChatInfo(c4, [c1]));
+    contactMap.set(c5.userName, new ContactChatInfo(c5, []));
 
-    contactMap.set(c1.userName, c1);
-    contactMap.set(c2.userName, c2);
-    contactMap.set(c3.userName, c3);
-    contactMap.set(c4.userName, c4);
-    contactMap.set(c5.userName, c5);
 
     function sendMessageTo(from, to, message) {
         from.messages.set(to.userName, message);
@@ -112,12 +106,12 @@ function initialState() {
         new Message('10:30, 16/4/2022', 'No way!', true, MESSAGES_TYPE.TEXT)]);
     sendMessageTo(c1, c4, []);
     sendMessageTo(c2, c3, []);
-    console.log(contactMap);
 }
 
 
 export default initialState;
-
+console.log("initialState");
+initialState();
 // check!
 // function addMessage(userName, text) {
 //     const item = contactMap.get(userName);
@@ -130,7 +124,6 @@ export default initialState;
 
 /*contactMap.get(c4.userName).contactList.map()*/
 
-// console.log(contactMap);
 
 
 // var c5 = new Contact(

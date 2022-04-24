@@ -9,7 +9,7 @@ import SignUp from "./SignUp";
 import Info from "./Info";
 
 
-function SignManagement() {
+function SignManagement({setRouteArray,setAddRoute}) {
 
     const [show1, setShow1] = React.useState(false);
     const [show2, setShow2] = React.useState(true);
@@ -35,16 +35,19 @@ function SignManagement() {
                             show2={show2}/>
                     </Col>
                     <Col className='slide-animation2'>
-                        <SignIn  setShow1={setShow1}
-                                 setShow2={setShow2}
-                                 show1={show1}
-                                 show2={show2}/>
+                        <SignIn setRouteArray = {setRouteArray}
+                                setAddRoute={setAddRoute}
+                                setShow1={setShow1}
+                                setShow2={setShow2}
+                                show1={show1}
+                                show2={show2}/>
                     </Col>
                 </Row>
                 <Row style={{display: display2()}}>
                     <Col
                         className='slide-animation'
-                    > <SignUp setShow1={setShow1}
+                    > <SignUp setRouteArray = {setRouteArray}
+                              setShow1={setShow1}
                               setShow2={setShow2}
                               show1={show1}
                               show2={show2}/>

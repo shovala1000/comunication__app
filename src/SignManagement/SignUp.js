@@ -1,11 +1,13 @@
 import React, {useState} from "react";
 import {Button} from "react-bootstrap";
-import {Contact, contactMap} from '../userData/data';
+import {Contact, ContactChatInfo, contactMap} from '../userData/data';
 import './SignInOrUp.css';
-import {Link, useNavigate} from "react-router-dom";
+import {Link, Route, useNavigate} from "react-router-dom";
+import ChatScreen from "../ChatPage/screen/ChatScreen";
+import {RouteArray} from "../App";
 
 
-function SignUp({setShow1, setShow2, show1, show2}) {
+function SignUp({setRouteArray,setShow1, setShow2, show1, show2}) {
     let navigate = useNavigate();
     // States for checking the errors
     const [errorMessages, setErrorMessages] = useState({});
@@ -49,8 +51,12 @@ function SignUp({setShow1, setShow2, show1, show2}) {
     };
 // Handling the image change
     const handleImage = (e) => {
-        setImage(e.target.value);
-        setIsSubmitted(false);
+        console.log(e.target.files[0].name)
+        if (e.target.files[0].name) {
+            setImage('/'+e.target.files[0].name);
+            setIsSubmitted(false);
+        }
+
     };
     const isPassValid = (pass) => {
         let value = pass.toString();
@@ -82,8 +88,12 @@ function SignUp({setShow1, setShow2, show1, show2}) {
         return false;
     };
     const isImageValid = (img) => {
-        let value = img.toString();
-        return value.match(/\.(jpg|jpeg|png|gif)$/);
+        if(img){
+            let value = img.toString();
+            return value.match(/\.(jpg|jpeg|png|gif)$/);
+        }else{
+            return true;
+        }
     }
 
 
@@ -119,13 +129,11 @@ function SignUp({setShow1, setShow2, show1, show2}) {
             } else if (!isImageValid(image)) {
                 setErrorMessages({name: "img", message: errors.img});
             } else {
-                console.log(" Add new register to database");
                 // Add new register to database
-                const contact = new Contact(username,password,image,'profile',nickname);
-                // const contactChatInfo= new ContactChatInfo(contact,[]);
-                // contactMap.set(username,contactChatInfo);
-                // database += new Register(username, nickname, password);
-                console.log(contactMap);
+                console.log('image: '+image);
+                const contact = new Contact(username, password, image, nickname);
+                const contactChatInfo = new ContactChatInfo(contact, []);
+                contactMap.set(username, contactChatInfo);
                 //sign up successfully
                 setIsSubmitted(true);
             }
@@ -136,6 +144,10 @@ function SignUp({setShow1, setShow2, show1, show2}) {
     // Generate code for error message
     const renderErrorMessage = (name) =>
         name === errorMessages.name && (<div className="error">{errorMessages.message}</div>);
+    function navToNewRoute(){
+        setRouteArray(prev=>[...prev,(<Route path={"chat/" + username} element={<ChatScreen mainUserName={username}/>}/>)]);
+        navigate('chat/' + username, {replace: true})
+    }
 
     const renderForm = (
         <form className="form" onSubmit={handleSubmit}>
@@ -166,14 +178,13 @@ function SignUp({setShow1, setShow2, show1, show2}) {
             </div>
             <div className="input-container">
                 <label>Image </label>
-                <input type="file" name="img" onChange={handleImage} className="input"
-                       value={image} required/>
+                <input type="file" name="img" onChange={handleImage} className="input"/>
                 <div>  {renderErrorMessage("img")}</div>
             </div>
-            <div id = "button-container">
+            <div id="button-container">
                 <Button id="button-container" onClick={handleSubmit} type="submit">
-                Submit
-            </Button>
+                    Submit
+                </Button>
             </div>
             <div id='details'>
                 already a register?
@@ -188,7 +199,7 @@ function SignUp({setShow1, setShow2, show1, show2}) {
         </form>);
     return (
         <div className="sign-info-background">
-            {isSubmitted ? navigate('chat/' + username, {replace: true}) : renderForm}
+            {isSubmitted ? navToNewRoute() : renderForm}
         </div>
     );
 }

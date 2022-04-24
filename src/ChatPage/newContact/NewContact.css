@@ -3,7 +3,9 @@
     height: 100%;
     width: 100%;
 }
-
+.new-contact-btn{
+    color:black;
+}
 #new-contact-button {
     /*float: left;*/
     position: relative;

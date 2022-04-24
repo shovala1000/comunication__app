@@ -15,7 +15,7 @@
     float: left;
     height: 100%;
     width: 50%;
-    font-size: x-large;
+    font-size: large;
     font-weight: bold;
     flex-direction: column;
     text-overflow: ellipsis;

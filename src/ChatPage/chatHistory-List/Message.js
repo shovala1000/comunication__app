@@ -21,16 +21,10 @@ const Message = (props) => {
     var messageClass = 'message';
     var sendTime = 'time';
 
-    if (props.isMyMessage === true) {
-        messageClass = 'message';
-        sendTime = 'time';
-    } else {
+    if (props.isMyMessage !== true) {
         messageClass = ' other-message';
         sendTime = 'other-time';
     }
-
-    console.log(messageClass);
-
     function data() {
         // if (props.type === MESSAGES_TYPE.TEXT) {
         //     return (<div className="message-Text">{props.message.data}</div>);

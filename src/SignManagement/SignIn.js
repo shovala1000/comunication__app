@@ -2,10 +2,11 @@ import React, {useState} from "react";
 import {Button} from "react-bootstrap";
 import {contactMap} from '../userData/data';
 import './SignInOrUp.css';
-import {Link} from "react-router-dom";
+import {Link, Route} from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+import ChatScreen from "../ChatPage/screen/ChatScreen";
 
-function SignIn({setShow1, setShow2, show1, show2}){
+function SignIn({setRouteArray,setAddRoute,setShow1, setShow2, show1, show2}){
     let navigate = useNavigate();
     // States for registration
     const [errorMessages, setErrorMessages] = useState({});
@@ -55,6 +56,12 @@ function SignIn({setShow1, setShow2, show1, show2}){
     const renderErrorMessage = () =>
         (<div className="error">{errorMessages.message}</div>);
 
+    function navToNewRoute(){
+        setAddRoute(true);
+        setRouteArray(prev=>[...prev,(<Route path={"chat/" + username} element={<ChatScreen mainUserName={username}/>}/>)]);
+        // navigate('chat/' + username, {replace: true})
+    }
+
     // sign in form
     const renderForm = (
         <div className="form">
@@ -92,7 +99,8 @@ function SignIn({setShow1, setShow2, show1, show2}){
 
     return (
         <div className="sign-info-background">
-            {isSubmitted ? navigate('chat/' + username,{replace: true}) : renderForm}
+            {isSubmitted?navToNewRoute():null}
+            {isSubmitted ?  navigate('chat/' + username, {replace: true}) : renderForm}
         </div>
     );
 }

@@ -1,14 +1,12 @@
-.message-Img, .message-Text{
+.message-Text{
     height: 100%;
     width: 100%;
 }
-
+.message-Img,.message-Video{
+    width: 200px;
+    height: 200px;
+}
 .message-Microphone{
     width: 200px;
     height: 40px;
-}
-
-.message-Video{
-    width: 250px;
-    height: 250px;
 }
