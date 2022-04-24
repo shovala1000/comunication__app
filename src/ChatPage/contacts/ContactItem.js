@@ -12,11 +12,13 @@ const ContactItem = (props) => {
     return (
         <li className={className} onClick={() => props.onContactItemSelected(props.item)}>
             <img src={props.item.imageURL} alt={props.item.imageAlt}></img>
-            <div className="name-latestMessage">
-                {props.item.nickname} <br/>{props.item.latestMessage}
+            <div className='nickname'>
+                {props.item.nickname}
+                <div className="name-latestMessage">
+                    {props.item.latestMessage}
+                </div>
             </div>
-
-            <div className="latestMessage-time">{props.item.latestMessageTime}</div>
+            <span className="latestMessage-time">{props.item.latestMessageTime}</span>
 
         </li>
     );

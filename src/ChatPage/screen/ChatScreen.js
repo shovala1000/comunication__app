@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 import './ChatScreen.css';
 
 import Container from 'react-bootstrap/Container';
@@ -7,42 +7,41 @@ import ContactSearch from '../contacts/ContactSearch';
 import ChatHeader from '../chatHeader/ChatHeader';
 import ChatHistory from '../chatHistory-List/ChatHistory';
 import ProfileHeader from '../profileHeader/ProfileHeader';
-import { contactMap } from '../../userData/data';
+import {contactMap} from '../../userData/data';
 import NewContact from '../newContact/NewContact';
-import { MESSAGES_TYPE } from '../chatHistory-List/Message';
+import {MESSAGES_TYPE} from '../chatHistory-List/Message';
 import ChatMessage from '../chatMessage-Box/ChatMessage';
-import { ContactChatInfo } from '../../userData/data';
 
-// import {
-//     useParams,
-//     useNavigate,
-//     useLocation,
-// } from "react-router-dom";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 
 const ChatScreen = (props) => {
-
-    const [addMessage, setAddMessage] = useState(false);
-
     let selectedContact = null;
+    const [addMessage, setAddMessage] = useState(false);
+    const [currentError, setErrorMessage] = useState('');
+    const [isAlertActive, setAlertActive] = useState(false);
     // This useState is saving the current state of the contactMap in contactList.
-    const [contactList, setContactList] = useState(props.contactChatInfo.contactList);
-
-    // This function search in the contact's search box.
-    const doSearch = function (q) {
-        setContactList(Array.from(props.contactChatInfo.contactList).filter((item) => item.nickname.includes(q)));
-    }
-
-    // This loop finds the active chat in the map the save it on selectedContact.
-    props.contactChatInfo.contactList.forEach((item) => {
-        if (item.isActive === true) {
-            selectedContact = item;
-        }
-    });
+    const [contactList, setContactList] = useState(props.mainContact.messages.keys());
 
     // This useState is saving the state for the selected contact, the contact that the current conversation is with.
     const [currentContact, setSelectedContact] = useState(selectedContact);
+    const [typeMessage, setTypeMessage] = useState(MESSAGES_TYPE.TEXT);
+
+
+    // This function search in the contact's search box.
+    const doSearch = function (q) {
+        setContactList(Array.from(contactList).filter((item) => item.nickname.includes(q)));
+    }
+
+    // This loop finds the active chat in the map the save it on selectedContact.
+    for (let i=0; i<contactList.length; i++){
+        console.log(props.mainContact)
+        let contactName = contactList.next();
+        console.log(contactName);
+        if (contactName.isActive === true) {
+            setSelectedContact(contactName);
+        }
+    }
 
     // this function in handle conversation changing, pressing on contact from the contact list will invoke this function.
     const onConversationChage = function (newContact) {
@@ -54,12 +53,6 @@ const ChatScreen = (props) => {
         //contactMap[newContact.userName] = newContact;
 
     }
-
-
-    const [currentError, setErrorMessage] = useState('');
-
-    const [isAlertActive, setAlertActive] = useState(false);
-
 
     // This function gets the nickname from the user and starts a conversation with him.
     /*
@@ -80,7 +73,7 @@ const ChatScreen = (props) => {
         var newContact = contactMap.get(username).mainContact;
         if (newContact) {
             var isExist = false;
-            props.contactChatInfo.contactList.forEach((value) => {
+            contactList.forEach((value) => {
                 if (value.userName === username) {
                     isExist = true;
                 }
@@ -89,13 +82,14 @@ const ChatScreen = (props) => {
                 //alreadyExist
                 setErrorMessage('username already exist');
                 setAlertActive(true);
-            } else {               
+            } else {
+                //add contact successfully
                 newContact.messages.set(props.contactChatInfo.mainContact.userName, []);
                 currentContact.messages.set(newContact.userName, []);
                 props.contactChatInfo.mainContact.messages.set(newContact.userName, []);
-                props.contactChatInfo.contactList.push(newContact);
+                contactList.push(newContact);
                 contactMap.set(newContact.userName, props.contactChatInfo);
-                setContactList(props.contactChatInfo.contactList);
+                setContactList(contactList);
                 onConversationChage(newContact);
                 setErrorMessage("");
                 setAlertActive(false);
@@ -248,54 +242,69 @@ const ChatScreen = (props) => {
             return contactMap.get(props.connectedUser).mainContact.messages.get(currentContact.userName);
         }
     }
-    const [typeMessage, setTypeMessage] = useState(MESSAGES_TYPE.TEXT);
+
+    let classAlert = "alert alert-primary";
+    // if (isAlertActive === false) {
+    //     classAlert = 'alert alert-primary'// + '-hide'
+    // }
+
+
     return (
         <Container className='chat-screen'>
-            <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
+            <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"/>
             <Row className=" chat-page">
 
-                <Col xs={4} sm={4} md={4} lg={4} xl={4} xxl={4} className='left-menu'>
+                <Col xs={3} sm={3} md={3} lg={3} xl={3} xxl={3} className='left-menu'>
                     <Container className='left-menu-container'>
                         <Row className='profile-header-class'>
                             <Col className='profile-header'>
-                                <ProfileHeader contact={props.contactChatInfo.mainContact} />
+                                <ProfileHeader contact={props.contactChatInfo.mainContact}/>
                             </Col>
                         </Row>
-                        <Row className='search-tn'>
+
+
+                        <Row className='search-tn' style={isAlertActive?{display:'none'}:null}>
                             <Col xs={10} sm={10} md={10} lg={10} xl={10} xxl={10} className='contact-search'>
-                                <ContactSearch doSearch={doSearch} />
+                                <ContactSearch doSearch={doSearch}/>
                             </Col>
                             <Col className='new-contact-btn'>
-                                <NewContact addContact={addContact} currentError={currentError} setErrorMessage={setErrorMessage} isAlertActive={isAlertActive} setAlertActive={setAlertActive} />
+                                <NewContact addContact={addContact} currentError={currentError}
+                                            setErrorMessage={setErrorMessage} isAlertActive={isAlertActive}
+                                            setAlertActive={setAlertActive}/>
                             </Col>
-                            {/*<div id="errorMessage">{current}</div>*/}
+                        </Row>
+                        <Row style={isAlertActive?null:{display:'none'}} className='error-message'>
+                            <Col className={classAlert} role="alert">{currentError}>
+                                <button type="button" className="btn-close" aria-label="Close"
+                                        onClick={() => setAlertActive(false)}></button>
+                            </Col>
                         </Row>
                         <Row className='contact-list'>
                             <Col className="people-list">
                                 <ContactList map={contactList}
-                                    selectedConversation={currentContact}
-                                    onContactItemSelected={onConversationChage} />
+                                             selectedConversation={currentContact}
+                                             onContactItemSelected={onConversationChage}/>
                             </Col>
                         </Row>
                     </Container>
                 </Col>
 
 
-                <Col className='chat-menu'>
+                <Col xs={9} sm={9} md={9} lg={9} xl={9} xxl={9} className='chat-menu'>
                     <Container className='chat-menu-container'>
                         <Row className='chat-header-class'>
                             <Col className='chat-header'>
-                                <ChatHeader selectedChat={currentContact} />
+                                <ChatHeader selectedChat={currentContact}/>
                             </Col>
                         </Row>
                         <Row className='chat-history-class'>
                             <Col className='chat-history'>
-                                {addMessage ? setAddMessage(false) : <ChatHistory messages={mass()} />}
+                                {addMessage ? setAddMessage(false) : <ChatHistory messages={mass()}/>}
                             </Col>
                         </Row>
                         <Row className='chat-message-box'>
                             <Col className='chat-message'>
-                                <ChatMessage createMessage={createNewMessage} />
+                                <ChatMessage createMessage={createNewMessage}/>
                             </Col>
                         </Row>
                     </Container>
@@ -303,6 +312,7 @@ const ChatScreen = (props) => {
             </Row>
         </Container>
     );
+
 };
 
 export default ChatScreen;

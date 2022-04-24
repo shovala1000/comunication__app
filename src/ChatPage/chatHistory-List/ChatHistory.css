@@ -3,7 +3,7 @@
     height: 100%;
     width: 100%;
     margin: 0;
-    padding: 0
+    padding: 0;
 }
 
 .chat-history li {
@@ -16,17 +16,17 @@
 }
 
 li .message {
+    position: relative;
+    display: flex;
+    float: right;
+    flex-direction: column;
     background: darkblue;
     border-radius: 7px;
-    display: inline-table;
-    position: relative;
     height: auto;
     width: auto;
     max-width: 70%;
-    max-height: 100%;
-    flex-direction: column;
+    /*max-height: 100%;*/
     padding: 7px;
-    float: right;
     overflow-wrap: break-word;
 }
 
@@ -36,15 +36,17 @@ li .message {
 
 li .other-message {
     background: dimgrey;
-    border-radius: 7px;
-    display: inline-table;
     position: relative;
+    display: flex;
+    float: left;
+    flex-direction: column;
+    border-radius: 7px;
     height: auto;
     width: auto;
     max-width: 70%;
-    flex-direction: column;
+    /*max-height: 100%;*/
     padding: 7px;
-    float: left;
+    overflow-wrap: break-word;
 }
 
 li .other-time {

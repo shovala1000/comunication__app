@@ -1,5 +1,5 @@
 import React from "react";
-import { useNa, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import './ChatHeader.css';
 
 const ChatHeader = (props) => {

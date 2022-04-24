@@ -1,6 +1,6 @@
 import React, {useState} from "react";
 import {Button} from "react-bootstrap";
-import {Contact, ContactChatInfo, contactMap} from '../userData/data';
+import {Contact, contactMap} from '../userData/data';
 import './SignInOrUp.css';
 import {Link, useNavigate} from "react-router-dom";
 
@@ -122,8 +122,8 @@ function SignUp({setShow1, setShow2, show1, show2}) {
                 console.log(" Add new register to database");
                 // Add new register to database
                 const contact = new Contact(username,password,image,'profile',nickname);
-                const contactChatInfo= new ContactChatInfo(contact,[]);
-                contactMap.set(username,contactChatInfo);
+                // const contactChatInfo= new ContactChatInfo(contact,[]);
+                // contactMap.set(username,contactChatInfo);
                 // database += new Register(username, nickname, password);
                 console.log(contactMap);
                 //sign up successfully

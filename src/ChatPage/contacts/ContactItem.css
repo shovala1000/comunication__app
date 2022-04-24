@@ -1,43 +1,50 @@
 .chat-list {
     padding: 1px;
     height: 100%;
+
 }
 
-.chat-list img{
-    margin-top: 3% ;
+.chat-list img {
+    margin-top: 3%;
     float: left;
     border-radius: 40px;
-    height:75% ;
+    height: 75%;
     width: fit-content;
     overflow: hidden;
 }
-.chat-list li{
+
+.chat-list li {
     height: 20%;
     padding: 1%;
-    border-radius: 10px;
-    
+    border-bottom: 1px solid white;
+
 }
-.chat-list li .name-latestMessage{
-    margin-left: 10%;
-    margin-top: 5%;
+
+.chat-list li .nickname {
+    margin-left: 5%;
+    margin-top: 3%;
     float: left;
     font-size: medium;
-    /* display: flex; */
     width: 25%;
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
- }
+}
 
-.chat-list li .latestMessage-time{
-    margin-right: 5%;
-    float: right;
-    font-size: medium;
-    /* display: flex; */
+.chat-list li .latestMessage-time, .chat-list li .name-latestMessage {
+    color: darkgray;
+    font-size: small;
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
 }
+
+.chat-list li .latestMessage-time {
+    margin-top: 3%;
+    float: right;
+    max-width: 50%;
+}
+
 
 .chat-list li:hover {
     background: cornflowerblue;

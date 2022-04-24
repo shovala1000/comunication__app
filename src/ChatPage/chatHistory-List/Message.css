@@ -1,6 +1,6 @@
 .message-Img, .message-Text{
-    max-height: 10vw;
-    max-width: 40vw;
+    height: 100%;
+    width: 100%;
 }
 
 .message-Microphone{

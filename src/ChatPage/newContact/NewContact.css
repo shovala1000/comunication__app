@@ -5,6 +5,8 @@
 }
 
 #new-contact-button {
+    /*float: left;*/
+    position: relative;
     padding: 0;
     font-size: medium;
     font-weight: bold;
@@ -32,4 +34,3 @@
 .alert-primary-hide {
     display: none;
 }
-
