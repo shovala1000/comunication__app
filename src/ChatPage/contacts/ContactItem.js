@@ -4,22 +4,22 @@ import './ContactItem.css';
 import {contactMap} from "../../userData/data";
 
 const ContactItem = (props) => {
-    console.log(contactMap.get(props.userName).contactList[props.index]);
     let className = 'clearfix';
-    if (contactMap.get(props.userName).contactList[props.index].isActive) {
+    if (contactMap.get(props.userName).contactList[props.index].contact.isActive) {
         className += ' avtice'
     }
     return (
-        <li className={className} onClick={() => props.onContactItemSelected(contactMap.get(props.userName).contactList[props.index])}>
-            <img src={contactMap.get(props.userName).contactList[props.index].imageURL} alt={contactMap.get(props.userName).contactList[props.index].imageAlt}></img>
+        <li className={className} onClick={() => props.onContactItemSelected(props.item)}>
+            <img src={props.item.imageURL} alt={props.item.imageAlt}></img>
             <div className='nickname'>
-                {contactMap.get(props.userName).contactList[props.index].nickname}
+                {props.item.nickname}
                 <div className="name-latestMessage">
-                    {contactMap.get(props.userName).contactList[props.index].latestMessage}
+                    {props.item.latestMessage}
                 </div>
             </div>
-            <span className="latestMessage-time">{contactMap.get(props.userName).contactList[props.index].latestMessageTime}</span>
+            <span className="latestMessage-time">{props.item.latestMessageTime}</span>
         </li>
+
     );
 }
 

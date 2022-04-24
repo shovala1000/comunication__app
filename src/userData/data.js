@@ -4,18 +4,23 @@ export const Contact = function (userName, password, imageURL, nickname) {
     this.userName = userName;
     this.nickname = nickname;
     this.password = password;
-    if(imageURL){
+    if (imageURL) {
         this.imageURL = imageURL;
+    } else {
+        this.imageURL = '/defalut-profile-picture.png';
     }
-    else {this.imageURL = '/defalut-profile-picture.png';}
     this.imageAlt = 'avatar';
     this.type = null;
-    this.latestMessage = "";
-    this.latestMessageTime = "";
+    // this.latestMessage = "";
+    // this.latestMessageTime = "";
     this.messages = new Map();
     this.isActive = false;
 }
-
+export const MessageData = function (contact, latestMessage = "", latestMessageTime = "") {
+    this.contact = contact;
+    this.latestMessage = latestMessage;
+    this.latestMessageTime = latestMessageTime;
+}
 
 export const ContactChatInfo = function (mainContact, contactList) {
     this.mainContact = mainContact;
@@ -76,12 +81,6 @@ function initialState() {
         '/avatar6.png',
         'Antonio',
     );
-    contactMap.set(c1.userName, new ContactChatInfo(c1, [c2, c3, c4]));
-    contactMap.set(c2.userName, new ContactChatInfo(c2, [c1, c3]));
-    contactMap.set(c3.userName, new ContactChatInfo(c3, [c1, c2]));
-    contactMap.set(c4.userName, new ContactChatInfo(c4, [c1]));
-    contactMap.set(c5.userName, new ContactChatInfo(c5, []));
-
 
     function sendMessageTo(from, to, message) {
         from.messages.set(to.userName, message);
@@ -92,12 +91,14 @@ function initialState() {
             } else {
                 newMessage.push(new Message(message[i].time, message[i].data, true, message[i].type));
             }
+            // if(i==message.length-1){
+            //    new MessageData(to,message[i].data,message[i].time);
+            // }
         }
         to.messages.set(from.userName, newMessage);
-
     }
 
-    sendMessageTo(c1, c2, [new Message('9:50, 16/4/2022', ' Hi, how are you?', true, MESSAGES_TYPE.TEXT)]);
+    sendMessageTo(c1, c2, [new Message('9:50, 16/4/2022', 'Hi, how are you?', true, MESSAGES_TYPE.TEXT)]);
     sendMessageTo(c1, c3, [
         new Message('9:53, 16/4/2022', ' Hi, how are you? How is the project coming along?', true, MESSAGES_TYPE.TEXT),
         new Message('10:00, 16/4/2022', 'I am good, how are you?', false, MESSAGES_TYPE.TEXT),
@@ -106,8 +107,26 @@ function initialState() {
         new Message('10:30, 16/4/2022', 'No way!', true, MESSAGES_TYPE.TEXT)]);
     sendMessageTo(c1, c4, []);
     sendMessageTo(c2, c3, []);
-}
 
+
+    //initialize last message and time
+    const c1Toc2 = new MessageData(c2, 'Hi, how are you?', '9:50, 16/4/2022');
+    const c1Toc3 = new MessageData(c3, 'No way!', '10:30, 16/4/2022');
+    const c1Toc4 = new MessageData(c4, '', '');
+    const c2Toc1 = new MessageData(c1, 'Hi, how are you?', '9:50, 16/4/2022');
+    const c2Toc3 = new MessageData(c3, '', '');
+    const c3Toc1 = new MessageData(c1, 'No way!', '10:30, 16/4/2022');
+    const c3Toc2 = new MessageData(c2, '', '');
+    const c4Toc1 = new MessageData(c1, '', '');
+
+    //initialize map
+    contactMap.set(c1.userName, new ContactChatInfo(c1, [c1Toc2, c1Toc3, c1Toc4]));
+    contactMap.set(c2.userName, new ContactChatInfo(c2, [c2Toc1, c2Toc3]));
+    contactMap.set(c3.userName, new ContactChatInfo(c3, [c3Toc1, c3Toc2]));
+    contactMap.set(c4.userName, new ContactChatInfo(c4, [c4Toc1]));
+    contactMap.set(c5.userName, new ContactChatInfo(c5, []));
+
+}
 
 export default initialState;
 console.log("initialState");
@@ -123,7 +142,6 @@ initialState();
 
 
 /*contactMap.get(c4.userName).contactList.map()*/
-
 
 
 // var c5 = new Contact(
