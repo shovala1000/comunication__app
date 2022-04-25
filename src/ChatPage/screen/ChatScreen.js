@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 import './ChatScreen.css';
 
 import Container from 'react-bootstrap/Container';
@@ -7,11 +7,11 @@ import ContactSearch from '../contacts/ContactSearch';
 import ChatHeader from '../chatHeader/ChatHeader';
 import ChatHistory from '../chatHistory-List/ChatHistory';
 import ProfileHeader from '../profileHeader/ProfileHeader';
-import { contactMap, Message, MessageData } from '../../userData/data';
+import {contactMap, Message, MessageData} from '../../userData/data';
 import NewContact from '../newContact/NewContact';
-import { MESSAGES_TYPE } from '../chatHistory-List/Message';
+import {MESSAGES_TYPE} from '../chatHistory-List/Message';
 import ChatMessage from '../chatMessage-Box/ChatMessage';
-import { getCurrentTime } from '../utils';
+import {getCurrentTime} from '../utils';
 
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
@@ -73,6 +73,9 @@ const ChatScreen = (props) => {
             setAlertActive(true);
             return;
         }
+        if (contactMap.get(username) === undefined) {
+            return;
+        }
         const newContact = contactMap.get(username).mainContact;
         //newContact is a register
         if (newContact) {
@@ -105,81 +108,83 @@ const ChatScreen = (props) => {
 
     function createNewMessage(info, type) {
         const currentTime = getCurrentTime();
-        switch (type) {
-            case MESSAGES_TYPE.TEXT:
-                // setTypeMessage(MESSAGES_TYPE.TEXT);
-                if (info.toString().length !== 0) {
-                    contactMap.get(props.mainUserName).mainContact.messages.get(currentContact.userName).push(
-                        new Message(currentTime, info, true, MESSAGES_TYPE.TEXT));
-                    setAddMessage(true);
-                    contactMap.get(currentContact.userName).mainContact.messages.get(contactMap.get(props.mainUserName).mainContact.userName).push(
-                        new Message(currentTime, info, false, MESSAGES_TYPE.TEXT));
+        if (currentContact !== null) {
+            switch (type) {
+                case MESSAGES_TYPE.TEXT:
+                    // setTypeMessage(MESSAGES_TYPE.TEXT);
+                    if (info.toString().length !== 0) {
+                        contactMap.get(props.mainUserName).mainContact.messages.get(currentContact.userName).push(
+                            new Message(currentTime, info, true, MESSAGES_TYPE.TEXT));
+                        setAddMessage(true);
+                        contactMap.get(currentContact.userName).mainContact.messages.get(contactMap.get(props.mainUserName).mainContact.userName).push(
+                            new Message(currentTime, info, false, MESSAGES_TYPE.TEXT));
 
 
-                    contactMap.get(props.mainUserName).contactList.filter((MessageData => MessageData.contact.userName === currentContact.userName))[0]
-                        .latestMessage = info;
-                    //mainUserName added currentContact but currentContact didn't add mainUserName.
-                    if (contactMap.get(currentContact.userName).contactList.find((MessageData) => MessageData.contact.userName === props.mainUserName)) {
-                        contactMap.get(currentContact.userName).contactList.find((MessageData) => MessageData.contact.userName === props.mainUserName).latestMessage = info;
+                        contactMap.get(props.mainUserName).contactList.filter((MessageData => MessageData.contact.userName === currentContact.userName))[0]
+                            .latestMessage = info;
+                        //mainUserName added currentContact but currentContact didn't add mainUserName.
+                        if (contactMap.get(currentContact.userName).contactList.find((MessageData) => MessageData.contact.userName === props.mainUserName)) {
+                            contactMap.get(currentContact.userName).contactList.find((MessageData) => MessageData.contact.userName === props.mainUserName).latestMessage = info;
+                        }
                     }
-                }
-                break;
+                    break;
 
-            case MESSAGES_TYPE.IMAGE:
-                if (info.toString().length !== 1) {
-                    contactMap.get(props.mainUserName).mainContact.messages.get(currentContact.userName).push(
-                        new Message(currentTime, info, true, MESSAGES_TYPE.IMAGE));
-                    contactMap.get(currentContact.userName).mainContact.messages.get(contactMap.get(props.mainUserName).mainContact.userName).push(
-                        new Message(currentTime, info, false, MESSAGES_TYPE.IMAGE));
-                    setAddMessage(true);
+                case MESSAGES_TYPE.IMAGE:
+                    if (info.toString().length !== 1) {
+                        contactMap.get(props.mainUserName).mainContact.messages.get(currentContact.userName).push(
+                            new Message(currentTime, info, true, MESSAGES_TYPE.IMAGE));
+                        contactMap.get(currentContact.userName).mainContact.messages.get(contactMap.get(props.mainUserName).mainContact.userName).push(
+                            new Message(currentTime, info, false, MESSAGES_TYPE.IMAGE));
+                        setAddMessage(true);
 
-                    // console.log(contactMap.get(props.mainUserName).contactList.filter((MessageData) => MessageData.contact.userName === currentContact.userName)[0]);
-                    contactMap.get(props.mainUserName).contactList.filter((MessageData) => MessageData.contact.userName === currentContact.userName)[0]
-                        .latestMessage = 'Img';
-                    //mainUserName added currentContact but currentContact didn't add mainUserName.
-                    if (contactMap.get(currentContact.userName).contactList.find((MessageData) => MessageData.contact.userName === props.mainUserName)) {
-                        contactMap.get(currentContact.userName).contactList.find((MessageData) => MessageData.contact.userName === props.mainUserName).latestMessage = 'Img';
+                        // console.log(contactMap.get(props.mainUserName).contactList.filter((MessageData) => MessageData.contact.userName === currentContact.userName)[0]);
+                        contactMap.get(props.mainUserName).contactList.filter((MessageData) => MessageData.contact.userName === currentContact.userName)[0]
+                            .latestMessage = 'Img';
+                        //mainUserName added currentContact but currentContact didn't add mainUserName.
+                        if (contactMap.get(currentContact.userName).contactList.find((MessageData) => MessageData.contact.userName === props.mainUserName)) {
+                            contactMap.get(currentContact.userName).contactList.find((MessageData) => MessageData.contact.userName === props.mainUserName).latestMessage = 'Img';
+                        }
                     }
-                }
-                break;
+                    break;
 
-            case MESSAGES_TYPE.MICROPHONE:
-                contactMap.get(props.mainUserName).mainContact.messages.get(currentContact.userName).push(
-                    new Message(currentTime, info, true, MESSAGES_TYPE.MICROPHONE));
-                contactMap.get(currentContact.userName).mainContact.messages.get(contactMap.get(props.mainUserName).mainContact.userName).push(
-                    new Message(currentTime, info, false, MESSAGES_TYPE.MICROPHONE));
-                setAddMessage(true);
-
-
-                contactMap.get(props.mainUserName).contactList.filter((MessageData) => MessageData.contact.userName === currentContact.userName)[0]
-                    .latestMessage = 'Audio';
-                //mainUserName added currentContact but currentContact didn't add mainUserName.
-                if (contactMap.get(currentContact.userName).contactList.find((MessageData) => MessageData.contact.userName === props.mainUserName)) {
-                    contactMap.get(currentContact.userName).contactList.find((MessageData) => MessageData.contact.userName === props.mainUserName).latestMessage = 'Audio';
-                }
-                break;
-
-            case MESSAGES_TYPE.VIDEO:
-                if (info.toString().length !== 0) {
-                    // setTypeMessage(MESSAGES_TYPE.VIDEO);
-
+                case MESSAGES_TYPE.MICROPHONE:
                     contactMap.get(props.mainUserName).mainContact.messages.get(currentContact.userName).push(
-                        new Message(currentTime, info, true, MESSAGES_TYPE.VIDEO));
+                        new Message(currentTime, info, true, MESSAGES_TYPE.MICROPHONE));
                     contactMap.get(currentContact.userName).mainContact.messages.get(contactMap.get(props.mainUserName).mainContact.userName).push(
-                        new Message(currentTime, info, false, MESSAGES_TYPE.VIDEO));
+                        new Message(currentTime, info, false, MESSAGES_TYPE.MICROPHONE));
                     setAddMessage(true);
 
 
                     contactMap.get(props.mainUserName).contactList.filter((MessageData) => MessageData.contact.userName === currentContact.userName)[0]
-                        .latestMessage = 'Video';
+                        .latestMessage = 'Audio';
                     //mainUserName added currentContact but currentContact didn't add mainUserName.
                     if (contactMap.get(currentContact.userName).contactList.find((MessageData) => MessageData.contact.userName === props.mainUserName)) {
-                        contactMap.get(currentContact.userName).contactList.find((MessageData) => MessageData.contact.userName === props.mainUserName).latestMessage = 'Video';
+                        contactMap.get(currentContact.userName).contactList.find((MessageData) => MessageData.contact.userName === props.mainUserName).latestMessage = 'Audio';
                     }
-                }
-                break;
-            default:
-                return;
+                    break;
+
+                case MESSAGES_TYPE.VIDEO:
+                    if (info.toString().length !== 0) {
+                        // setTypeMessage(MESSAGES_TYPE.VIDEO);
+
+                        contactMap.get(props.mainUserName).mainContact.messages.get(currentContact.userName).push(
+                            new Message(currentTime, info, true, MESSAGES_TYPE.VIDEO));
+                        contactMap.get(currentContact.userName).mainContact.messages.get(contactMap.get(props.mainUserName).mainContact.userName).push(
+                            new Message(currentTime, info, false, MESSAGES_TYPE.VIDEO));
+                        setAddMessage(true);
+
+
+                        contactMap.get(props.mainUserName).contactList.filter((MessageData) => MessageData.contact.userName === currentContact.userName)[0]
+                            .latestMessage = 'Video';
+                        //mainUserName added currentContact but currentContact didn't add mainUserName.
+                        if (contactMap.get(currentContact.userName).contactList.find((MessageData) => MessageData.contact.userName === props.mainUserName)) {
+                            contactMap.get(currentContact.userName).contactList.find((MessageData) => MessageData.contact.userName === props.mainUserName).latestMessage = 'Video';
+                        }
+                    }
+                    break;
+                default:
+                    return;
+            }
         }
         contactMap.get(props.mainUserName).contactList.filter((MessageData) => MessageData.contact.userName === currentContact.userName)[0]
             .latestMessageTime = currentTime;
@@ -209,40 +214,40 @@ const ChatScreen = (props) => {
      */
     return (
         <Container className='chat-screen'>
-            <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
+            <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"/>
             <Row className=" chat-page">
 
                 <Col xs={3} sm={3} md={3} lg={3} xl={3} xxl={3} className='left-menu'>
                     <Container className='left-menu-container'>
                         <Row className='profile-header-class'>
                             <Col className='profile-header'>
-                                <ProfileHeader contact={contactMap.get(props.mainUserName).mainContact} />
+                                <ProfileHeader contact={contactMap.get(props.mainUserName).mainContact}/>
                             </Col>
                         </Row>
 
 
-                        <Row className='search-tn' style={isAlertActive ? { display: 'none' } : null}>
+                        <Row className='search-tn' style={isAlertActive ? {display: 'none'} : null}>
                             <Col xs={10} sm={10} md={10} lg={10} xl={10} xxl={10} className='contact-search'>
-                                <ContactSearch doSearch={doSearch} />
+                                <ContactSearch doSearch={doSearch}/>
                             </Col>
                             <Col className='new-contact-btn'>
                                 <NewContact addContact={addContact} currentError={currentError}
-                                    setErrorMessage={setErrorMessage} isAlertActive={isAlertActive}
-                                    setAlertActive={setAlertActive} />
+                                            setErrorMessage={setErrorMessage} isAlertActive={isAlertActive}
+                                            setAlertActive={setAlertActive}/>
                             </Col>
                         </Row>
 
-                        <Row style={isAlertActive ? null : { display: 'none' }} className='error-message'>
+                        <Row style={isAlertActive ? null : {display: 'none'}} className='error-message'>
                             <Col className={classAlert} role="alert">{currentError}
                                 <button type="button" className="btn-close" aria-label="Close"
-                                    onClick={() => setAlertActive(false)}></button>
+                                        onClick={() => setAlertActive(false)}></button>
                             </Col>
                         </Row>
 
                         <Row className='contact-list'>
                             <Col className="people-list">
                                 {<ContactList userName={props.mainUserName} listState={listState}
-                                    onContactItemSelected={onConversationChange} />}
+                                              onContactItemSelected={onConversationChange}/>}
                             </Col>
                         </Row>
                     </Container>
@@ -253,23 +258,23 @@ const ChatScreen = (props) => {
                     <Container className='chat-menu-container'>
                         <Row className='chat-header-class'>
                             <Col className='chat-header'>
-                                <ChatHeader selectedChat={currentContact} />
+                                <ChatHeader selectedChat={currentContact}/>
                             </Col>
                         </Row>
                         <Row className='chat-history-class'>
                             <Col className='chat-history'>
-                                {addMessage ? setAddMessage(false) : <ChatHistory messages={mass()} />}
+                                {addMessage ? setAddMessage(false) : <ChatHistory messages={mass()}/>}
                             </Col>
                         </Row>
                         <Row className='chat-message-box'>
                             <Col className='chat-message'>
-                                <ChatMessage createMessage={createNewMessage} />
+                                <ChatMessage createMessage={createNewMessage}/>
                             </Col>
                         </Row>
                     </Container>
                 </Col>
             </Row>
-    {/*console.log(contactMap)*/}
+            {/*console.log(contactMap)*/}
         </Container>
     );
 };

@@ -24,7 +24,7 @@ function Info({signName, setShow1, setShow2, show1, show2}) {
         <div className="sign-info-background" style={{display:'flex'}}>
             <div className="title">{info.title}</div>
             {info.details}
-            <div id="button-container">
+            <div>
                 <Button
                     id="button-container"
                 onClick={() => {

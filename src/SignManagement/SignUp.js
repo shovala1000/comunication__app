@@ -181,8 +181,8 @@ function SignUp({setRouteArray,setShow1, setShow2, show1, show2}) {
                 <input type="file" name="img" onChange={handleImage} className="input"/>
                 <div>  {renderErrorMessage("img")}</div>
             </div>
-            <div id="button-container">
-                <Button id="button-container" onClick={handleSubmit} type="submit">
+            <div className='button-container'>
+                <Button id="button-container-signUp" onClick={handleSubmit} type="submit">
                     Submit
                 </Button>
             </div>
