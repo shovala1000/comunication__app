@@ -18,7 +18,6 @@
 }
 
 .modal-backdrop {
-    /* bug fix - no overlay */    
     display: none;    
 }
 

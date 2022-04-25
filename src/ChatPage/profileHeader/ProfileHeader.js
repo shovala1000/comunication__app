@@ -1,6 +1,10 @@
 import React from "react";
 import './ProfileHeader.css';
 
+
+/*
+    This component contain the information about the connected user.
+*/
 function ProfileHeader({contact}) {
     return (
         <div className='profile-header'>

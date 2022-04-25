@@ -2,6 +2,7 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import './ChatHeader.css';
 
+/* This component is responsible for displaying the details of the contact the user is talking to */
 const ChatHeader = (props) => {
     let navigate = useNavigate();
     if (props.selectedChat !== null) {
@@ -17,8 +18,7 @@ const ChatHeader = (props) => {
     } else {
         return (
             <div className="chat-header clearfix">
-                
-                <div className="chat-header-about">{}</div>
+                <div className="chat-header-about">Choose contact from your list to start chatting <br></br> or add new contacts on the + button</div>
                 <button type="button" className="btn btn-outline-light sign-out-button" onClick={() => {
                     navigate("/", "_self")
                 }}>Sign Out
@@ -29,9 +29,3 @@ const ChatHeader = (props) => {
 }
 
 export default ChatHeader;
-
-
-{/* <Button className="sign-out-button" onClick={() => {window.open("/","_self")}}>Sign Out </Button>
-<div data-toggle="modal" data-target="#view_info"></div>
-*/
-}

@@ -4,7 +4,7 @@ import {Contact, ContactChatInfo, contactMap} from '../userData/data';
 import './SignInOrUp.css';
 import {Link, Route, useNavigate} from "react-router-dom";
 import ChatScreen from "../ChatPage/screen/ChatScreen";
-import {RouteArray} from "../App";
+// import {RouteArray} from "../App";
 
 
 function SignUp({setRouteArray,setShow1, setShow2, show1, show2}) {
@@ -51,7 +51,7 @@ function SignUp({setRouteArray,setShow1, setShow2, show1, show2}) {
     };
 // Handling the image change
     const handleImage = (e) => {
-        console.log(e.target.files[0].name)
+        // console.log(e.target.files[0].name)
         if (e.target.files[0].name) {
             setImage('/'+e.target.files[0].name);
             setIsSubmitted(false);
@@ -130,7 +130,7 @@ function SignUp({setRouteArray,setShow1, setShow2, show1, show2}) {
                 setErrorMessages({name: "img", message: errors.img});
             } else {
                 // Add new register to database
-                console.log('image: '+image);
+                // console.log('image: '+image);
                 const contact = new Contact(username, password, image, nickname);
                 const contactChatInfo = new ContactChatInfo(contact, []);
                 contactMap.set(username, contactChatInfo);

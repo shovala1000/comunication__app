@@ -1,28 +1,31 @@
-.input-group-prepend,.btn-group,.fa-send,.fa{
-    height: 100%;
-}
-#get_file ,#get-audio ,#get_video,#send-message-box,#send-button{
-    height: 100%;
+.input-group-prepend,
+.btn-group,
+.fa-send,
+.fa {
+  height: 100%;
 }
 
-/* 
-#get-audio{
-    margin-top: 50px;
-  } */
-  
-  .audio-recording-hide {
-    display: none;
-  }
-  
-  .send-recording-hide {
-    display: none;
-  }
-  
-  .send-recording {
-    display: inline-block;
-  }
-  
-  .audio-recording {
-    display: inline-block;
-    cursor: pointer;
-  }
+#get_file,
+#get-audio,
+#get_video,
+#send-message-box,
+#send-button {
+  height: 100%;
+}
+
+.audio-recording-hide {
+  display: none;
+}
+
+.send-recording-hide {
+  display: none;
+}
+
+.send-recording {
+  display: inline-block;
+}
+
+.audio-recording {
+  display: inline-block;
+  cursor: pointer;
+}

@@ -1,14 +1,14 @@
 #basic-addon2 {
-    position:relative;
+    position: relative;
     width: fit-content;
     height: 100%;
 }
 
-#contact-search-box{
-
+#contact-search-box {
     height: 100%;
 }
-.input-search{
+
+.input-search {
     width: 100%;
     height: 100%;
 }

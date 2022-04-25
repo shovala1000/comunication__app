@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 
 /*
-creating userRecording state, for tracking the state when recording a message.
+creating userRecording hook, for tracking the state when recording a message.
 */
 const useRecorder = () => {
     const [audioURL, setAudioURL] = useState("");

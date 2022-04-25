@@ -3,6 +3,7 @@ import React from "react";
 import Message from "./Message";
 import './ChatHistory.css';
 
+/* This component is responsible to display all the chat history between the user and the selected contact*/
 const ChatHistory = (props) => {
     var messageItems = [];
     if (props.messages) {

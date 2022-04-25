@@ -11,22 +11,29 @@ import { contactMap, Message, MessageData } from '../../userData/data';
 import NewContact from '../newContact/NewContact';
 import { MESSAGES_TYPE } from '../chatHistory-List/Message';
 import ChatMessage from '../chatMessage-Box/ChatMessage';
+import { getCurrentTime } from '../utils';
 
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 
 const ChatScreen = (props) => {
-    const [addMessage, setAddMessage] = useState(false);
-    const [currentError, setErrorMessage] = useState('');
-    const [isAlertActive, setAlertActive] = useState(false);
-    let selectedContact = null;
-    // // This useState is saving the current state of the contactMap in contactList.
 
+    const [addMessage, setAddMessage] = useState(false);
+
+    // save the state for error message when adding contact to the contacts list.
+    const [currentError, setErrorMessage] = useState('');
+
+    // saving the state for the alert message.
+    const [isAlertActive, setAlertActive] = useState(false);
+
+    let selectedContact = null;
+    let classAlert = "alert alert-primary";
+
+    // This useState is saving the current state of the contactMap in contactList.
     const [listState, setListState] = useState(contactMap.get(props.mainUserName).contactList);
 
     // This useState is saving the state for the selected contact, the contact that the current conversation is with.
     const [currentContact, setCurrentContact] = useState(selectedContact);
-
 
 
     // This loop finds the active chat in the map the save it on selectedContact.
@@ -43,7 +50,7 @@ const ChatScreen = (props) => {
     }
 
 
-    // this function in handle conversation changing, pressing on contact from the contact list will invoke this function.
+    // This function in handle conversation changing, pressing on contact from the contact list will invoke this function.
     const onConversationChange = function (newContact) {
         if (currentContact !== null) {
             currentContact.isActive = false;
@@ -55,10 +62,6 @@ const ChatScreen = (props) => {
 
 
     // This function gets the nickname from the user and starts a conversation with him.
-    /*
-        NOTICE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        After creating the users map, need to find the nickname and add it to the constructor.
-    */
     const addContact = function (username) {
         document.getElementById("modal-textbox").value = '';
         // username invalid - default
@@ -85,17 +88,6 @@ const ChatScreen = (props) => {
                 setAlertActive(true);
                 return;
             }
-            // // userName exist in the messages and not in the contactList (added before by the other contact)
-            // let isInMessage = contactMap.get(props.mainUserName).mainContact.messages.get(username)
-            // if (isInMessage) {
-            //     contactMap.get(props.mainUserName).contactList.push(newContact);
-            //
-            //     setErrorMessage("");
-            //     setAlertActive(false);
-            //     setStam(false);
-            //     return;
-            // }
-
 
             //add contact successfully
             contactMap.get(newContact.userName).mainContact.messages.set(props.mainUserName, []);
@@ -103,28 +95,11 @@ const ChatScreen = (props) => {
             contactMap.get(props.mainUserName).mainContact.messages.set(newContact.userName, []);
             contactMap.get(props.mainUserName).contactList.push(new MessageData(newContact, '', ''));
 
-            // setContactList( contactMap.get(contactMap.get(props.mainUserName).mainContact.userName).contactList);
             onConversationChange(newContact);
             setErrorMessage("");
             setAlertActive(false);
-            // setStam(false);
         }
 
-    }
-
-
-    function getCurrentTime() {
-        var today = new Date();
-        let date = today.getDate() + '/' + (today.getMonth() + 1) + '/' + today.getFullYear();
-        let minutes = today.getMinutes();
-        let time;
-        if (minutes > 10) {
-            time = today.getHours() + ":" + today.getMinutes();
-        } else {
-            time = today.getHours() + ":0" + today.getMinutes();
-        }
-        let dateTime = time + ', ' + date;
-        return String(dateTime)
     }
 
 
@@ -158,7 +133,7 @@ const ChatScreen = (props) => {
                         new Message(currentTime, info, false, MESSAGES_TYPE.IMAGE));
                     setAddMessage(true);
 
-                    console.log(contactMap.get(props.mainUserName).contactList.filter((MessageData) => MessageData.contact.userName === currentContact.userName)[0]);
+                    // console.log(contactMap.get(props.mainUserName).contactList.filter((MessageData) => MessageData.contact.userName === currentContact.userName)[0]);
                     contactMap.get(props.mainUserName).contactList.filter((MessageData) => MessageData.contact.userName === currentContact.userName)[0]
                         .latestMessage = 'Img';
                     //mainUserName added currentContact but currentContact didn't add mainUserName.
@@ -203,6 +178,8 @@ const ChatScreen = (props) => {
                     }
                 }
                 break;
+            default:
+                return;
         }
         contactMap.get(props.mainUserName).contactList.filter((MessageData) => MessageData.contact.userName === currentContact.userName)[0]
             .latestMessageTime = currentTime;
@@ -211,8 +188,13 @@ const ChatScreen = (props) => {
         contactMap.get(currentContact.userName).contactList.find((MessageData) => MessageData.contact.userName === props.mainUserName)
             .latestMessageTime = currentTime;
         // }
+    }
 
-        // setContactList(contactMap.get(contactMap.get(props.mainUserName).mainContact.userName).contactList);
+
+    const mass = () => {
+        if (currentContact !== null) {
+            return contactMap.get(props.mainUserName).mainContact.messages.get(currentContact.userName);
+        }
     }
 
     /*
@@ -225,16 +207,6 @@ const ChatScreen = (props) => {
          In ChatHistory - This component contains the chat history with that specific user.
          In ChatMessage - This component contains the send message box and the other application for sending messages.
      */
-    const mass = () => {
-        if (currentContact !== null) {
-            return contactMap.get(props.mainUserName).mainContact.messages.get(currentContact.userName);
-        }
-    }
-
-
-    let classAlert = "alert alert-primary";
-
-
     return (
         <Container className='chat-screen'>
             <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
@@ -297,7 +269,7 @@ const ChatScreen = (props) => {
                     </Container>
                 </Col>
             </Row>
-            {console.log(contactMap)}
+    {/*console.log(contactMap)*/}
         </Container>
     );
 };

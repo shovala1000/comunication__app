@@ -36,50 +36,45 @@ export const Message = function (time, data, isMyMessage, type) {
     this.type = type;
 }
 
-
+// This map contain all the users in the app
 export const contactMap = new Map();
 
+// This function will create the Hard codded messages between the users.
 function initialState() {
     var c1 = new Contact(
-        //'Christian Eriksen',
         'a1',
         'a1',
         null,
-        // '/avatar1.png',
-        'Christiansxxxxxxxxxxxxxxxxxxx',
+        'aa',
     );
 
 
     var c2 = new Contact(
-        // 'Lionel Messi',
         'b2',
         'b2',
         '/avatar3.png',
-        'LM10',
+        'bb',
     );
 
     var c3 = new Contact(
-        // 'Hugo Loris',
         'c3',
         'c3',
         '/avatar5.png',
-        'Loris',
+        'cc',
     );
 
     var c4 = new Contact(
-        // 'Son Houng min',
         'd4',
         'd4',
         '/avatar5.png',
-        'Sonny',
+        'dd',
     );
 
     var c5 = new Contact(
-        // 'Antonio Conte',
         'e5',
         'e5',
         '/avatar6.png',
-        'Antonio',
+        'ee',
     );
 
     function sendMessageTo(from, to, message) {
@@ -91,9 +86,6 @@ function initialState() {
             } else {
                 newMessage.push(new Message(message[i].time, message[i].data, true, message[i].type));
             }
-            // if(i==message.length-1){
-            //    new MessageData(to,message[i].data,message[i].time);
-            // }
         }
         to.messages.set(from.userName, newMessage);
     }
@@ -130,39 +122,3 @@ function initialState() {
 
 export default initialState;
 initialState();
-// check!
-// function addMessage(userName, text) {
-//     const item = contactMap.get(userName);
-//     if (item != null) {
-//         item.latestMessage = text;
-//         item.messages.push(text);
-//     }
-// }
-
-
-/*contactMap.get(c4.userName).contactList.map()*/
-
-
-// var c5 = new Contact(
-//     'Antonio Conte',
-//     'avatar5.png',
-//     'avatar',
-//     'Antonio',
-// );
-// contactMap.set(c5.userName, c5);
-
-// var c6 = new Contact(
-//     'Cristiano Ronaldo',
-//     'avatar5.png',
-//     'avatar',
-//     'CR7',
-// );
-// contactMap.set(c6.userName, c6);
-
-// var c7 = new Contact(
-//     'Harry Kane',
-//     'avatar5.png',
-//     'avatar',
-//     'HK10',
-// );
-// contactMap.set(c7.userName, c7);

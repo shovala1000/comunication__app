@@ -1,11 +1,13 @@
 import React, {useRef} from 'react';
 import {Modal} from 'bootstrap';
 
-import './NewContact.css'
+import './NewContact.css';
 
+/* This component creates the window that opens when the user adds a new contact to his contact list. */
 function NewContact({addContact, currentError, setErrorMessage, isAlertActive, setAlertActive}) {
     const modalRef = useRef()
 
+    // The function turn the modal window to be visible.
     const showModal = () => {
         const modalEle = modalRef.current
         const bsModal = new Modal(modalEle, {
@@ -15,20 +17,22 @@ function NewContact({addContact, currentError, setErrorMessage, isAlertActive, s
         bsModal.show()
     }
 
+    // The function turn the modal window to be invisible.
     const hideModal = () => {
         const modalEle = modalRef.current
         const bsModal = Modal.getInstance(modalEle)
         bsModal.hide()
     }
 
+    // The function checks the input from the input box.
     const checkInput = (data) => {
         if (data.length !== 0) {
-            // let error = currentError;
             hideModal();
             addContact(data);
         }
     }
 
+    // The function handles keypress. Allow insert new contact by pressing Enter.
     const handlePressedKey = (key) => {
         if (key.key === 'Enter') {
             let data = document.getElementById('modal-textbox').value;
@@ -37,8 +41,6 @@ function NewContact({addContact, currentError, setErrorMessage, isAlertActive, s
             }
         }
     }
-
-
 
     return (
         <div className="new-contact-btn">
@@ -65,42 +67,9 @@ function NewContact({addContact, currentError, setErrorMessage, isAlertActive, s
                     </div>
                 </div>
             </div>
-
-            {/*<div className={classAlert} role="alert">{currentError}*/}
-            {/*    <button type="button" className="btn-close" aria-label="Close"*/}
-            {/*            onClick={() => setAlertActive(false)}></button>*/}
-            {/*</div>*/}
         </div>
     );
 }
 
 export default NewContact;
 
-
-//  return (
-//   <div className='new-contact-btn'>
-//     <div className="new-contact">
-//       <button type="button" className="btn btn-light" id="new-contact-button" data-bs-toggle="modal" data-bs-target="#add-new-contact-button">+</button>
-//     </div>
-//     <div className="modal fade" id="add-new-contact-button" tabIndex="-1" aria-labelledby="add-new-contact" aria-hidden="true">
-//       <div className="modal-dialog">
-//         <div className="modal-content">
-//           <div className="modal-header">
-//             <h5 className="modal-title" id="add-new-contact">Add new contact</h5>
-//             <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"/>
-//           </div>
-//           <div className="modal-body">
-//             <input type="text" className="form-control" id="modal-textbox" placeholder="Enter contact username..." required/>
-//           </div>
-//           <div className="modal-footer">
-//             <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-//             <button type="button" className="btn btn-primary" id="add-button"
-//               onClick={() => addContact(document.getElementById("modal-textbox").value)}
-//               data-bs-dismiss="modal">Add
-//               </button>
-//           </div>
-//         </div>
-//       </div>
-//     </div>
-//   </div>
-// );

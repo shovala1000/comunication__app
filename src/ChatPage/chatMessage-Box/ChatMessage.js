@@ -4,6 +4,8 @@ import useRecorder from "./useRecorder";
 
 import './ChatMessage.css';
 
+/* This component is allows the user to choose which type of message he wants to use
+ and moving the message information to different components for sending the message" */
 function ChatMessage({ createMessage }) {
     const [fileName, setFileName] = useState('')
 
@@ -12,18 +14,19 @@ function ChatMessage({ createMessage }) {
             setFileName(event.target.files[0].name);
         }
     }
+
     const createMessageImg = (event) => {
         if (event.target.files[0].name) {
-            console.log(event.target.url);
+            // console.log(event.target.url);
             createMessage('/' + fileName, MESSAGES_TYPE.IMAGE);
-            console.log(fileName);
+            // console.log(fileName);
         }
     }
     const createMessageVideo = (event) => {
         if (event.target.files[0].name) {
 
             createMessage('/' + fileName, MESSAGES_TYPE.VIDEO);
-            console.log(fileName);
+            // console.log(fileName);
         }
     }
 
@@ -33,10 +36,10 @@ function ChatMessage({ createMessage }) {
                 createMessage(document.getElementById(id).value, type);
                 break;
             case MESSAGES_TYPE.MICROPHONE:
-                createMessage(id,type);
-                // createMessage('/'+fileName,type);
-
+                createMessage(id, type);
                 break;
+            default:
+                return;
         }
     }
 
@@ -61,11 +64,13 @@ function ChatMessage({ createMessage }) {
         }
     }
 
-    let [audioURL, isRecording, startRecording, stopRecording,currentAudioClassName,changeAudioClassName] = useRecorder();
+    // using the useRecorder hook.
+    let [audioURL, isRecording, startRecording, stopRecording, currentAudioClassName, changeAudioClassName] = useRecorder();
 
+    // Disable sending a recording before recording information.
     let disableSending = true;
     if (audioURL !== "" && isRecording === false) {
-      disableSending = false;
+        disableSending = false;
     }
 
 
@@ -92,14 +97,13 @@ function ChatMessage({ createMessage }) {
                 <input type="file" onChange={createMessageImg} onInput={fileSelectedHandler} id="input_file"
                     accept=".jpg,.jpeg,.png" style={{ display: 'none' }} />
 
-
                 <button id='get-audio' type="button" className="btn btn-outline-danger" onClick={changeAudioClassName}>
-                <i className="fa fa-microphone" aria-hidden="true"/></button>
+                    <i className="fa fa-microphone" aria-hidden="true" /></button>
                 <div className={currentAudioClassName}>
                     <audio src={audioURL} controls />
                     <button className="btn btn-dark" onClick={startRecording} disabled={isRecording} ><i className="fa fa-play" aria-hidden="true"></i> </button>
                     <button className="btn btn-dark" onClick={stopRecording} disabled={!isRecording}><i className="fa fa-stop" aria-hidden="true"></i></button>
-                    <button className="btn btn-dark" disabled={disableSending} onClick={()=>handleClick(audioURL,MESSAGES_TYPE.MICROPHONE)}><i className="fa fa-paper-plane" aria-hidden="true"></i></button>
+                    <button className="btn btn-dark" disabled={disableSending} onClick={() => handleClick(audioURL, MESSAGES_TYPE.MICROPHONE)}><i className="fa fa-paper-plane" aria-hidden="true"></i></button>
                     <button className="btn btn-dark" onClick={changeAudioClassName}><i className="fa fa-window-close" aria-hidden="true"></i></button>
                 </div>
 
