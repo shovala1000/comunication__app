@@ -70,10 +70,10 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/d
 This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
 
 
-### 'Getting Started'
-To run this program, notice that you must install Node Js on your computer.
-Clone this repository by using the git clone command.
-Enter to the project folder and execute the following on CLI:
+### Getting Started
+- To run this program, notice that you must install Node Js on your computer.
+- Clone this repository by using the git clone command.
+- Enter to the project folder and execute the following on CLI:
 $ npm install.
 $ npm install react-bootstrap.
 $ npm install react-router-dom.
