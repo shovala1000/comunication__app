@@ -22,7 +22,7 @@ function ChatMessage({createMessage}) {
                 createMessage(id, type);
                 break;
             default:
-                console.log('handleClick');
+                return;
         }
     }
 
