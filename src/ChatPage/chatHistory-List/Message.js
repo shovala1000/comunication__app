@@ -10,8 +10,8 @@ export const MESSAGES_TYPE = {
 }
 /* This component is responsible for the structure of the message and how it will be displayed in the chat history window */
 const Message = (props) => {
-    var messageClass = 'message';
-    var sendTime = 'time';
+    let messageClass = 'message';
+    let sendTime = 'time';
 
     // checking if the message is a message that the user sent or received
     if (props.isMyMessage !== true) {

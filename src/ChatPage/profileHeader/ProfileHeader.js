@@ -3,7 +3,7 @@ import './ProfileHeader.css';
 
 
 /*
-    This component contain the information about the connected user.
+    This component contains the information about the connected user.
 */
 function ProfileHeader({contact}) {
     return (

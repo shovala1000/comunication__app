@@ -4,7 +4,6 @@ import {Contact, ContactChatInfo, contactMap} from '../userData/data';
 import './SignInOrUp.css';
 import {Link, Route, useNavigate} from "react-router-dom";
 import ChatScreen from "../ChatPage/screen/ChatScreen";
-// import {RouteArray} from "../App";
 
 
 function SignUp({setRouteArray,setShow1, setShow2, show1, show2}) {
@@ -17,7 +16,8 @@ function SignUp({setRouteArray,setShow1, setShow2, show1, show2}) {
     const [nickname, setNickname] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [password, setPassword] = useState('');
-    const [image, setImage] = useState('');
+    const [imageName, setImageName] = useState('');
+    const [imageUrl, setImageUrl] = useState('');
 //Error messages
     const errors = {
         uname: "Username already exist",
@@ -44,16 +44,16 @@ function SignUp({setRouteArray,setShow1, setShow2, show1, show2}) {
         setPassword(e.target.value);
         setIsSubmitted(false);
     };
-// Handling the confirm password change
+// Handling the confirmation password change
     const handleConfirmPassword = (e) => {
         setConfirmPassword(e.target.value);
         setIsSubmitted(false);
     };
 // Handling the image change
     const handleImage = (e) => {
-        // console.log(e.target.files[0].name)
         if (e.target.files[0].name) {
-            setImage('/'+e.target.files[0].name);
+            setImageUrl(URL.createObjectURL(e.target.files[0]));
+            setImageName(e.target.files[0].name);
             setIsSubmitted(false);
         }
 
@@ -126,12 +126,11 @@ function SignUp({setRouteArray,setShow1, setShow2, show1, show2}) {
             // Invalid confirm password
             else if (password !== confirmPassword) {
                 setErrorMessages({name: "copass", message: errors.copass});
-            } else if (!isImageValid(image)) {
+            } else if (!isImageValid(imageName)) {
                 setErrorMessages({name: "img", message: errors.img});
             } else {
                 // Add new register to database
-                // console.log('image: '+image);
-                const contact = new Contact(username, password, image, nickname);
+                const contact = new Contact(username, password, imageUrl, nickname);
                 const contactChatInfo = new ContactChatInfo(contact, []);
                 contactMap.set(username, contactChatInfo);
                 //sign up successfully
@@ -145,7 +144,7 @@ function SignUp({setRouteArray,setShow1, setShow2, show1, show2}) {
     const renderErrorMessage = (name) =>
         name === errorMessages.name && (<div className="error">{errorMessages.message}</div>);
     function navToNewRoute(){
-        setRouteArray(prev=>[...prev,(<Route path={"chat/" + username} element={<ChatScreen mainUserName={username}/>}/>)]);
+        setRouteArray(prev=>[...prev,(<Route key={username} path={"chat/" + username} element={<ChatScreen mainUserName={username}/>}/>)]);
         navigate('chat/' + username, {replace: true})
     }
 

@@ -137,7 +137,6 @@ const ChatScreen = (props) => {
                             new Message(currentTime, info, false, MESSAGES_TYPE.IMAGE));
                         setAddMessage(true);
 
-                        // console.log(contactMap.get(props.mainUserName).contactList.filter((MessageData) => MessageData.contact.userName === currentContact.userName)[0]);
                         contactMap.get(props.mainUserName).contactList.filter((MessageData) => MessageData.contact.userName === currentContact.userName)[0]
                             .latestMessage = 'Img';
                         //mainUserName added currentContact but currentContact didn't add mainUserName.
@@ -188,11 +187,9 @@ const ChatScreen = (props) => {
         }
         contactMap.get(props.mainUserName).contactList.filter((MessageData) => MessageData.contact.userName === currentContact.userName)[0]
             .latestMessageTime = currentTime;
-        //mainUserName added currentContact but currentContact didn't add mainUserName.
-        // if (contactMap.get(currentContact.userName).contactList.find((MessageData) => MessageData.contact.userName === props.mainUserName)) {
+        //after mainUserName added currentContact
         contactMap.get(currentContact.userName).contactList.find((MessageData) => MessageData.contact.userName === props.mainUserName)
             .latestMessageTime = currentTime;
-        // }
     }
 
 
@@ -205,7 +202,7 @@ const ChatScreen = (props) => {
     /*
       The return value for this page.
          In ProfileHeader - The name of the user, and his Image.
-         In NewContact - This component contain the code for adding a new contact to the contact list and start a new conversaion.
+         In NewContact - This component contains the code for adding a new contact to the contact list and start a new conversaion.
          In ContactSearch - This component contains the search box.
          In ContactList - This component contains the list of contact that whom the user has a chat with them. Showing details about the conversation.
          In ChatHeader - This component contains the name of the user nickname that the current chat is with.
@@ -231,9 +228,7 @@ const ChatScreen = (props) => {
                                 <ContactSearch doSearch={doSearch}/>
                             </Col>
                             <Col className='new-contact-btn'>
-                                <NewContact addContact={addContact} currentError={currentError}
-                                            setErrorMessage={setErrorMessage} isAlertActive={isAlertActive}
-                                            setAlertActive={setAlertActive}/>
+                                <NewContact addContact={addContact}/>
                             </Col>
                         </Row>
 
@@ -263,7 +258,7 @@ const ChatScreen = (props) => {
                         </Row>
                         <Row className='chat-history-class'>
                             <Col className='chat-history'>
-                                {addMessage ? setAddMessage(false) : <ChatHistory messages={mass()}/>}
+                                {addMessage ? <>{setAddMessage(false)}</>  : <ChatHistory messages={mass()}/>}
                             </Col>
                         </Row>
                         <Row className='chat-message-box'>
@@ -274,7 +269,6 @@ const ChatScreen = (props) => {
                     </Container>
                 </Col>
             </Row>
-            {/*console.log(contactMap)*/}
         </Container>
     );
 };

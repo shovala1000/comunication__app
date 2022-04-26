@@ -6,7 +6,7 @@ import {Link, Route} from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import ChatScreen from "../ChatPage/screen/ChatScreen";
 
-function SignIn({setRouteArray,setAddRoute,setShow1, setShow2, show1, show2}){
+function SignIn({setRouteArray,setShow1, setShow2, show1, show2}){
     let navigate = useNavigate();
     // States for registration
     const [errorMessages, setErrorMessages] = useState({});
@@ -51,15 +51,12 @@ function SignIn({setRouteArray,setAddRoute,setShow1, setShow2, show1, show2}){
         }
     };
 
-
     // Generate JSX code for error message
     const renderErrorMessage = () =>
         (<div className="error">{errorMessages.message}</div>);
 
     function navToNewRoute(){
-        setAddRoute(true);
-        setRouteArray(prev=>[...prev,(<Route path={"chat/" + username} element={<ChatScreen mainUserName={username}/>}/>)]);
-        // navigate('chat/' + username, {replace: true})
+        setRouteArray(prev=>[...prev,(<Route key={username} path={"chat/" + username} element={<ChatScreen mainUserName={username}/>}/>)]);
     }
 
     // sign in form

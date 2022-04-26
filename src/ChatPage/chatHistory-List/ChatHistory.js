@@ -5,7 +5,7 @@ import './ChatHistory.css';
 
 /* This component is responsible to display all the chat history between the user and the selected contact*/
 const ChatHistory = (props) => {
-    var messageItems = [];
+    const messageItems = [];
     if (props.messages) {
         props.messages.forEach((message, index) => {
             messageItems.push((<Message key={index}

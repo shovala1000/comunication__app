@@ -6,7 +6,7 @@ import './ContactSearch.css';
 /* This component allows the user to search contact in his contact list */
 function ContactSearch({doSearch}) {
 
-    // creating a referance to the search box.
+    // creating a reference to the search box.
     const searchBox = useRef(null)
     
     // the function make the search using do search function.

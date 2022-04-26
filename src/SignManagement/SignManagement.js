@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import {useState} from "react";
 import Container from 'react-bootstrap/Container'
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
@@ -9,10 +9,10 @@ import SignUp from "./SignUp";
 import Info from "./Info";
 
 
-function SignManagement({setRouteArray,setAddRoute}) {
+function SignManagement({setRouteArray}) {
 
-    const [show1, setShow1] = React.useState(false);
-    const [show2, setShow2] = React.useState(true);
+    const [show1, setShow1] =useState(false);
+    const [show2, setShow2] = useState(true);
 
     const display1 = () => {
         if (show1) return "none";
@@ -36,7 +36,6 @@ function SignManagement({setRouteArray,setAddRoute}) {
                     </Col>
                     <Col className='slide-animation2'>
                         <SignIn setRouteArray = {setRouteArray}
-                                setAddRoute={setAddRoute}
                                 setShow1={setShow1}
                                 setShow2={setShow2}
                                 show1={show1}

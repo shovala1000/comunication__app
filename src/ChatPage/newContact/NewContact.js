@@ -4,7 +4,7 @@ import {Modal} from 'bootstrap';
 import './NewContact.css';
 
 /* This component creates the window that opens when the user adds a new contact to his contact list. */
-function NewContact({addContact, currentError, setErrorMessage, isAlertActive, setAlertActive}) {
+function NewContact({addContact}) {
     const modalRef = useRef()
 
     // The function turn the modal window to be visible.
@@ -72,4 +72,3 @@ function NewContact({addContact, currentError, setErrorMessage, isAlertActive, s
 }
 
 export default NewContact;
-

@@ -64,7 +64,6 @@ body {
     margin: 0;
     overflow: hidden;
     border-right: 3px solid white;
-    /*border-bottom: 3px solid white;*/
 }
 
 .profile-header {
@@ -85,7 +84,6 @@ body {
     align-content: center;
     align-self: center;
     border-right: 3px solid white;
-    /* border-bottom: 3px solid white; */
 }
 
 .contact-search {
@@ -126,7 +124,6 @@ body {
     height: 77.5%;
     overflow-y: auto;
     border-right: 3px solid white;
-    /*border-bottom: 3px solid white;*/
 }
 
 .clearfix::marker {
@@ -135,7 +132,6 @@ body {
 
 .people-list {
     height: 100%;
-    overflow-y: auto;
     text-overflow: ellipsis;
 }
 
