@@ -8,9 +8,7 @@ const ChatHistory = (props) => {
 
     const messageItems = [];
     if (props.messages.length>0) {
-        console.log("all messages: ",props.messages);
         props.messages.forEach((message, index) => {
-            console.log("message: ", message);
             messageItems.push((<Message key={index}
                                         isMyMessage={message.sent}
                                         message={message}

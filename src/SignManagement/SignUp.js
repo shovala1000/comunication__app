@@ -27,7 +27,6 @@ function SignUp({setRouteArray, setShow1, setShow2, show1, show2}) {
     };
 
     /**************************************************************************************************************** */
-    // const [athoKey, setAthoKey] = useState('');
     //add a user
     async function postUser(id, password) {
         await fetch(context.server + 'Users', {
@@ -39,17 +38,13 @@ function SignUp({setRouteArray, setShow1, setShow2, show1, show2}) {
         })
             .then(response => {
                 response.text().then((r) => context.token = r);
-                setStatus(response.status);
             })
     }
-
-    const [status, setStatus] = useState(-1);
 
     // get a user with the username id if exist
     async function getUser(id) {
         await fetch(context.server + 'Users/' + id)
             .then(response => {
-                setStatus(response.status);
                 isValid(response.status);
             });
     }
@@ -128,7 +123,6 @@ function SignUp({setRouteArray, setShow1, setShow2, show1, show2}) {
     };
 
     function isValid(status) {
-        console.log(status);
         // Username already exist
         if (status === 200) {
             setErrorMessages({name: "uname", message: errors.uname});

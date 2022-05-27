@@ -8,14 +8,11 @@ import ChatHeader from '../chatHeader/ChatHeader';
 import ChatHistory from '../chatHistory-List/ChatHistory';
 import ProfileHeader from '../profileHeader/ProfileHeader';
 import NewContact from '../newContact/NewContact';
-import {MESSAGES_TYPE} from '../chatHistory-List/Message';
 import ChatMessage from '../chatMessage-Box/ChatMessage';
-import {getCurrentTime} from '../utils';
-
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
-import {getCLS} from "web-vitals";
 import {context} from "../../userData/data";
+
 const ChatScreen = (props) => {
     // save the state for error message when adding contact to the contacts list.
     const [currentError, setErrorMessage] = useState('');
@@ -26,19 +23,23 @@ const ChatScreen = (props) => {
     // This useState is saving the state for the selected contact, the contact that the current conversation is with.
     const [currentContact, setCurrentContact] = useState(selectedContact);
     /**************************************************************************************************************** */
-        // This useState is saving the current state of the contactMap in contactList.
+    // This useState is saving the current state of the contactList.
     const [listState, setListState] = useState([]);
+    // This useState is saving the all the user's contactList.
     const [list, setList] = useState([]);
+    //This useState is for initialize all the user's contactList.
     const [isInit, setInit] = useState(false);
+    //This useState is for saving the messages from user to one of his contacts.
     const [messages, setMessages] = useState([]);
 
     //get all the user's contacts
-    async function getAllC() {
-            await fetch(context.server+'Contacts/',{
-                headers:{
-                    'Content-Type': 'application/json',
-                    'Authorization': 'Bearer '+context.token,
-                }})
+    async function getAllContacts() {
+        await fetch(context.server + 'Contacts/', {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + context.token,
+            }
+        })
             .then(response => response.json())
             .then(data => {
                 setList(data);
@@ -47,12 +48,13 @@ const ChatScreen = (props) => {
     }
 
     //get messages with contact (id)
-    async function getAllM(id) {
-        await fetch(context.server+'Contacts/'+id+'/Messages',{
+    async function getAllMessages(id) {
+        await fetch(context.server + 'Contacts/' + id + '/Messages', {
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': 'Bearer '+context.token,
-            }})
+                'Authorization': 'Bearer ' + context.token,
+            }
+        })
             .then(response => response.json())
             .then(data => {
                 context.messages = data;
@@ -60,73 +62,88 @@ const ChatScreen = (props) => {
 
             });
     }
-
-    async function postM(id,server,content) {
-        await fetch(server+'Contacts/'+id+'/Messages', {
+    //post a message to contact (id) with content
+    async function postMessage(id, content) {
+        await fetch(context.server + 'Contacts/' + id + '/Messages', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': 'Bearer '+context.token,
+                'Authorization': 'Bearer ' + context.token,
             },
             body: JSON.stringify({content})
-        }).then((response)=>{
-                response.text().then((data)=> {
-                    context.currentMessage=data;
-                    messages.push(data);
-                });
+        }).then((response) => {
+            response.text().then((data) => {
+                context.currentMessage = data;
+                messages.push(data);
             });
+        });
     }
-    async function postTransfer(from,to,content) {
-        https://localhost:7049/api/Transfer?From=s&To=s&Content=s
-        await fetch('https://'+currentContact.server+'/api/Transfer?From='+from+'&To='+to+'&Content='+content, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                //'Authorization': 'Bearer '+context.token,
-            },
-            //body: JSON.stringify({from,to,content})
-        })
-    }
-
-    async function postInvitations(from,to,server) {
-        await fetch('https://'+server+'/api/Invitations?From='+from+'&To='+to+'&Server='+server, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                //'Authorization': 'Bearer '+context.token,
-            },
-            //body: JSON.stringify({from,to,server})
-        })
+    //post - send the contact's server request to post the message the user send
+    async function postTransfer(from, to, content) {
+            await fetch('https://' + currentContact.server + '/api/Transfer?From=' + from + '&To=' + to + '&Content=' + content, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                //body: JSON.stringify({from,to,content})
+            })
     }
 
+    async function postInvitations(responsePost, to, server) {
+        responsePost.then(async (r) => {
+            if (r.status === 201) {
+                console.log(responsePost.status);
+                await fetch('https://' + server + '/api/Invitations?From=' + props.username + '&To=' + to + '&Server=' + server, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        //'Authorization': 'Bearer '+context.token,
+                    },
+                    //body: JSON.stringify({props.username,to,server})
+                }).then((r) => {
+                    if (r.status === 201) {
+                        setInit(false);
+                    } else {
+                        console.log("r: ", r.status);
+                        setErrorMessage('failed to add');
+                        setAlertActive(true);
+                    }
+                })
+            } else {
+                //(?)delete contact
+                console.log("res: ", r);
+                setErrorMessage('failed to add');
+                setAlertActive(true);
+            }
+        });
+    }
+    //initialize contactsList and update if contact was added
+    useEffect(() => {
+        setListState(list);
+        setInit(true);
+    }, [list]);
+
+    if (!isInit) {
+        getAllContacts();
+    }
     /**************************************************************************************************************** */
 
-    // This function search in the contact's search box.
+        // This function search in the contact's search box.
     const doSearch = function (q) {
-        setListState(list.filter((contact) => contact.name.includes(q)));
-    }
+            setListState(list.filter((contact) => contact.name.includes(q)));
+        }
 
     // This function in handle conversation changing, pressing on contact from the contact list will invoke this function.
     const onConversationChange = function (id) {
-        getAllM(id);
-        setCurrentContact(listState.find((contact)=>contact.id===id));
+        getAllMessages(id);
+        setCurrentContact(listState.find((contact) => contact.id === id));
 
     }
-
-
-    // This function gets the nickname from the user and starts a conversation with him.
-    const addContact = function (to,server) {
-        postInvitations(props.username,to,server);
-        setInit(false);
-    }
-
 
     function createNewMessage(content) {
-        postM(currentContact.id,context.server,content);
-        postTransfer(props.username,currentContact.id,content);
+        postMessage(currentContact.id, content);
+        postTransfer(props.username, currentContact.id, content);
     }
-
-
 
 
     /*
@@ -139,14 +156,7 @@ const ChatScreen = (props) => {
          In ChatHistory - This component contains the chat history with that specific user.
          In ChatMessage - This component contains the send message box and the other application for sending messages.
      */
-    useEffect(()=> {
-        setListState(list);
-        setInit(true);
-        },[list]);
 
-    if(!isInit){
-        getAllC();
-    }
 
     return (
         <Container className='chat-screen'>
@@ -156,7 +166,7 @@ const ChatScreen = (props) => {
                     <Container className='left-menu-container'>
                         <Row className='profile-header-class'>
                             <Col className='profile-header'>
-                              <ProfileHeader  username={props.username}/>
+                                <ProfileHeader username={props.username}/>
                             </Col>
                         </Row>
                         <Row className='search-tn' style={isAlertActive ? {display: 'none'} : null}>
@@ -164,7 +174,7 @@ const ChatScreen = (props) => {
                                 <ContactSearch doSearch={doSearch}/>
                             </Col>
                             <Col className='new-contact-btn'>
-                                <NewContact addContact={addContact}/>
+                                <NewContact addContact={postInvitations}/>
                             </Col>
                         </Row>
 
@@ -193,7 +203,7 @@ const ChatScreen = (props) => {
                         <Row className='chat-history-class'>
                             <Col className='chat-history'>
                                 <ChatHistory messages={messages}
-                                            />
+                                />
                             </Col>
                         </Row>
                         <Row className='chat-message-box'>

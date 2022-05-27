@@ -25,9 +25,9 @@ function NewContact({addContact}) {
         bsModal.hide()
     }
 /******************************************************************************************************************** */
-
-    async function postC(id,name,server){
-        await fetch(context.server+'Contacts',{
+    //add contact to contactList
+    async function postContact(id,name,server){
+        return await fetch(context.server+'Contacts',{
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -41,8 +41,8 @@ function NewContact({addContact}) {
     // The function checks the input from the input box.
     const checkInput = (id,name,server) => {
             hideModal();
-            postC(id,name,server);
-            addContact(id,server);
+            const response = postContact(id,name,server);
+            addContact(response,id,server);
 
     }
 

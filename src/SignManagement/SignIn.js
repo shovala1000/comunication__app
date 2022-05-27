@@ -36,6 +36,7 @@ function SignIn({setRouteArray, setShow1, setShow2, show1, show2}) {
             })
     }
 
+    // check that the user signIn successfully
     function isValid(status){
             // if user exist
             if (status === 200) {
