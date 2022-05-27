@@ -10,7 +10,7 @@ export default function App() {
     const [RouteArray, setRouteArray] = useState([]);
     //function for every contact create path
     contactMap.forEach((value, key) => {
-        RouteArray.push((<Route key={key} path={"chat/" + key} element={<ChatScreen mainUserName={key}/>}/>));
+        RouteArray.push((<Route key={key} path={"chat/" + key} element={<ChatScreen username={key}/>}/>));
     })
     return (
         <BrowserRouter>

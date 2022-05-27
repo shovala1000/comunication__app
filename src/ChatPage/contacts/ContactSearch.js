@@ -1,14 +1,13 @@
-import React, {useRef} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 
 import './ContactSearch.css';
 
 
 /* This component allows the user to search contact in his contact list */
 function ContactSearch({doSearch}) {
-
     // creating a reference to the search box.
     const searchBox = useRef(null)
-    
+
     // the function make the search using do search function.
     const search = function (){
         doSearch(searchBox.current.value);

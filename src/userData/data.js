@@ -1,4 +1,5 @@
 import {MESSAGES_TYPE} from "../ChatPage/chatHistory-List/Message";
+import {useState} from "react";
 
 export const Contact = function (userName, password, imageURL, nickname) {
     this.userName = userName;
@@ -161,3 +162,11 @@ function initialState() {
 
 export default initialState;
 initialState();
+
+export const context =
+    {
+        token:'',
+        server:'https://localhost:7049/api/',
+        messages:[],
+        currentMessage:{}
+    };

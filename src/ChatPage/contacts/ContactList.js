@@ -8,16 +8,16 @@ const ContactList = (props) => {
     props.listState.forEach((item, index) => {
         conversationsItems.push(
             (<ContactItem index={index}
-                key={index}
-                userName={props.userName}
-                item={item}
-                onContactItemSelected={props.onContactItemSelected}/>));
-            });
-        return (
-            <ul className="list-group chat-list">
-                {conversationsItems}
-            </ul>
-        );
-    }
+                          key={index}
+                          userName={props.userName}
+                          item={item}
+                          onContactItemSelected={props.onContactItemSelected}/>));
+    });
+    return (
+        <ul className="list-group chat-list">
+            {conversationsItems}
+        </ul>
+    );
+}
 
-    export default ContactList;
+export default ContactList;

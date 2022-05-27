@@ -23,17 +23,17 @@ const Message = (props) => {
     function data() {
         switch (props.type) {
             case MESSAGES_TYPE.TEXT:
-                return (<div className="message-Text">{props.message.data}</div>);
+                return (<div className="message-Text">{props.message.content}</div>);
             case MESSAGES_TYPE.IMAGE:
                 return (<div className="message-Img">
-                    <img className="message-Img" alt="" src={props.message.data} /></div>)
+                    <img className="message-Img" alt="" src={props.message.content} /></div>)
             case MESSAGES_TYPE.VIDEO:
                 return (<div className="message-Video">
-                    <video controls className="message-Video" src={props.message.data} />
+                    <video controls className="message-Video" src={props.message.content} />
                 </div>)
             case MESSAGES_TYPE.MICROPHONE:
                 return (<div className="message-Microphone">
-                    <audio controls className="message-Microphone audio-recording" src={props.message.data}></audio></div>)
+                    <audio controls className="message-Microphone audio-recording" src={props.message.content}></audio></div>)
             default:
                 return;
 

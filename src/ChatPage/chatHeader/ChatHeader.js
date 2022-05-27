@@ -8,10 +8,10 @@ const ChatHeader = (props) => {
     if (props.selectedChat !== null) {
         return (
             <div className="chat-header clearfix">
-                <img src={props.selectedChat.imageURL} alt={props.selectedChat.imageAlt}></img>
-                <div className="chat-header-about">{props.selectedChat.nickname}</div>
+                <img src='/defalut-profile-picture.png' alt='default'/>
+                <div className="chat-header-about">{props.selectedChat.name}</div>
                 <button type="button" className="btn btn-outline-light sign-out-button" onClick={() => {
-                   navigate("/", {replace:true})}}>Sign Out
+                    navigate("/", {replace:true}); }}>Sign Out
                 </button>
             </div>
         );

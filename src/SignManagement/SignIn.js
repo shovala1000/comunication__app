@@ -1,12 +1,13 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {Button} from "react-bootstrap";
-import {contactMap} from '../userData/data';
+// import {contactMap} from '../userData/data';
 import './SignInOrUp.css';
 import {Link, Route} from "react-router-dom";
-import { useNavigate } from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 import ChatScreen from "../ChatPage/screen/ChatScreen";
+import {context} from "../userData/data";
 
-function SignIn({setRouteArray,setShow1, setShow2, show1, show2}){
+function SignIn({setRouteArray, setShow1, setShow2, show1, show2}) {
     let navigate = useNavigate();
     // States for registration
     const [errorMessages, setErrorMessages] = useState({});
@@ -16,47 +17,68 @@ function SignIn({setRouteArray,setShow1, setShow2, show1, show2}){
     const [password, setPassword] = useState('');
     //Error message
     const error = "invalid username or/and password";
-    // Handling the username change
+
+
+    /**************************************************************************************************************** */
+
+    // user signIn
+    async function postUser(id, password) {
+        await fetch(context.server+'Login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({id: id, password: password})
+        })
+            .then(response => {
+                response.text().then((r) => context.token = r);
+                isValid(response.status);
+            })
+    }
+
+    function isValid(status){
+            // if user exist
+            if (status === 200) {
+                //sign in successfully
+                setIsSubmitted(true);
+            }
+            // Username not found
+            else {
+                setErrorMessages({message: error});
+            }
+        }
+
+
+    /**************************************************************************************************************** */
+
+
+        // Handling the username change
     const handleUsername = (e) => {
-        setUsername(e.target.value);
-        setIsSubmitted(false);
-    };
+            setUsername(e.target.value);
+            setIsSubmitted(false);
+        };
     // Handling the password change
     const handlePassword = (e) => {
         setPassword(e.target.value);
         setIsSubmitted(false);
     };
 
+
     const handleSubmit = (event) => {
         //Prevent page reload
         event.preventDefault();
-
-        // Find user login info
-        const userData = contactMap.get(username);
-
-        // Compare user info
-        if (userData) {
-            if (userData.mainContact.password !== password) {
-                // Invalid password
-                setErrorMessages({message: error});
-            }
-            //sign in successfully
-            else {
-                setIsSubmitted(true);
-            }
-        }
-        // Username not found
-        else {
-            setErrorMessages({message: error});
-        }
+        //ask from server to signIn
+        postUser(username,password);
     };
 
     // Generate JSX code for error message
     const renderErrorMessage = () =>
         (<div className="error">{errorMessages.message}</div>);
 
-    function navToNewRoute(){
-        setRouteArray(prev=>[...prev,(<Route key={username} path={"chat/" + username} element={<ChatScreen mainUserName={username}/>}/>)]);
+    function navToNewRoute() {
+        setRouteArray(prev => [...prev, (
+            <Route key={username} path={"chat/" + username} element={<ChatScreen username={username}/>}/>)]);
+        navigate('chat/' + username, {replace: true});
     }
 
     // sign in form
@@ -86,8 +108,9 @@ function SignIn({setRouteArray,setShow1, setShow2, show1, show2}){
                           onClick={() => {
                               setShow1(!show1);
                               setShow2(!show2);
+
                           }}>
-                    Sign Up
+                        Sign Up
                     </Link>
                 </div>
             </form>
@@ -96,8 +119,7 @@ function SignIn({setRouteArray,setShow1, setShow2, show1, show2}){
 
     return (
         <div className="sign-info-background">
-            {isSubmitted?navToNewRoute():null}
-            {isSubmitted ?  navigate('chat/' + username, {replace: true}) : renderForm}
+            {isSubmitted ? navToNewRoute() : renderForm}
         </div>
     );
 }

@@ -5,11 +5,11 @@ import './ProfileHeader.css';
 /*
     This component contains the information about the connected user.
 */
-function ProfileHeader({contact}) {
+function ProfileHeader({username}) {
     return (
         <div className='profile-header'>
-            <img src={contact.imageURL} alt={contact.imageAlt}/>
-            <span className="profile-header-about">Welcome, {contact.nickname}</span>
+            <img src='/defalut-profile-picture.png' alt='default'/>
+            <span className="profile-header-about">Welcome, {username}</span>
         </div>
 
 );

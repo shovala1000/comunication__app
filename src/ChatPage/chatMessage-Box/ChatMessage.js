@@ -1,25 +1,42 @@
-import React from "react";
+import React, {useState} from "react";
 import {MESSAGES_TYPE} from "../chatHistory-List/Message";
 import useRecorder from "./useRecorder";
 import './ChatMessage.css';
+import {context} from "../../userData/data";
 
 
-function ChatMessage({createMessage}) {
+function ChatMessage(props) {
 
     const createMessageImg = (event) => {
-        createMessage(URL.createObjectURL(event.target.files[0]), MESSAGES_TYPE.IMAGE);
+        props.createMessage(URL.createObjectURL(event.target.files[0]), MESSAGES_TYPE.IMAGE);
     }
     const createMessageVideo = (event) => {
-        createMessage(URL.createObjectURL(event.target.files[0]), MESSAGES_TYPE.VIDEO);
+        props.createMessage(URL.createObjectURL(event.target.files[0]), MESSAGES_TYPE.VIDEO);
     }
 
+
+    /**************************************************************************************************************** */
+    // const [message, setMessage] = useState([]);
+    // async function postM(id, content) {
+    //     await fetch(context.server+'Contacts/'+id+'/Messages', {
+    //         method: 'POST',
+    //         headers: {
+    //             'Content-Type': 'application/json',
+    //             'Authorization': 'Bearer '+context.token,
+    //         },
+    //         body: JSON.stringify({content})
+    //     });
+    // }
+
+
+    /**************************************************************************************************************** */
     function handleClick(id, type) {
         switch (type) {
             case MESSAGES_TYPE.TEXT:
-                createMessage(document.getElementById(id).value, type);
+                props.createMessage(document.getElementById(id).value);
                 break;
             case MESSAGES_TYPE.MICROPHONE:
-                createMessage(id, type);
+                props.createMessage(id, type);
                 break;
             default:
                 return;

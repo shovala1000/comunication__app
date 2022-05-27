@@ -1,19 +1,18 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {Button} from "react-bootstrap";
-import {Contact, ContactChatInfo, contactMap} from '../userData/data';
+// import {Contact, ContactChatInfo, contactMap} from '../userData/data';
 import './SignInOrUp.css';
 import {Link, Route, useNavigate} from "react-router-dom";
 import ChatScreen from "../ChatPage/screen/ChatScreen";
+import {context} from "../userData/data";
 
-
-function SignUp({setRouteArray,setShow1, setShow2, show1, show2}) {
+function SignUp({setRouteArray, setShow1, setShow2, show1, show2}) {
     let navigate = useNavigate();
     // States for checking the errors
     const [errorMessages, setErrorMessages] = useState({});
     const [isSubmitted, setIsSubmitted] = useState(false);
     // States for registration
     const [username, setUsername] = useState('');
-    const [nickname, setNickname] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [password, setPassword] = useState('');
     const [imageName, setImageName] = useState('');
@@ -27,19 +26,44 @@ function SignUp({setRouteArray,setShow1, setShow2, show1, show2}) {
         img: "select valid image"
     };
 
+    /**************************************************************************************************************** */
+    // const [athoKey, setAthoKey] = useState('');
+    //add a user
+    async function postUser(id, password) {
+        await fetch(context.server + 'Users', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({id: id, password: password})
+        })
+            .then(response => {
+                response.text().then((r) => context.token = r);
+                setStatus(response.status);
+            })
+    }
+
+    const [status, setStatus] = useState(-1);
+
+    // get a user with the username id if exist
+    async function getUser(id) {
+        await fetch(context.server + 'Users/' + id)
+            .then(response => {
+                setStatus(response.status);
+                isValid(response.status);
+            });
+    }
+
+    /**************************************************************************************************************** */
+
+
+
 // Handling the username change
     const handleUsername = (e) => {
         setUsername(e.target.value);
         setIsSubmitted(false);
     };
-
-// Handling the nickname change
-    const handleNickname = (e) => {
-        setNickname(e.target.value);
-        setIsSubmitted(false);
-    };
-
-    // Handling the password change
+// Handling the password change
     const handlePassword = (e) => {
         setPassword(e.target.value);
         setIsSubmitted(false);
@@ -88,24 +112,25 @@ function SignUp({setRouteArray,setShow1, setShow2, show1, show2}) {
         return false;
     };
     const isImageValid = (img) => {
-        if(img){
+        if (img) {
             let value = img.toString();
             return value.match(/\.(jpg|jpeg|png|gif)$/);
-        }else{
+        } else {
             return true;
         }
     }
 
-
     const handleSubmit = (event) => {
         //Prevent page reload
         event.preventDefault();
-
         // Find user login info
-        const userData = contactMap.get(username);
+        getUser(username);
+    };
 
+    function isValid(status) {
+        console.log(status);
         // Username already exist
-        if (userData) {
+        if (status === 200) {
             setErrorMessages({name: "uname", message: errors.uname});
         }
         // Username not found
@@ -114,10 +139,6 @@ function SignUp({setRouteArray,setShow1, setShow2, show1, show2}) {
             if (!isNameValid(username)) {
                 setErrorMessages({name: "uname", message: errors.name});
 
-            }
-            // Invalid nickname
-            else if (!isNameValid(nickname)) {
-                setErrorMessages({name: "nname", message: errors.name});
             }
             // Invalid password
             else if (!isPassValid(password)) {
@@ -130,21 +151,21 @@ function SignUp({setRouteArray,setShow1, setShow2, show1, show2}) {
                 setErrorMessages({name: "img", message: errors.img});
             } else {
                 // Add new register to database
-                const contact = new Contact(username, password, imageUrl, nickname);
-                const contactChatInfo = new ContactChatInfo(contact, []);
-                contactMap.set(username, contactChatInfo);
+                postUser(username, password);
                 //sign up successfully
                 setIsSubmitted(true);
             }
         }
-    };
+    }
 
 
     // Generate code for error message
     const renderErrorMessage = (name) =>
         name === errorMessages.name && (<div className="error">{errorMessages.message}</div>);
-    function navToNewRoute(){
-        setRouteArray(prev=>[...prev,(<Route key={username} path={"chat/" + username} element={<ChatScreen mainUserName={username}/>}/>)]);
+
+    function navToNewRoute() {
+        setRouteArray(prev => [...prev, (
+            <Route key={username} path={"chat/" + username} element={<ChatScreen username={username}/>}/>)]);
         navigate('chat/' + username, {replace: true})
     }
 
@@ -157,12 +178,12 @@ function SignUp({setRouteArray,setShow1, setShow2, show1, show2}) {
                        value={username} required/>
                 <div>  {renderErrorMessage("uname")}</div>
             </div>
-            <div className="input-container">
-                <label>Nickname </label>
-                <input type="text" name="nname" onChange={handleNickname} className="input"
-                       value={nickname} required/>
-                <div>  {renderErrorMessage("nname")}</div>
-            </div>
+            {/*<div className="input-container">*/}
+            {/*    <label>Nickname </label>*/}
+            {/*    <input type="text" name="nname" onChange={handleNickname} className="input"*/}
+            {/*           value={nickname} required/>*/}
+            {/*    <div>  {renderErrorMessage("nname")}</div>*/}
+            {/*</div>*/}
             <div className="input-container">
                 <label>Password </label>
                 <input type="password" name="pass" onChange={handlePassword} className="input"
