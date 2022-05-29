@@ -1,6 +1,10 @@
+import { Button } from "bootstrap";
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import { context } from "../../userData/data";
 import './ChatHeader.css';
+
+
 
 /* This component is responsible for displaying the details of the contact the user is talking to */
 const ChatHeader = (props) => {
@@ -22,6 +26,8 @@ const ChatHeader = (props) => {
                 <button type="button" className="btn btn-outline-light sign-out-button" onClick={() => {
                     navigate("/", "_self")
                 }}>Sign Out
+                </button>
+                <button type="button" className="btn btn-outline-light sign-out-button" onClick={ ()=> window.location.href= context.Ratings}>Go to ratings
                 </button>
             </div>
         );
