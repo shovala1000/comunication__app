@@ -4,7 +4,7 @@ import {context} from "../../userData/data";
 import './NewContact.css';
 
 /* This component creates the window that opens when the user adds a new contact to his contact list. */
-function NewContact({addContact}) {
+function NewContact(props) {
     const modalRef = useRef()
 
 
@@ -24,27 +24,39 @@ function NewContact({addContact}) {
         const bsModal = Modal.getInstance(modalEle)
         bsModal.hide()
     }
-/******************************************************************************************************************** */
-    //add contact to contactList
-    async function postContact(id,name,server){
-        return await fetch(context.server+'Contacts',{
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': 'Bearer '+context.token,
-            },
-            body: JSON.stringify({ id: id, name: name, server:server})
-        })
-    }
-/******************************************************************************************************************** */
 
-    // The function checks the input from the input box.
-    const checkInput = (id,name,server) => {
+    /******************************************************************************************************************** */
+    // //add contact to contactList
+    // async function postContact(id, name, server) {
+    //     return await fetch(context.server + 'Contacts', {
+    //         method: 'POST',
+    //         headers: {
+    //             'Content-Type': 'application/json',
+    //             'Authorization': 'Bearer ' + context.token,
+    //         },
+    //         body: JSON.stringify({id: id, name: name, server: server})
+    //     }).then((r) => {
+    //
+    //     })
+    // }
+    //
+    // //signalR
+    // const addContact = async (userId, userServer, id, name, server) => {
+    //     try {
+    //         await context.connection.invoke("AddContact", userId, userServer, id, name, server);
+    //     } catch (e) {
+    //         console.log(e);
+    //     }
+    // }
+    /******************************************************************************************************************** */
+
+        // The function checks the input from the input box.
+    const checkInput = (id, name, server) => {
             hideModal();
-            const response = postContact(id,name,server);
-            addContact(response,id,server);
+            props.postContact(id, name, server);
+            props.postInvitations(props.username,id, server);
 
-    }
+        }
 
     // The function handles keypress. Allow insert new contact by pressing Enter.
     /**const handlePressedKey = (key) => {
@@ -69,15 +81,15 @@ function NewContact({addContact}) {
                         {/*delete from input: onKeyDown={handlePressedKey}*/}
                         <div className="modal-body">
                             <input type="text" className="form-control" id="modal-textbox-id"
-                                   placeholder="Enter contact username..." ></input>
+                                   placeholder="Enter contact username..."></input>
                         </div>
                         <div className="modal-body">
                             <input type="text" className="form-control" id="modal-textbox-name"
-                                   placeholder="Enter contact nickname..." ></input>
+                                   placeholder="Enter contact nickname..."></input>
                         </div>
                         <div className="modal-body">
                             <input type="text" className="form-control" id="modal-textbox-server"
-                                   placeholder="Enter contact server..." ></input>
+                                   placeholder="Enter contact server..."></input>
                         </div>
                         <div className="modal-footer">
                             <button type="button" className="btn btn-secondary" onClick={hideModal}>Close</button>

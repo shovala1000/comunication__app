@@ -1,12 +1,11 @@
 import React, {useEffect, useState} from "react";
 import {Button} from "react-bootstrap";
-// import {contactMap} from '../userData/data';
 import './SignInOrUp.css';
 import {Link, Route} from "react-router-dom";
 import {useNavigate} from "react-router-dom";
 import ChatScreen from "../ChatPage/screen/ChatScreen";
-import {addContact, AddUserToConnection, context, startConnection} from "../userData/data";
 import {HubConnectionBuilder} from "@microsoft/signalr";
+import {context, startConnection} from "../userData/data";
 
 function SignIn({setRouteArray, setShow1, setShow2, show1, show2}) {
     let navigate = useNavigate();
@@ -22,22 +21,25 @@ function SignIn({setRouteArray, setShow1, setShow2, show1, show2}) {
 
     /**************************************************************************************************************** */
         // //signalR
-        // const [connection, setConnection] = useState();
-        // const startConnection = async () => {
-        //     try {
-        //         const connection = new HubConnectionBuilder()
-        //             .withUrl('https://localhost:7049/AppHub')
-        //             .build();
-        //         await connection.start().then((result)=>{
-        //             connection.on('ReceiveMessage',message=>{
-        //
-        //             })
-        //         });
-        //         setConnection(connection);
-        //     } catch (e) {
-        //         console.log(e);
-        //     }
-        // }
+//     const startConnection = async (userid) => {
+//     try {
+//         const connection = new HubConnectionBuilder()
+//             .withUrl('https://localhost:7049/AppHub')
+//             .build();
+//         await connection.start().then(result => {
+//             connection.invoke("LogIn", userid);
+//             console.log("result: ",result);
+//             connection.on('ReceiveMessage', message => {
+//                 console.log(message);
+//                 //postMessage(message.UserId, message.Contact);
+//             })
+//         });
+//
+//         context.connection = connection;
+//     } catch (e) {
+//         console.log(e);
+//     }
+// }
 
     // user signIn
     async function postUser(id, password) {
@@ -88,7 +90,7 @@ function SignIn({setRouteArray, setShow1, setShow2, show1, show2}) {
         event.preventDefault();
         //ask from server to signIn
         postUser(username, password);
-        startConnection(username);
+        //startConnection(username);
     };
 
     // Generate JSX code for error message

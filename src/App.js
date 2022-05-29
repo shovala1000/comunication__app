@@ -7,20 +7,6 @@ import {HubConnectionBuilder} from "@microsoft/signalr";
 
 const App = () => {
     const [RouteArray, setRouteArray] = useState([]);
-    // const [connection, setConnection] = useState();
-    // const startConnection = async () => {
-    //     try {
-    //         const connection = new HubConnectionBuilder()
-    //             .withUrl('https://localhost:7049/AppHub')
-    //             .build();
-    //         await connection.start();
-    //         // await connection.invoke("AddUserToConnection", {"Id":userId,"Paddsword":password});
-    //         setConnection(connection);
-    //     } catch (e) {
-    //         console.log(e);
-    //     }
-    // }
-
     return (
         <BrowserRouter>
             <Routes>

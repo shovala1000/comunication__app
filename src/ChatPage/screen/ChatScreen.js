@@ -43,7 +43,8 @@ const ChatScreen = (props) => {
         })
             .then(response => response.json())
             .then(data => {
-                setList(data);
+                context.listConatcts=data;
+                setList(list.concat([data]));
             })
 
     }
@@ -74,86 +75,137 @@ const ChatScreen = (props) => {
             },
             body: JSON.stringify({content})
         }).then((response) => {
-            // console.log("Content: ", content, "ContactId: ", currentContact.id, "UserId: ", props.username)
-            sendMessage(content, props.username, currentContact.id);
             response.text().then((data) => {
-                context.currentMessage = data;
-                messages.push(data);
+                sendMessage(content, props.username, currentContact.id);
             });
         });
     }
 
     //post - send the contact's server request to post the message the user send
     async function postTransfer(from, to, content) {
-        await fetch('https://' + currentContact.server + '/api/Transfer?From=' + from + '&To=' + to + '&Content=' + content, {
+        await fetch('https://' + currentContact.server + '/api/Transfer', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
-            //body: JSON.stringify({from,to,content})
+            body: JSON.stringify({from, to, content})
         })
     }
 
-    async function postInvitations(responsePost, to, server) {
-        responsePost.then(async (r) => {
-            if (r.status === 201) {
-                console.log(responsePost.status);
-                await fetch('https://' + server + '/api/Invitations?From=' + props.username + '&To=' + to + '&Server=' + server, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        //'Authorization': 'Bearer '+context.token,
-                    },
-                    //body: JSON.stringify({props.username,to,server})
-                }).then((r) => {
-                    if (r.status === 201) {
-                        setInit(false);
-                    } else {
-                        console.log("r: ", r.status);
-                        setErrorMessage('failed to add');
-                        setAlertActive(true);
-                    }
-                })
-            } else {
-                //(?)delete contact
-                console.log("res: ", r);
-                setErrorMessage('failed to add');
-                setAlertActive(true);
-            }
-        });
+    async function postInvitations(username, to, server) {
+        if (status === 201) {
+            console.log(status);
+            await fetch('https://' + server + '/api/Invitations', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    //'Authorization': 'Bearer '+context.token,
+                },
+                body: JSON.stringify({username, to, server})
+            }).then((r) => {
+                if (status === 201) {
+                    setInit(false);
+                } else {
+                    setErrorMessage('failed to add');
+                    setAlertActive(true);
+                }
+            })
+        } else {
+            //(?)delete contact
+            setErrorMessage('failed to add');
+            setAlertActive(true);
+        }
+
     }
 
+    //
+    // const [isMessageAdded, setIsMessageAdded] = useState(false);
+    // useEffect(() => {
+    //     setIsMessageAdded(true);
+    // }, [list]);
+    // if(isMessageAdded){
+    //     startConnection()
+    //    setIsMessageAdded(false);
+    // }
+
+    const startConnection = async () => {
+        //post a message to contact (id) with content
+
+        try {
+            const connection = new HubConnectionBuilder()
+                .withUrl('https://localhost:7049/AppHub')
+                .build();
+            await connection.start().then(result => {
+                connection.invoke("LogIn", props.username);
+                console.log("result: ", result);
+                connection.on('ReceiveMessage', message => {
+                    context.messages.push(message);
+                    setMessages(context.messages.concat([]));
+                    //setMessages(messages.concat([message]));
+                    console.log(message);
+                    console.log("setMessages: ", messages);
+                    console.log("context: ", context.messages);
+                    //postMessage(message.UserId, message.Contact);
+                });
+                connection.on('ContactAdded', contact => {
+                    setList(list.concat([contact]));
+                    context.listConatcts.push(contact);
+                    setListState(listState.concat([contact]));
+                    console.log('state: ', listState);
+                    console.log('list: ', list);
+                })
+            });
+
+            context.connection = connection;
+        } catch (e) {
+            console.log(e);
+        }
+    }
+    const [one, setOne] = useState(false);
+    //const [isMessageAdd, setAddMessage] = useState(false);
+    if (!one) {
+        console.log("one");
+        startConnection(props.username);
+        setOne(true);
+    }
     //initialize contactsList and update if contact was added
     useEffect(() => {
         setListState(list);
         setInit(true);
     }, [list]);
-
     if (!isInit) {
         getAllContacts();
     }
 
     //signalR
-    // const [connection, setConnection] = useState();
-    // const startConnection = async () => {
-    //     try {
-    //         const connection = new HubConnectionBuilder()
-    //             .withUrl('https://localhost:7049/AppHub')
-    //             .build();
-    //         await connection.start().then((result)=>{
-    //             connection.on('ReceiveMessage',message=>{
-    //
-    //             })
-    //         });
-    //         setConnection(connection);
-    //     } catch (e) {
-    //         console.log(e);
-    //     }
-    // }
-    const sendMessage = async ( content, userId, contactId) => {
+    const sendMessage = async (content, userId, contactId) => {
         try {
-            console.log("Content: ", content, "ContactId: ", currentContact.id, "UserId: ", props.username);
             await context.connection.invoke("SendMessage", content, userId, contactId);
+        } catch (e) {
+            console.log(e);
+        }
+    }
+    const [status, setStatus] = useState(-1);
+
+    //add contact to contactList
+    async function postContact(id, name, server) {
+        await fetch(context.server + 'Contacts', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + context.token,
+            },
+            body: JSON.stringify({id: id, name: name, server: server})
+        }).then((r) => {
+            setStatus(r.status);
+            addContact(props.username, 'localhost:7049', id, name, server);
+        });
+    }
+
+    //signalR
+    const addContact = async (userId, userServer, id, name, server) => {
+        try {
+            await context.connection.invoke("AddContact", userId, userServer, id, name, server);
         } catch (e) {
             console.log(e);
         }
@@ -169,6 +221,7 @@ const ChatScreen = (props) => {
     const onConversationChange = function (id) {
         getAllMessages(id);
         setCurrentContact(listState.find((contact) => contact.id === id));
+        context.contactId = id;
 
     }
 
@@ -188,8 +241,6 @@ const ChatScreen = (props) => {
          In ChatHistory - This component contains the chat history with that specific user.
          In ChatMessage - This component contains the send message box and the other application for sending messages.
      */
-
-
     return (
         <Container className='chat-screen'>
             <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"/>
@@ -206,7 +257,9 @@ const ChatScreen = (props) => {
                                 <ContactSearch doSearch={doSearch}/>
                             </Col>
                             <Col className='new-contact-btn'>
-                                <NewContact addContact={postInvitations}/>
+                                <NewContact postInvitations={postInvitations}
+                                            postContact={postContact}
+                                            username={props.username}/>
                             </Col>
                         </Row>
 
@@ -219,7 +272,7 @@ const ChatScreen = (props) => {
 
                         <Row className='contact-list'>
                             <Col className="people-list">
-                                {<ContactList userName={props.username} listState={listState}
+                                {<ContactList userName={props.username} listState={list}
                                               onContactItemSelected={onConversationChange}/>}
                             </Col>
                         </Row>
