@@ -1,6 +1,5 @@
 import React, {useRef, useState} from 'react';
 import {Modal} from 'bootstrap';
-import {context} from "../../userData/data";
 import './NewContact.css';
 
 /* This component creates the window that opens when the user adds a new contact to his contact list. */
@@ -26,35 +25,31 @@ function NewContact(props) {
     }
 
     /******************************************************************************************************************** */
-    // //add contact to contactList
-    // async function postContact(id, name, server) {
-    //     return await fetch(context.server + 'Contacts', {
-    //         method: 'POST',
-    //         headers: {
-    //             'Content-Type': 'application/json',
-    //             'Authorization': 'Bearer ' + context.token,
-    //         },
-    //         body: JSON.stringify({id: id, name: name, server: server})
-    //     }).then((r) => {
-    //
-    //     })
-    // }
-    //
-    // //signalR
-    // const addContact = async (userId, userServer, id, name, server) => {
-    //     try {
-    //         await context.connection.invoke("AddContact", userId, userServer, id, name, server);
-    //     } catch (e) {
-    //         console.log(e);
-    //     }
-    // }
+
+    async function postInvitations(from, to, server) {
+        await fetch('https://' + server + '/api/Invitations', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({from, to, server})
+        }).then((r) => {
+            if (r.status !== 201) {
+                /**delete contact?*/
+                props.setErrorMessage('failed to add');
+                props.setAlertActive(true);
+            }
+        });
+    }
+
     /******************************************************************************************************************** */
 
         // The function checks the input from the input box.
     const checkInput = (id, name, server) => {
             hideModal();
             props.postContact(id, name, server);
-            props.postInvitations(props.username,id, server);
+            postInvitations(props.username, id, server);
+            //props.postInvitations(props.username,id, server);
 
         }
 

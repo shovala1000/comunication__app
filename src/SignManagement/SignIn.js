@@ -1,11 +1,10 @@
-import React, {useEffect, useState} from "react";
+import React, {useState} from "react";
 import {Button} from "react-bootstrap";
 import './SignInOrUp.css';
-import {Link, Route, Router} from "react-router-dom";
+import {Link, Route} from "react-router-dom";
 import {useNavigate} from "react-router-dom";
 import ChatScreen from "../ChatPage/screen/ChatScreen";
-import {HubConnectionBuilder} from "@microsoft/signalr";
-import {context, startConnection} from "../userData/data";
+import {context} from "../userData/data";
 
 function SignIn({setRouteArray, setShow1, setShow2, show1, show2}) {
     let navigate = useNavigate();
@@ -20,26 +19,6 @@ function SignIn({setRouteArray, setShow1, setShow2, show1, show2}) {
 
 
     /**************************************************************************************************************** */
-        // //signalR
-//     const startConnection = async (userid) => {
-//     try {
-//         const connection = new HubConnectionBuilder()
-//             .withUrl('https://localhost:7049/AppHub')
-//             .build();
-//         await connection.start().then(result => {
-//             connection.invoke("LogIn", userid);
-//             console.log("result: ",result);
-//             connection.on('ReceiveMessage', message => {
-//                 console.log(message);
-//                 //postMessage(message.UserId, message.Contact);
-//             })
-//         });
-//
-//         context.connection = connection;
-//     } catch (e) {
-//         console.log(e);
-//     }
-// }
 
     // user signIn
     async function postUser(id, password) {
@@ -105,8 +84,9 @@ function SignIn({setRouteArray, setShow1, setShow2, show1, show2}) {
 
     // Send the user to the ratings page.
     function goToRatings() {
-        setRouteArray(prev =>  [...prev, (<Route key={username} path={"chat/" + username} element={<ChatScreen username={username}/>}/>)]);
-       window.location.href= context.Ratings;
+        setRouteArray(prev => [...prev, (
+            <Route key={username} path={"chat/" + username} element={<ChatScreen username={username}/>}/>)]);
+        window.location.href = context.Ratings;
     }
 
     // sign in form

@@ -12,7 +12,7 @@ import ChatMessage from '../chatMessage-Box/ChatMessage';
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 import {context} from "../../userData/data";
-import {HubConnectionBuilder, LogLevel} from "@microsoft/signalr";
+import {HubConnectionBuilder} from "@microsoft/signalr";
 
 const ChatScreen = (props) => {
     // save the state for error message when adding contact to the contacts list.
@@ -43,8 +43,9 @@ const ChatScreen = (props) => {
         })
             .then(response => response.json())
             .then(data => {
-                context.listConatcts=data;
-                setList(list.concat([data]));
+                context.listConatcts = data;
+                setList(data);
+                setListState(data);
             })
 
     }
@@ -92,41 +93,6 @@ const ChatScreen = (props) => {
         })
     }
 
-    async function postInvitations(username, to, server) {
-        if (status === 201) {
-            console.log(status);
-            await fetch('https://' + server + '/api/Invitations', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    //'Authorization': 'Bearer '+context.token,
-                },
-                body: JSON.stringify({username, to, server})
-            }).then((r) => {
-                if (status === 201) {
-                    setInit(false);
-                } else {
-                    setErrorMessage('failed to add');
-                    setAlertActive(true);
-                }
-            })
-        } else {
-            //(?)delete contact
-            setErrorMessage('failed to add');
-            setAlertActive(true);
-        }
-
-    }
-
-    //
-    // const [isMessageAdded, setIsMessageAdded] = useState(false);
-    // useEffect(() => {
-    //     setIsMessageAdded(true);
-    // }, [list]);
-    // if(isMessageAdded){
-    //     startConnection()
-    //    setIsMessageAdded(false);
-    // }
 
     const startConnection = async () => {
         //post a message to contact (id) with content
@@ -137,22 +103,16 @@ const ChatScreen = (props) => {
                 .build();
             await connection.start().then(result => {
                 connection.invoke("LogIn", props.username);
-                console.log("result: ", result);
                 connection.on('ReceiveMessage', message => {
+                    /**do iff currentContact.id === message.contact.id
+                     or invoke ReceiveMessage iff we on currentContact.id conversation*/
+                    //console.log(message);
                     context.messages.push(message);
                     setMessages(context.messages.concat([]));
-                    //setMessages(messages.concat([message]));
-                    console.log(message);
-                    console.log("setMessages: ", messages);
-                    console.log("context: ", context.messages);
-                    //postMessage(message.UserId, message.Contact);
                 });
                 connection.on('ContactAdded', contact => {
-                    setList(list.concat([contact]));
                     context.listConatcts.push(contact);
-                    setListState(listState.concat([contact]));
-                    console.log('state: ', listState);
-                    console.log('list: ', list);
+                    setList(context.listConatcts.concat([]));
                 })
             });
 
@@ -168,13 +128,11 @@ const ChatScreen = (props) => {
         startConnection(props.username);
         setOne(true);
     }
-    //initialize contactsList and update if contact was added
-    useEffect(() => {
-        setListState(list);
-        setInit(true);
-    }, [list]);
+
     if (!isInit) {
+        console.log('2');
         getAllContacts();
+        setInit(true);
     }
 
     //signalR
@@ -185,7 +143,7 @@ const ChatScreen = (props) => {
             console.log(e);
         }
     }
-    const [status, setStatus] = useState(-1);
+    // const [status, setStatus] = useState(-1);
 
     //add contact to contactList
     async function postContact(id, name, server) {
@@ -197,9 +155,14 @@ const ChatScreen = (props) => {
             },
             body: JSON.stringify({id: id, name: name, server: server})
         }).then((r) => {
-            setStatus(r.status);
-            addContact(props.username, 'localhost:7049', id, name, server);
+            if (r.status !== 201) {
+                setErrorMessage('failed to add');
+                setAlertActive(true);
+            } else {
+                addContact(props.username, 'localhost:7049', id, name, server);
+            }
         });
+
     }
 
     //signalR
@@ -210,6 +173,7 @@ const ChatScreen = (props) => {
             console.log(e);
         }
     }
+
     /**************************************************************************************************************** */
 
         // This function search in the contact's search box.
@@ -257,9 +221,10 @@ const ChatScreen = (props) => {
                                 <ContactSearch doSearch={doSearch}/>
                             </Col>
                             <Col className='new-contact-btn'>
-                                <NewContact postInvitations={postInvitations}
-                                            postContact={postContact}
-                                            username={props.username}/>
+                                <NewContact postContact={postContact}
+                                            username={props.username}
+                                            setErrorMessage={setErrorMessage}
+                                            setAlertActive={setAlertActive}/>
                             </Col>
                         </Row>
 
