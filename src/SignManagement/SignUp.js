@@ -5,6 +5,7 @@ import './SignInOrUp.css';
 import {Link, Route, useNavigate} from "react-router-dom";
 import ChatScreen from "../ChatPage/screen/ChatScreen";
 import {addContact, AddUserToConnection, context} from "../userData/data";
+import {HubConnectionBuilder} from "@microsoft/signalr";
 
 function SignUp({setRouteArray, setShow1, setShow2, show1, show2}) {
     let navigate = useNavigate();
@@ -27,6 +28,21 @@ function SignUp({setRouteArray, setShow1, setShow2, show1, show2}) {
     };
 
     /**************************************************************************************************************** */
+    //signalR
+    const [connection, setConnection] = useState();
+    const startConnection = async () => {
+        try {
+            const connection = new HubConnectionBuilder()
+                .withUrl('https://localhost:7049/AppHub')
+                .build();
+            await connection.start();
+            setConnection(connection);
+        } catch (e) {
+            console.log(e);
+        }
+    }
+
+
     //add a user
     async function postUser(id, password) {
         await fetch(context.server + 'Users', {
@@ -120,8 +136,7 @@ function SignUp({setRouteArray, setShow1, setShow2, show1, show2}) {
         event.preventDefault();
         // Find user login info
         getUser(username);
-        const contact = {name: username,server:'localhost:7049'};
-        //AddUserToConnection(username);
+        startConnection();
     };
 
     function isValid(status) {
@@ -161,7 +176,8 @@ function SignUp({setRouteArray, setShow1, setShow2, show1, show2}) {
 
     function navToNewRoute() {
         setRouteArray(prev => [...prev, (
-            <Route key={username} path={"chat/" + username} element={<ChatScreen username={username}/>}/>)]);
+            <Route key={username} path={"chat/" + username}
+                   element={<ChatScreen username={username} connection={connection}/>}/>)]);
         navigate('chat/' + username, {replace: true})
     }
 
