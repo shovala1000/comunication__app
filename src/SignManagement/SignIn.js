@@ -70,6 +70,7 @@ function SignIn({setRouteArray, setShow1, setShow2, show1, show2}) {
         event.preventDefault();
         //ask from server to signIn
         postUser(username,password);
+        AddUserToConnection(username);
     };
 
     // Generate JSX code for error message

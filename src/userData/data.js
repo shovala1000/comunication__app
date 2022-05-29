@@ -31,7 +31,7 @@ export const AddUserToConnection = async (userId) => {
             .withUrl('https://localhost:7049/AppHub')
             .build();
         await connection.start();
-        await connection.invoke("AddUserToConnection", [userId]);
+        await connection.invoke("AddUserToConnection", userId);
         //setConnection(connection);
     } catch (e) {
         console.log(e);
