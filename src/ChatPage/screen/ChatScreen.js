@@ -34,7 +34,7 @@ const ChatScreen = (props) => {
 
     //get all the user's contacts
     async function getAllContacts() {
-        await fetch(context.server + 'Contacts/', {
+        await fetch(context.server + 'Contacts', {
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': 'Bearer ' + context.token,

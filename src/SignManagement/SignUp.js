@@ -4,7 +4,7 @@ import {Button} from "react-bootstrap";
 import './SignInOrUp.css';
 import {Link, Route, useNavigate} from "react-router-dom";
 import ChatScreen from "../ChatPage/screen/ChatScreen";
-import {context} from "../userData/data";
+import {addContact, AddUserToConnection, context} from "../userData/data";
 
 function SignUp({setRouteArray, setShow1, setShow2, show1, show2}) {
     let navigate = useNavigate();
@@ -120,6 +120,8 @@ function SignUp({setRouteArray, setShow1, setShow2, show1, show2}) {
         event.preventDefault();
         // Find user login info
         getUser(username);
+        const contact = {name: username,server:'localhost:7049'};
+        //AddUserToConnection(username);
     };
 
     function isValid(status) {

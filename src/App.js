@@ -1,9 +1,13 @@
 import {BrowserRouter, Route, Routes} from "react-router-dom";
 import SignManagement from "./SignManagement/SignManagement";
 import React, {useState} from "react";
+import {context} from "./userData/data";
 
 
-export default function App() {
+ const App=()=> {
+    const [connection, setConnection] = useState();
+
+
 
     const [RouteArray, setRouteArray] = useState([]);
     return (
@@ -15,3 +19,4 @@ export default function App() {
         </BrowserRouter>
     );
 }
+export default App;
