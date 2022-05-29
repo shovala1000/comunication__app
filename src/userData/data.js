@@ -6,6 +6,7 @@ export const context =
         connection: '',
         token: '',
         server: 'https://localhost:7049/api/',
+        Ratings: 'http://localhost:5219/Ratings',
         messages: [],
         currentMessage: {}
     };
@@ -22,19 +23,7 @@ export const startConnection = async (userid) => {
                 //postMessage(message.UserId, message.Contact);
             })
         });
-
-<<<<<<< HEAD
-export const AddUserToConnection = async (userId) => {
-    try {
-        const connection = new HubConnectionBuilder()
-            .withUrl('https://localhost:7049/AppHub')
-            .build();
-        await connection.start();
-        await connection.invoke("AddUserToConnection", userId);
-        //setConnection(connection);
-=======
         context.connection = connection;
->>>>>>> a796f7368d5119f094da47f5149ede5c56353687
     } catch (e) {
         console.log(e);
     }

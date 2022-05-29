@@ -32,6 +32,18 @@
     border-color: white;
 }
 
+/*All buttons (sign and submit)*/
+#button-container,#button-container-Ratings,#button-container-signUp,.button-container {
+    display: flex;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    padding: 10px 20px;
+    background: black;
+    border-color: white;
+}
+
 /*Animation*/
 .slide-animation {
     display: flex;

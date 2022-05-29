@@ -2,7 +2,7 @@ import React, {useEffect, useState} from "react";
 import {Button} from "react-bootstrap";
 // import {contactMap} from '../userData/data';
 import './SignInOrUp.css';
-import {Link, Route} from "react-router-dom";
+import {Link, Route, Router} from "react-router-dom";
 import {useNavigate} from "react-router-dom";
 import ChatScreen from "../ChatPage/screen/ChatScreen";
 import {addContact, AddUserToConnection, context, startConnection} from "../userData/data";
@@ -87,13 +87,8 @@ function SignIn({setRouteArray, setShow1, setShow2, show1, show2}) {
         //Prevent page reload
         event.preventDefault();
         //ask from server to signIn
-<<<<<<< HEAD
-        postUser(username,password);
-        AddUserToConnection(username);
-=======
         postUser(username, password);
         startConnection(username);
->>>>>>> a796f7368d5119f094da47f5149ede5c56353687
     };
 
     // Generate JSX code for error message
@@ -104,6 +99,12 @@ function SignIn({setRouteArray, setShow1, setShow2, show1, show2}) {
         setRouteArray(prev => [...prev, (
             <Route key={username} path={"chat/" + username} element={<ChatScreen username={username}/>}/>)]);
         navigate('chat/' + username, {replace: true});
+    }
+
+    // Send the user to the ratings page.
+    function goToRatings() {
+        setRouteArray(prev =>  [...prev, (<Route key={username} path={"chat/" + username} element={<ChatScreen username={username}/>}/>)]);
+       window.location.href= context.Ratings;
     }
 
     // sign in form
@@ -125,6 +126,11 @@ function SignIn({setRouteArray, setShow1, setShow2, show1, show2}) {
                 <div className='button-container'>
                     <Button id="button-container-signIn" onClick={handleSubmit} type="submit">
                         Submit
+                    </Button>
+                </div>
+                <div className='button-container'>
+                    <Button id="button-container-Ratings" onClick={goToRatings}>
+                        Go to ratings
                     </Button>
                 </div>
                 <div id='details'>
