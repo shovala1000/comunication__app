@@ -5,7 +5,7 @@ import './SignInOrUp.css';
 import {Link, Route} from "react-router-dom";
 import {useNavigate} from "react-router-dom";
 import ChatScreen from "../ChatPage/screen/ChatScreen";
-import {context} from "../userData/data";
+import {addContact, AddUserToConnection, context} from "../userData/data";
 
 function SignIn({setRouteArray, setShow1, setShow2, show1, show2}) {
     let navigate = useNavigate();
