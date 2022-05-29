@@ -12,6 +12,7 @@ import ChatMessage from '../chatMessage-Box/ChatMessage';
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 import {context} from "../../userData/data";
+import {HubConnectionBuilder, LogLevel} from "@microsoft/signalr";
 
 const ChatScreen = (props) => {
     // save the state for error message when adding contact to the contacts list.
@@ -23,7 +24,7 @@ const ChatScreen = (props) => {
     // This useState is saving the state for the selected contact, the contact that the current conversation is with.
     const [currentContact, setCurrentContact] = useState(selectedContact);
     /**************************************************************************************************************** */
-    // This useState is saving the current state of the contactList.
+        // This useState is saving the current state of the contactList.
     const [listState, setListState] = useState([]);
     // This useState is saving the all the user's contactList.
     const [list, setList] = useState([]);
@@ -62,6 +63,7 @@ const ChatScreen = (props) => {
 
             });
     }
+
     //post a message to contact (id) with content
     async function postMessage(id, content) {
         await fetch(context.server + 'Contacts/' + id + '/Messages', {
@@ -72,21 +74,24 @@ const ChatScreen = (props) => {
             },
             body: JSON.stringify({content})
         }).then((response) => {
+            // console.log("Content: ", content, "ContactId: ", currentContact.id, "UserId: ", props.username)
+            sendMessage(content, props.username, currentContact.id);
             response.text().then((data) => {
                 context.currentMessage = data;
                 messages.push(data);
             });
         });
     }
+
     //post - send the contact's server request to post the message the user send
     async function postTransfer(from, to, content) {
-            await fetch('https://' + currentContact.server + '/api/Transfer?From=' + from + '&To=' + to + '&Content=' + content, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                //body: JSON.stringify({from,to,content})
-            })
+        await fetch('https://' + currentContact.server + '/api/Transfer?From=' + from + '&To=' + to + '&Content=' + content, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            //body: JSON.stringify({from,to,content})
+        })
     }
 
     async function postInvitations(responsePost, to, server) {
@@ -117,6 +122,7 @@ const ChatScreen = (props) => {
             }
         });
     }
+
     //initialize contactsList and update if contact was added
     useEffect(() => {
         setListState(list);
@@ -125,6 +131,32 @@ const ChatScreen = (props) => {
 
     if (!isInit) {
         getAllContacts();
+    }
+
+    //signalR
+    // const [connection, setConnection] = useState();
+    // const startConnection = async () => {
+    //     try {
+    //         const connection = new HubConnectionBuilder()
+    //             .withUrl('https://localhost:7049/AppHub')
+    //             .build();
+    //         await connection.start().then((result)=>{
+    //             connection.on('ReceiveMessage',message=>{
+    //
+    //             })
+    //         });
+    //         setConnection(connection);
+    //     } catch (e) {
+    //         console.log(e);
+    //     }
+    // }
+    const sendMessage = async ( content, userId, contactId) => {
+        try {
+            console.log("Content: ", content, "ContactId: ", currentContact.id, "UserId: ", props.username);
+            await context.connection.invoke("SendMessage", content, userId, contactId);
+        } catch (e) {
+            console.log(e);
+        }
     }
     /**************************************************************************************************************** */
 

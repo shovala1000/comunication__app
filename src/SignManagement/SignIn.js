@@ -5,7 +5,8 @@ import './SignInOrUp.css';
 import {Link, Route} from "react-router-dom";
 import {useNavigate} from "react-router-dom";
 import ChatScreen from "../ChatPage/screen/ChatScreen";
-import {addContact, AddUserToConnection, context} from "../userData/data";
+import {addContact, AddUserToConnection, context, startConnection} from "../userData/data";
+import {HubConnectionBuilder} from "@microsoft/signalr";
 
 function SignIn({setRouteArray, setShow1, setShow2, show1, show2}) {
     let navigate = useNavigate();
@@ -20,10 +21,27 @@ function SignIn({setRouteArray, setShow1, setShow2, show1, show2}) {
 
 
     /**************************************************************************************************************** */
+        // //signalR
+        // const [connection, setConnection] = useState();
+        // const startConnection = async () => {
+        //     try {
+        //         const connection = new HubConnectionBuilder()
+        //             .withUrl('https://localhost:7049/AppHub')
+        //             .build();
+        //         await connection.start().then((result)=>{
+        //             connection.on('ReceiveMessage',message=>{
+        //
+        //             })
+        //         });
+        //         setConnection(connection);
+        //     } catch (e) {
+        //         console.log(e);
+        //     }
+        // }
 
     // user signIn
     async function postUser(id, password) {
-        await fetch(context.server+'Login', {
+        await fetch(context.server + 'Login', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -37,17 +55,17 @@ function SignIn({setRouteArray, setShow1, setShow2, show1, show2}) {
     }
 
     // check that the user signIn successfully
-    function isValid(status){
-            // if user exist
-            if (status === 200) {
-                //sign in successfully
-                setIsSubmitted(true);
-            }
-            // Username not found
-            else {
-                setErrorMessages({message: error});
-            }
+    function isValid(status) {
+        // if user exist
+        if (status === 200) {
+            //sign in successfully
+            setIsSubmitted(true);
         }
+        // Username not found
+        else {
+            setErrorMessages({message: error});
+        }
+    }
 
 
     /**************************************************************************************************************** */
@@ -69,8 +87,13 @@ function SignIn({setRouteArray, setShow1, setShow2, show1, show2}) {
         //Prevent page reload
         event.preventDefault();
         //ask from server to signIn
+<<<<<<< HEAD
         postUser(username,password);
         AddUserToConnection(username);
+=======
+        postUser(username, password);
+        startConnection(username);
+>>>>>>> a796f7368d5119f094da47f5149ede5c56353687
     };
 
     // Generate JSX code for error message
