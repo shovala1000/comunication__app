@@ -39,7 +39,14 @@ function SignUp({setRouteArray, setShow1, setShow2, show1, show2}) {
             body: JSON.stringify({id: id, password: password})
         })
             .then(response => {
-                response.text().then((r) => context.token = r);
+                context.isAleardyConnected= '';
+                response.text().then((r) => {
+                    context.token = r;
+                    //sign up successfully
+                    setIsSubmitted(true);
+                    console.log("r: ",r);
+
+                });
             })
     }
 
@@ -149,8 +156,6 @@ function SignUp({setRouteArray, setShow1, setShow2, show1, show2}) {
             } else {
                 // Add new register to database
                 postUser(username, password);
-                //sign up successfully
-                setIsSubmitted(true);
             }
         }
     }

@@ -6,6 +6,7 @@ import './ContactItem.css';
 const ContactList = (props) => {
     const conversationsItems = [];
     props.listState.forEach((item, index) => {
+        console.log(item);
         conversationsItems.push(
             (<ContactItem index={index}
                           key={index}

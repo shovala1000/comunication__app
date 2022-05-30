@@ -110,8 +110,8 @@ const ChatScreen = (props) => {
                 .build();
             await connection.start().then(result => {
                 connection.invoke("LogIn", props.username);
-                connection.on('ReceiveMessage', (message,userid) => {
-                    if(userid===context.contactId||userid===props.username){
+                connection.on('ReceiveMessage', (message,id) => {
+                    if(id===context.contactId){
                         context.messages.push(message);
                         setMessages(context.messages.concat([]));
                         // console.log("messages: ",messages);
