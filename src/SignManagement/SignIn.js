@@ -89,7 +89,7 @@ function SignIn({setRouteArray, setShow1, setShow2, show1, show2}) {
     function goToRatings() {
         setRouteArray(prev => [...prev, (
             <Route key={username} path={"chat/" + username} element={<ChatScreen username={username}/>}/>)]);
-        window.location.href = context.Ratings;
+        window.location.href = context.ratings;
     }
 
     // sign in form

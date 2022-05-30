@@ -29,7 +29,7 @@ const ChatHeader = (props) => {
                 }}>Sign Out
                 </button>
                 <button type="button" className="btn btn-outline-light sign-out-button"
-                        onClick={() => window.location.href = context.Ratings}>Go to ratings
+                        onClick={() => window.location.href = context.ratings}>Go to ratings
                 </button>
             </div>
         );
@@ -45,7 +45,7 @@ const ChatHeader = (props) => {
                 }}>Sign Out
                 </button>
                 <button type="button" className="btn btn-outline-light sign-out-button"
-                        onClick={() => window.location.href = context.Ratings}>Go to ratings
+                        onClick={() => window.location.href = context.ratings}>Go to ratings
                 </button>
             </div>
         );

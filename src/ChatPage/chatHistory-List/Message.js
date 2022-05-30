@@ -1,5 +1,6 @@
 import React from "react";
 import './Message.css';
+import { getCurrentTime } from "../utils";
 
 // exporting all message types available in the app to avoid mistakes.
 export const MESSAGES_TYPE = {
@@ -42,7 +43,7 @@ const Message = (props) => {
 
     return (
         <li className="clearfix">
-            <div className={sendTime}> {props.message.created}</div>
+            <div className={sendTime}> {getCurrentTime(props.message.created)}</div>
             <div className={messageClass}>{data()}</div>
         </li>
     );

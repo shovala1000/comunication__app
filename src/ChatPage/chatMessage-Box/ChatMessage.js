@@ -31,6 +31,9 @@ function ChatMessage(props) {
 
     /**************************************************************************************************************** */
     function handleClick(id, type) {
+        if (document.getElementById('send-message-box').value == '') {
+            return;
+        }
         switch (type) {
             case MESSAGES_TYPE.TEXT:
                 props.createMessage(document.getElementById(id).value);
@@ -80,13 +83,13 @@ function ChatMessage(props) {
             <input type="text" className="form-control" id="send-message-box" placeholder="Enter text here..."
                    onKeyDown={sendMessageByEnter}/>
             <div className="btn-group" role="group" aria-label="Basic mixed styles example">
-                <button id="get_file" type="button" className="btn btn-outline-success"
+                <button id="get_file" type="button" className="btn btn-outline-success" disabled={true}
                         onClick={() => OpenImg()}>
                     <i className="fa fa-camera" aria-hidden="true"></i>
                 </button>
                 <input type="file" onChange={createMessageImg} id="input_file"
                        accept=".jpg,.jpeg,.png" style={{display: 'none'}}/>
-                <button id='get-audio' type="button" className="btn btn-outline-danger" onClick={changeAudioClassName}>
+                <button id='get-audio' type="button" className="btn btn-outline-danger" disabled={true} onClick={changeAudioClassName}>
                     <i className="fa fa-microphone" aria-hidden="true"/></button>
                 <div className={currentAudioClassName}>
                     <audio src={audioURL} controls/>
@@ -100,7 +103,7 @@ function ChatMessage(props) {
                     <button className="btn btn-dark" onClick={changeAudioClassName}><i className="fa fa-window-close"
                                                                                        aria-hidden="true"></i></button>
                 </div>
-                <button id="get_video" type="button" className="btn btn-outline-primary"
+                <button id="get_video" type="button" className="btn btn-outline-primary" disabled={true}
                         onClick={() => OpenVideo()}>
                     <i
                         className="fa fa-video-camera" aria-hidden="true"/></button>

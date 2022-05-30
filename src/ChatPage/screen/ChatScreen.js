@@ -136,7 +136,6 @@ const ChatScreen = (props) => {
     useEffect(() => {
         if (context.token !== '' && context.isAleardyConnected !== true) {
             startConnection(props.username);
-
             getAllContacts();
         }
     }, [context.token])
