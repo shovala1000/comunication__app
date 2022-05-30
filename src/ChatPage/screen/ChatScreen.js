@@ -83,6 +83,7 @@ const ChatScreen = (props) => {
             body: JSON.stringify({content})
         }).then((response) => {
             response.text().then((data) => {
+                //console.log(data);
                 sendMessage(content, props.username, currentContact.id);
             });
         });
@@ -113,13 +114,14 @@ const ChatScreen = (props) => {
                     if(userid===context.contactId||userid===props.username){
                         context.messages.push(message);
                         setMessages(context.messages.concat([]));
-                        console.log("messages: ",messages);
-                        console.log("context.messages: ",context.messages);
+                        // console.log("messages: ",messages);
+                        // console.log("context.messages: ",context.messages);
                     }
                 });
                 connection.on('ContactAdded', contact => {
                     context.listConatcts.push(contact);
                     setList(context.listConatcts.concat([]));
+                    setListState(context.listConatcts.concat([]));
                 })
             });
             context.connection = connection;
@@ -245,7 +247,7 @@ const ChatScreen = (props) => {
 
                         <Row className='contact-list'>
                             <Col className="people-list">
-                                {<ContactList userName={props.username} listState={list}
+                                {<ContactList userName={props.username} listState={listState}
                                               onContactItemSelected={onConversationChange}/>}
                             </Col>
                         </Row>
