@@ -42,7 +42,7 @@ const Message = (props) => {
 
     return (
         <li className="clearfix">
-            <div className={sendTime}> {props.message.time}</div>
+            <div className={sendTime}> {props.message.created}</div>
             <div className={messageClass}>{data()}</div>
         </li>
     );

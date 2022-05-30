@@ -30,7 +30,10 @@ function SignIn({setRouteArray, setShow1, setShow2, show1, show2}) {
             body: JSON.stringify({id: id, password: password})
         })
             .then(response => {
-                response.text().then((r) => context.token = r);
+                response.text().then((r) => {
+                        context.token = r;
+                    context.isAleardyConnected= '';
+                    });
                 isValid(response.status);
             })
     }

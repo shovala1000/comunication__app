@@ -41,12 +41,18 @@ const ChatScreen = (props) => {
                 'Authorization': 'Bearer ' + context.token,
             }
         })
-            .then(response => response.json())
-            .then(data => {
-                context.listConatcts = data;
-                setList(data);
-                setListState(data);
-            })
+            .then(response => {
+                response.json().then(data => {
+                    context.listConatcts = data;
+                    setList(data);
+                    setListState(data);
+                })
+            });
+            // .then(data => {
+            //     context.listConatcts = data;
+            //     setList(data);
+            //     setListState(data);
+            // })
 
     }
 
@@ -97,6 +103,7 @@ const ChatScreen = (props) => {
     const startConnection = async () => {
         //post a message to contact (id) with content
         try {
+            context.isAleardyConnected = true;
             const connection = new HubConnectionBuilder()
                 .withUrl('https://localhost:7049/AppHub')
                 .build();
@@ -106,6 +113,8 @@ const ChatScreen = (props) => {
                     if(userid===context.contactId||userid===props.username){
                         context.messages.push(message);
                         setMessages(context.messages.concat([]));
+                        console.log("messages: ",messages);
+                        console.log("context.messages: ",context.messages);
                     }
                 });
                 connection.on('ContactAdded', contact => {
@@ -113,31 +122,30 @@ const ChatScreen = (props) => {
                     setList(context.listConatcts.concat([]));
                 })
             });
-
             context.connection = connection;
+
         } catch (e) {
+            context.isAleardyConnected = false;
             console.log(e);
         }
     }
-    const [one, setOne] = useState(false);
-    //const [isMessageAdd, setAddMessage] = useState(false);
-    if (!one) {
-        console.log("one");
-        startConnection(props.username);
-        setOne(true);
-    }
 
-    if (!isInit) {
-        console.log('2');
-        getAllContacts();
-        setInit(true);
-    }
-
+    useEffect(()=>{
+        // console.log("props.username: ",props.username);
+        console.log("context.isAleardyConnected: ",context.isAleardyConnected);
+        // console.log("context.connection: ",context.connection);
+        console.log("context.token: ",context.token);
+        if (context.token !== ''&&context.isAleardyConnected!==true) {
+            startConnection(props.username);
+            // console.log("context.connection2: ",context.connection);
+            // console.log("context.connection: ",context.isAleardyConnected);
+            getAllContacts();
+        }
+    },[context.token])
     //signalR
     const sendMessage = async (content, userId, contactId) => {
         try {
             await context.connection.invoke("SendMessage", content, userId, contactId);
-            console.log("contactid: ",currentContact.id);
         } catch (e) {
             console.log(e);
         }
@@ -247,7 +255,8 @@ const ChatScreen = (props) => {
                     <Container className='chat-menu-container'>
                         <Row className='chat-header-class'>
                             <Col className='chat-header'>
-                                <ChatHeader selectedChat={currentContact}/>
+                                <ChatHeader selectedChat={currentContact}
+                                setInit={setInit}/>
                             </Col>
                         </Row>
                         <Row className='chat-history-class'>
