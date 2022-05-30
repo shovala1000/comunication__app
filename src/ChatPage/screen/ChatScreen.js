@@ -96,19 +96,17 @@ const ChatScreen = (props) => {
 
     const startConnection = async () => {
         //post a message to contact (id) with content
-
         try {
             const connection = new HubConnectionBuilder()
                 .withUrl('https://localhost:7049/AppHub')
                 .build();
             await connection.start().then(result => {
                 connection.invoke("LogIn", props.username);
-                connection.on('ReceiveMessage', message => {
-                    /**do iff currentContact.id === message.contact.id
-                     or invoke ReceiveMessage iff we on currentContact.id conversation*/
-                    //console.log(message);
-                    context.messages.push(message);
-                    setMessages(context.messages.concat([]));
+                connection.on('ReceiveMessage', (message,userid) => {
+                    if(userid===context.contactId||userid===props.username){
+                        context.messages.push(message);
+                        setMessages(context.messages.concat([]));
+                    }
                 });
                 connection.on('ContactAdded', contact => {
                     context.listConatcts.push(contact);
@@ -139,6 +137,7 @@ const ChatScreen = (props) => {
     const sendMessage = async (content, userId, contactId) => {
         try {
             await context.connection.invoke("SendMessage", content, userId, contactId);
+            console.log("contactid: ",currentContact.id);
         } catch (e) {
             console.log(e);
         }
@@ -184,6 +183,7 @@ const ChatScreen = (props) => {
     // This function in handle conversation changing, pressing on contact from the contact list will invoke this function.
     const onConversationChange = function (id) {
         getAllMessages(id);
+        context.contactId=id;
         setCurrentContact(listState.find((contact) => contact.id === id));
         context.contactId = id;
 
