@@ -111,7 +111,12 @@ const ChatScreen = (props) => {
             await connection.start().then(result => {
                 connection.invoke("LogIn", props.username);
                 connection.on('ReceiveMessage', (message,id) => {
+                    //update last and last date of contact
+                    context.listConatcts.find((contact)=>contact.id === id).lastdate = message.created;
+                    context.listConatcts.find((contact)=>contact.id === id).last = message.content;
+                    console.log("list: ",context.listConatcts);
                     if(id===context.contactId){
+                        console.log("in");
                         context.messages.push(message);
                         setMessages(context.messages.concat([]));
                         // console.log("messages: ",messages);
@@ -119,6 +124,7 @@ const ChatScreen = (props) => {
                     }
                 });
                 connection.on('ContactAdded', contact => {
+                    console.log("contact: ",contact);
                     context.listConatcts.push(contact);
                     setList(context.listConatcts.concat([]));
                     setListState(context.listConatcts.concat([]));
