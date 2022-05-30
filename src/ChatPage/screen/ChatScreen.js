@@ -24,7 +24,7 @@ const ChatScreen = (props) => {
     // This useState is saving the state for the selected contact, the contact that the current conversation is with.
     const [currentContact, setCurrentContact] = useState(selectedContact);
     /**************************************************************************************************************** */
-        // This useState is saving the current state of the contactList.
+    // This useState is saving the current state of the contactList.
     const [listState, setListState] = useState([]);
     // This useState is saving the all the user's contactList.
     const [list, setList] = useState([]);
@@ -48,11 +48,6 @@ const ChatScreen = (props) => {
                     setListState(data);
                 })
             });
-            // .then(data => {
-            //     context.listConatcts = data;
-            //     setList(data);
-            //     setListState(data);
-            // })
 
     }
 
@@ -83,7 +78,6 @@ const ChatScreen = (props) => {
             body: JSON.stringify({content})
         }).then((response) => {
             response.text().then((data) => {
-                //console.log(data);
                 sendMessage(content, props.username, currentContact.id);
             });
         });
@@ -102,7 +96,6 @@ const ChatScreen = (props) => {
 
 
     const startConnection = async () => {
-        //post a message to contact (id) with content
         try {
             context.isAleardyConnected = true;
             const connection = new HubConnectionBuilder()
@@ -110,24 +103,22 @@ const ChatScreen = (props) => {
                 .build();
             await connection.start().then(result => {
                 connection.invoke("LogIn", props.username);
-                connection.on('ReceiveMessage', (message,id) => {
+                connection.on('ReceiveMessage', (message, id) => {
                     //update last and last date of contact
-                    context.listConatcts.find((contact)=>contact.id === id).lastdate = message.created;
-                    context.listConatcts.find((contact)=>contact.id === id).last = message.content;
-                    console.log("list: ",context.listConatcts);
-                    if(id===context.contactId){
-                        console.log("in");
+                    context.listConatcts.find((contact) => contact.id === id).lastdate = message.created;
+                    context.listConatcts.find((contact) => contact.id === id).last = message.content;
+                    if (id === context.contactId) {
                         context.messages.push(message);
                         setMessages(context.messages.concat([]));
-                        // console.log("messages: ",messages);
-                        // console.log("context.messages: ",context.messages);
+
                     }
                 });
                 connection.on('ContactAdded', contact => {
-                    console.log("contact: ",contact);
-                    context.listConatcts.push(contact);
-                    setList(context.listConatcts.concat([]));
-                    setListState(context.listConatcts.concat([]));
+                    if (props.username !== contact.id) {
+                        context.listConatcts.push(contact);
+                        setList(context.listConatcts.concat([]));
+                        setListState(context.listConatcts.concat([]));
+                    }
                 })
             });
             context.connection = connection;
@@ -137,19 +128,18 @@ const ChatScreen = (props) => {
             console.log(e);
         }
     }
-
-    useEffect(()=>{
-        // console.log("props.username: ",props.username);
-        console.log("context.isAleardyConnected: ",context.isAleardyConnected);
-        // console.log("context.connection: ",context.connection);
-        console.log("context.token: ",context.token);
-        if (context.token !== ''&&context.isAleardyConnected!==true) {
+    //useEffect
+    useEffect(() => {
+        setList(context.listConatcts.concat([]));
+        setListState(context.listConatcts.concat([]));
+    }, [context.listConatcts])
+    useEffect(() => {
+        if (context.token !== '' && context.isAleardyConnected !== true) {
             startConnection(props.username);
-            // console.log("context.connection2: ",context.connection);
-            // console.log("context.connection: ",context.isAleardyConnected);
+
             getAllContacts();
         }
-    },[context.token])
+    }, [context.token])
     //signalR
     const sendMessage = async (content, userId, contactId) => {
         try {
@@ -158,7 +148,6 @@ const ChatScreen = (props) => {
             console.log(e);
         }
     }
-    // const [status, setStatus] = useState(-1);
 
     //add contact to contactList
     async function postContact(id, name, server) {
@@ -199,7 +188,7 @@ const ChatScreen = (props) => {
     // This function in handle conversation changing, pressing on contact from the contact list will invoke this function.
     const onConversationChange = function (id) {
         getAllMessages(id);
-        context.contactId=id;
+        context.contactId = id;
         setCurrentContact(listState.find((contact) => contact.id === id));
         context.contactId = id;
 
@@ -240,7 +229,9 @@ const ChatScreen = (props) => {
                                 <NewContact postContact={postContact}
                                             username={props.username}
                                             setErrorMessage={setErrorMessage}
-                                            setAlertActive={setAlertActive}/>
+                                            setAlertActive={setAlertActive}
+                                            setListState={setListState}
+                                            setList={setList}/>
                             </Col>
                         </Row>
 
@@ -264,7 +255,7 @@ const ChatScreen = (props) => {
                         <Row className='chat-header-class'>
                             <Col className='chat-header'>
                                 <ChatHeader selectedChat={currentContact}
-                                setInit={setInit}/>
+                                            setInit={setInit}/>
                             </Col>
                         </Row>
                         <Row className='chat-history-class'>

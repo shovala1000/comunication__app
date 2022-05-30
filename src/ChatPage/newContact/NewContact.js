@@ -1,6 +1,7 @@
 import React, {useRef, useState} from 'react';
 import {Modal} from 'bootstrap';
 import './NewContact.css';
+import {context} from "../../userData/data";
 
 /* This component creates the window that opens when the user adds a new contact to his contact list. */
 function NewContact(props) {
@@ -27,6 +28,7 @@ function NewContact(props) {
     /******************************************************************************************************************** */
 
     async function postInvitations(from, to, server) {
+        try{
         await fetch('https://' + server + '/api/Invitations', {
             method: 'POST',
             headers: {
@@ -35,13 +37,30 @@ function NewContact(props) {
             body: JSON.stringify({from, to, server})
         }).then((r) => {
             if (r.status !== 201) {
-                /**delete contact?*/
+
                 props.setErrorMessage('failed to add');
                 props.setAlertActive(true);
             }
         });
+    }catch (e){
+            /**delete contact?*/
+            deleteContact(to);
+        }
     }
 
+    async function deleteContact(contactId) {
+        await fetch( context.server+'contacts/'+contactId, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + context.token,
+            },
+        }).then((r) => {
+            context.listConatcts.pop();
+            props.setListState(context.listConatcts.concat([]));
+            props.setList(context.listConatcts.concat([]));
+        })
+    }
     /******************************************************************************************************************** */
 
         // The function checks the input from the input box.
@@ -52,16 +71,6 @@ function NewContact(props) {
             //props.postInvitations(props.username,id, server);
 
         }
-
-    // The function handles keypress. Allow insert new contact by pressing Enter.
-    /**const handlePressedKey = (key) => {
-        if (key.key === 'Enter') {
-            let data = document.getElementById('modal-textbox').value;
-            if (data.length !== 0) {
-                checkInput(data);
-            }
-        }
-    }*/
 
     return (
         <div className="new-contact-btn">
