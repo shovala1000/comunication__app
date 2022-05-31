@@ -10,3 +10,8 @@ export const context =
         currentMessage: {},
         listConatcts: []
     };
+export const pushToListConatcts = (c) => {
+    if (context.listConatcts.find((contact) => contact.id === c.id) === undefined) {
+        context.listConatcts.push(c);
+    }
+}

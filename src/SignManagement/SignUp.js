@@ -44,8 +44,6 @@ function SignUp({setRouteArray, setShow1, setShow2, show1, show2}) {
                     context.token = r;
                     //sign up successfully
                     setIsSubmitted(true);
-                    console.log("r: ",r);
-
                 });
             })
     }

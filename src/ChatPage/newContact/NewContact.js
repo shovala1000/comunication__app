@@ -26,48 +26,90 @@ function NewContact(props) {
     }
 
     /******************************************************************************************************************** */
-
-    async function postInvitations(from, to, server) {
-        try{
-        await fetch('https://' + server + '/api/Invitations', {
+    //add contact to contactList
+    async function postContact(id, name, server) {
+        await fetch(context.server + 'Contacts', {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({from, to, server})
-        }).then((r) => {
-            if (r.status !== 201) {
-
-                props.setErrorMessage('failed to add');
-                props.setAlertActive(true);
-            }
-        });
-    }catch (e){
-            /**delete contact?*/
-            deleteContact(to);
-        }
-    }
-
-    async function deleteContact(contactId) {
-        await fetch( context.server+'contacts/'+contactId, {
-            method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': 'Bearer ' + context.token,
             },
+            body: JSON.stringify({id: id, name: name, server: server})
         }).then((r) => {
+            if (r.status !== 201) {
+                props.setErrorMessage('failed to add');
+                props.setAlertActive(true);
+            } else {
+                addContact(props.username, 'localhost:7049', id, name, server);
+                postInvitations(props.username, id, server);
+            }
+        });
+
+    }
+    async function postInvitations(from, to, server) {
+        try {
+            await fetch('https://' + server + '/api/Invitations', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({from, to, server})
+            }).then((r) => {
+                if (r.status !== 201) {
+                    props.setErrorMessage('failed to add');
+                    props.setAlertActive(true);
+                    deleteContact(to);
+                }
+            });
+        } catch (e) {
+            /**delete contact?*/
+            deleteContact(to);
+
+        }
+    }
+
+    async function deleteContact(contactId) {
+        try {
+            await fetch(context.server + 'contacts/' + contactId, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + context.token,
+                },
+            })
+                .then((r) => {
+                    context.listConatcts.pop();
+                    props.setListState(context.listConatcts);
+                    props.setList(context.listConatcts);
+                    props.setErrorMessage('failed to add');
+                    props.setAlertActive(true);
+
+
+
+                })
+        } catch (e) {
             context.listConatcts.pop();
-            props.setListState(context.listConatcts.concat([]));
-            props.setList(context.listConatcts.concat([]));
-        })
+            props.setListState(context.listConatcts);
+            props.setList(context.listConatcts);
+            props.setErrorMessage('failed to add');
+            props.setAlertActive(true);
+        }
+
+    }
+    //signalR
+    const addContact = async (userId, userServer, id, name, server) => {
+        try {
+            await context.connection.invoke("AddContact", userId, userServer, id, name, server);
+        } catch (e) {
+            console.log(e);
+        }
     }
     /******************************************************************************************************************** */
 
         // The function checks the input from the input box.
     const checkInput = (id, name, server) => {
             hideModal();
-            props.postContact(id, name, server);
-            postInvitations(props.username, id, server);
+            postContact(id, name, server);
             //props.postInvitations(props.username,id, server);
 
         }

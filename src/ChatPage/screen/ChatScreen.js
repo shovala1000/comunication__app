@@ -11,7 +11,7 @@ import NewContact from '../newContact/NewContact';
 import ChatMessage from '../chatMessage-Box/ChatMessage';
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
-import {context} from "../../userData/data";
+import {context, pushToListConatcts} from "../../userData/data";
 import {HubConnectionBuilder} from "@microsoft/signalr";
 
 const ChatScreen = (props) => {
@@ -79,6 +79,7 @@ const ChatScreen = (props) => {
         }).then((response) => {
             response.text().then((data) => {
                 sendMessage(content, props.username, currentContact.id);
+                postTransfer(props.username, currentContact.id, content);
             });
         });
     }
@@ -104,6 +105,7 @@ const ChatScreen = (props) => {
             await connection.start().then(result => {
                 connection.invoke("LogIn", props.username);
                 connection.on('ReceiveMessage', (message, id) => {
+
                     //update last and last date of contact
                     context.listConatcts.find((contact) => contact.id === id).lastdate = message.created;
                     context.listConatcts.find((contact) => contact.id === id).last = message.content;
@@ -115,7 +117,7 @@ const ChatScreen = (props) => {
                 });
                 connection.on('ContactAdded', contact => {
                     if (props.username !== contact.id) {
-                        context.listConatcts.push(contact);
+                        pushToListConatcts(contact);
                         setList(context.listConatcts.concat([]));
                         setListState(context.listConatcts.concat([]));
                     }
@@ -130,8 +132,8 @@ const ChatScreen = (props) => {
     }
     //useEffect
     useEffect(() => {
-        setList(context.listConatcts.concat([]));
-        setListState(context.listConatcts.concat([]));
+        setList(context.listConatcts);
+        setListState(context.listConatcts);
     }, [context.listConatcts])
     useEffect(() => {
         if (context.token !== '' && context.isAleardyConnected !== true) {
@@ -147,36 +149,6 @@ const ChatScreen = (props) => {
             console.log(e);
         }
     }
-
-    //add contact to contactList
-    async function postContact(id, name, server) {
-        await fetch(context.server + 'Contacts', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + context.token,
-            },
-            body: JSON.stringify({id: id, name: name, server: server})
-        }).then((r) => {
-            if (r.status !== 201) {
-                setErrorMessage('failed to add');
-                setAlertActive(true);
-            } else {
-                addContact(props.username, 'localhost:7049', id, name, server);
-            }
-        });
-
-    }
-
-    //signalR
-    const addContact = async (userId, userServer, id, name, server) => {
-        try {
-            await context.connection.invoke("AddContact", userId, userServer, id, name, server);
-        } catch (e) {
-            console.log(e);
-        }
-    }
-
     /**************************************************************************************************************** */
 
         // This function search in the contact's search box.
@@ -195,7 +167,7 @@ const ChatScreen = (props) => {
 
     function createNewMessage(content) {
         postMessage(currentContact.id, content);
-        postTransfer(props.username, currentContact.id, content);
+        // postTransfer(props.username, currentContact.id, content);
     }
 
 
@@ -225,8 +197,7 @@ const ChatScreen = (props) => {
                                 <ContactSearch doSearch={doSearch}/>
                             </Col>
                             <Col className='new-contact-btn'>
-                                <NewContact postContact={postContact}
-                                            username={props.username}
+                                <NewContact username={props.username}
                                             setErrorMessage={setErrorMessage}
                                             setAlertActive={setAlertActive}
                                             setListState={setListState}

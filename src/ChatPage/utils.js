@@ -1,7 +1,12 @@
 //This function returns a string that contain the current date and time. 
 export function getCurrentTime(input) {
+<<<<<<< HEAD
     if (input != null) {
         const today = new Date(input)
+=======
+    if(input!=null){
+        const today = new Date(input);
+>>>>>>> 991c7738dacf110a0048a09bc5c84cf39c831f2e
         let date = today.getDate() + '/' + (today.getMonth() + 1) + '/' + today.getFullYear();
         let minutes = today.getMinutes();
         let time;
@@ -14,4 +19,8 @@ export function getCurrentTime(input) {
         let dateTime = time + ', ' + date;
         return String(dateTime)
     }
+<<<<<<< HEAD
+=======
+
+>>>>>>> 991c7738dacf110a0048a09bc5c84cf39c831f2e
 }
