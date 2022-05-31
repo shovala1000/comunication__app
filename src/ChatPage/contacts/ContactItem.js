@@ -9,6 +9,7 @@ const ContactItem = (props) => {
 
 
     let className = 'clearfix';
+    console.log(props.item);
     return (
         <li className={className} key={props.item.id} onClick={() => props.onContactItemSelected(props.item.id)}>
             <img src='/defalut-profile-picture.png' alt='default'></img>
