@@ -79,6 +79,7 @@ const ChatScreen = (props) => {
         }).then((response) => {
             response.text().then((data) => {
                 sendMessage(content, props.username, currentContact.id);
+                postTransfer(props.username, currentContact.id, content);
             });
         });
     }
@@ -104,6 +105,7 @@ const ChatScreen = (props) => {
             await connection.start().then(result => {
                 connection.invoke("LogIn", props.username);
                 connection.on('ReceiveMessage', (message, id) => {
+
                     //update last and last date of contact
                     context.listConatcts.find((contact) => contact.id === id).lastdate = message.created;
                     context.listConatcts.find((contact) => contact.id === id).last = message.content;
@@ -165,7 +167,7 @@ const ChatScreen = (props) => {
 
     function createNewMessage(content) {
         postMessage(currentContact.id, content);
-        postTransfer(props.username, currentContact.id, content);
+        // postTransfer(props.username, currentContact.id, content);
     }
 
 

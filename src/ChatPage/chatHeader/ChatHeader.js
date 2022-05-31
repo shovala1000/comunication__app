@@ -8,10 +8,11 @@ import './ChatHeader.css';
 const ChatHeader = (props) => {
     let navigate = useNavigate();
 
-    function initContext() {
+    async function initContext() {
         context.contactId = '';
+        await context.connection.stop();
         context.connection = '';
-        context.isAleardyConnected= '';
+        context.isAleardyConnected = '';
         context.token = '';
         context.messages = [];
         context.currentMessage = {};
@@ -25,6 +26,7 @@ const ChatHeader = (props) => {
                 <img src='/defalut-profile-picture.png' alt='default'/>
                 <div className="chat-header-about">{props.selectedChat.name}</div>
                 <button type="button" className="btn btn-outline-light sign-out-button" onClick={() => {
+                    initContext();
                     navigate("/", {replace: true});
                 }}>Sign Out
                 </button>
