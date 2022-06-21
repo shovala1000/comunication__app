@@ -1,4 +1,4 @@
-import React, {useRef, useState} from 'react';
+import React, {useRef} from 'react';
 import {Modal} from 'bootstrap';
 import './NewContact.css';
 import {context} from "../../userData/data";

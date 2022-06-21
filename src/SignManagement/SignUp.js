@@ -1,11 +1,11 @@
-import React, {useEffect, useState} from "react";
+import React, {useState} from "react";
 import {Button} from "react-bootstrap";
 // import {Contact, ContactChatInfo, contactMap} from '../userData/data';
 import './SignInOrUp.css';
 import {Link, Route, useNavigate} from "react-router-dom";
 import ChatScreen from "../ChatPage/screen/ChatScreen";
-import {addContact, AddUserToConnection, context} from "../userData/data";
-import {HubConnectionBuilder} from "@microsoft/signalr";
+import {context} from "../userData/data";
+;
 
 function SignUp({setRouteArray, setShow1, setShow2, show1, show2}) {
     let navigate = useNavigate();

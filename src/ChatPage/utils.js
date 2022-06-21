@@ -1,5 +1,3 @@
-
-
 //This function returns a string that contain the current date and time. 
 export function getCurrentTime(input) {
     if(input!=null){
@@ -16,5 +14,4 @@ export function getCurrentTime(input) {
         let dateTime = time + ', ' + date;
         return String(dateTime)
     }
-
 }
