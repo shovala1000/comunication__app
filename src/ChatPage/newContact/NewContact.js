@@ -48,7 +48,7 @@ function NewContact(props) {
     }
     async function postInvitations(from, to, server) {
         try {
-            await fetch('https://' + server + '/api/Invitations', {
+            await fetch('http://' + server + '/api/Invitations', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

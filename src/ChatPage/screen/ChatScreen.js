@@ -86,7 +86,7 @@ const ChatScreen = (props) => {
 
     //post - send the contact's server request to post the message the user send
     async function postTransfer(from, to, content) {
-        await fetch('https://' + currentContact.server + '/api/Transfer', {
+        await fetch('http://' + currentContact.server + '/api/Transfer', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -100,7 +100,7 @@ const ChatScreen = (props) => {
         try {
             context.isAleardyConnected = true;
             const connection = new HubConnectionBuilder()
-                .withUrl('https://localhost:7049/AppHub')
+                .withUrl('http://localhost:7049/AppHub')
                 .build();
             await connection.start().then(result => {
                 connection.invoke("LogIn", props.username);
@@ -112,7 +112,6 @@ const ChatScreen = (props) => {
                     if (id === context.contactId) {
                         context.messages.push(message);
                         setMessages(context.messages.concat([]));
-
                     }
                 });
                 connection.on('ContactAdded', contact => {
@@ -183,7 +182,7 @@ const ChatScreen = (props) => {
      */
     return (
         <Container className='chat-screen'>
-            <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"/>
+            <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"/>
             <Row className=" chat-page">
                 <Col xs={3} sm={3} md={3} lg={3} xl={3} xxl={3} className='left-menu'>
                     <Container className='left-menu-container'>

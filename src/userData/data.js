@@ -4,7 +4,7 @@ export const context =
         connection: '',
         isAleardyConnected: '',
         token: '',
-        server: 'https://localhost:7049/api/',
+        server: 'http://localhost:7049/api/',
         ratings: 'http://localhost:5219/Ratings',
         messages: [],
         currentMessage: {},
